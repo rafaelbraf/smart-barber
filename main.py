@@ -76,31 +76,41 @@ def get_barbearia_by_id(barbearia_id):
 
 @app.route('/barbearias', methods=['POST'])
 def insert_barbearia():
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
-        barbearia: Barbearia = request.json
-        connection = get_db_connection()
+    barbearia: Barbearia = request.json
+    connection = get_db_connection()
 
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute("INSERT INTO barbearias (cnpj, nome, endereco, email, telefone, senha) VALUES (%s, %s, "
-                               "%s, %s, %s, %s) RETURNING id",
-                               (barbearia['cnpj'], barbearia['nome'], barbearia['endereco'], barbearia['email'],
-                                barbearia['telefone'], barbearia['senha']))
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO barbearias (cnpj, nome, endereco, email, telefone, senha) VALUES (%s, %s, "
+                           "%s, %s, %s, %s) RETURNING id",
+                           (barbearia['cnpj'], barbearia['nome'], barbearia['endereco'], barbearia['email'],
+                            barbearia['telefone'], barbearia['senha']))
 
-                id_nova_barbearia = cursor.fetchone()[0]
-                connection.commit()
+            id_nova_barbearia = cursor.fetchone()[0]
+            connection.commit()
 
-            return jsonify({'mensagem': f'Barbearia criada com id {id_nova_barbearia}'}), 201
+        return jsonify({'mensagem': f'Barbearia criada com id {id_nova_barbearia}'}), 201
 
-        except Exception as e:
-            return jsonify({'mensagem': f'Erro ao criar Barbearia: {str(e)}'}), 500
+    except Exception as e:
+        return jsonify({'mensagem': f'Erro ao criar Barbearia: {str(e)}'}), 500
 
-        finally:
-            connection.close()
+    finally:
+        connection.close()
 
-    else:
-        return 'Content-Type is not supported!'
+
+@app.route('/barbearias/<barbearia_id>', methods=['DELETE'])
+def delete_barbearia_by_id(barbearia_id):
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM barbearias WHERE id = %s", (barbearia_id,))
+            connection.commit()
+
+        return jsonify({}), 204
+
+    finally:
+        connection.close()
 
 
 if __name__ == '__main__':
