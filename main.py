@@ -98,6 +98,34 @@ def insert_barbearia():
         connection.close()
 
 
+@app.route('/barbearias/<barbearia_id>', methods=['PUT'])
+def update_barbearia_by_id(barbearia_id):
+    dados_atualizados = request.json
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM barbearias WHERE id = %s", (barbearia_id,))
+
+            barbearia = cursor.fetchone()
+            if not barbearia:
+                return jsonify({"mensagem": "Barbearia não encontrada"})
+
+            campos_validos = ["cnpj", "nome", "endereco", "email", "telefone"]
+            for campo, valor_atualizado in dados_atualizados.items():
+                if campo in campos_validos:
+                    cursor.execute(f"UPDATE barbearias SET {campo} = %s WHERE id = %s",
+                                   (valor_atualizado, barbearia_id))
+
+            connection.commit()
+
+        return jsonify({"mensagem": "Barbearia atualizada com sucesso!"}), 200
+    except Exception as e:
+        return jsonify({"erro": f"Erro ao atualizar Barbearia: {str(e)}"}), 500
+    finally:
+        connection.close()
+
+
 @app.route('/barbearias/<barbearia_id>', methods=['DELETE'])
 def delete_barbearia_by_id(barbearia_id):
     connection = get_db_connection()
