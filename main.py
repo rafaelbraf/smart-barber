@@ -1,20 +1,9 @@
 from flask import Flask, jsonify, request
+
+from db.connect_db import get_db_connection
 from model.barbearia import Barbearia
-import psycopg2
 
 app = Flask(__name__)
-
-db_params = {
-    'dbname': 'barbearia-app',
-    'user': 'postgres',
-    'password': 'minha_senha',
-    'host': 'localhost',
-    'port': '5432'
-}
-
-
-def get_db_connection():
-    return psycopg2.connect(**db_params)
 
 
 @app.route('/')
@@ -66,10 +55,8 @@ def get_barbearia_by_id(barbearia_id):
             return jsonify(barbearia_json)
 
         return jsonify({"mensagem": "Barbearia não encontrada."})
-
     except Exception as e:
         return jsonify({'mensagem': f'Erro ao buscar Barbearia: {str(e)}'}), 500
-
     finally:
         connection.close()
 
@@ -90,10 +77,8 @@ def insert_barbearia():
             connection.commit()
 
         return jsonify({'mensagem': f'Barbearia criada com id {id_nova_barbearia}'}), 201
-
     except Exception as e:
         return jsonify({'mensagem': f'Erro ao criar Barbearia: {str(e)}'}), 500
-
     finally:
         connection.close()
 
@@ -136,7 +121,6 @@ def delete_barbearia_by_id(barbearia_id):
             connection.commit()
 
         return jsonify({}), 204
-
     finally:
         connection.close()
 
