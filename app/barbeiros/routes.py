@@ -1,8 +1,9 @@
-from flask import jsonify
+from flask import jsonify, request
 
 from app.barbeiros import barbeiros_blueprint
 from db.connect_db import get_db_connection
 from model.barbeiro import Barbeiro
+from model.barbeiro_dto import BarbeiroDTO
 
 
 @barbeiros_blueprint.route('/barbeiros', methods=['GET'])
@@ -53,5 +54,76 @@ def get_barbeiro_por_id(barbeiro_id):
         return jsonify({"mensagem": "Barbeiro não encontrado"}), 404
     except Exception as e:
         return jsonify({"mensagem": f"Erro ao buscar Barbeiro: {str(e)}"}), 500
+    finally:
+        connection.close()
+
+
+@barbeiros_blueprint.route('/barbeiros', methods=['POST'])
+def insert_barbeiro():
+    barbeiro_data = request.json
+    barbeiro_dto = BarbeiroDTO(cpf=barbeiro_data['cpf'],
+                               nome=barbeiro_data['nome'],
+                               email=barbeiro_data['email'],
+                               celular=barbeiro_data['celular'],
+                               admin=barbeiro_data['admin'],
+                               id_barbearia=barbeiro_data['idBarbearia'])
+    barbeiro = Barbeiro(**barbeiro_dto.__dict__)
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO barbeiros (cpf, nome, email, celular, admin, id_barbearia) VALUES (%s, %s, "
+                           "%s, %s, %s, %s) RETURNING id",
+                           (barbeiro.cpf, barbeiro.nome, barbeiro.email, barbeiro.celular, barbeiro.admin,
+                            barbeiro.id_barbearia))
+
+            id_novo_barbeiro = cursor.fetchone()[0]
+            connection.commit()
+
+        return jsonify({"mensagem": f"Barbeiro criado com sucesso com id {id_novo_barbeiro}!"}), 201
+    except Exception as e:
+        return jsonify({"mensagem": f"Erro ao criar Barbeiro: {str(e)}"})
+    finally:
+        connection.close()
+
+
+@barbeiros_blueprint.route('/barbeiros/<barbeiro_id>', methods=['PUT'])
+def update_barbeiro_by_id(barbeiro_id):
+    dados_atualizados = request.json
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM barbeiros WHERE id = %s", (barbeiro_id,))
+
+            barbeiro = cursor.fetchone()
+            if not barbeiro:
+                return jsonify({"mensagem": "Barbeiro não encontrado!"}), 404
+
+            campos_validos = ["cpf", "nome", "email", "celular", "admin"]
+            for campo, valor_atualizado in dados_atualizados.items():
+                if campo in campos_validos:
+                    cursor.execute(f"UPDATE barbeiros SET {campo} = %s WHERE id = %s",
+                                   (valor_atualizado, barbeiro_id))
+
+            connection.commit()
+
+        return jsonify({"mensagem": "Barbeiro atualizado com sucesso!"}), 200
+    except Exception as e:
+        return jsonify({"erro": f"Erro ao atualizar Barbeiro: {str(e)}"}), 500
+    finally:
+        connection.close()
+
+
+@barbeiros_blueprint.route('/barbeiros/<barbeiro_id>', methods=['DELETE'])
+def delete_barbeiro_by_id(barbeiro_id):
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM barbeiros WHERE id = %s", (barbeiro_id,))
+            connection.commit()
+
+        return jsonify({}), 204
     finally:
         connection.close()
