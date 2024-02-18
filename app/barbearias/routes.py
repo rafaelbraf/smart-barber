@@ -48,7 +48,7 @@ def get_barbearia_por_id(barbearia_id):
 
             return jsonify(barbearia_json)
 
-        return jsonify({"mensagem": "Barbearia não encontrada."})
+        return jsonify({"mensagem": "Barbearia não encontrada."}), 404
     except Exception as e:
         return jsonify({'mensagem': f'Erro ao buscar Barbearia: {str(e)}'}), 500
     finally:
