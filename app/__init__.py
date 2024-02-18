@@ -1,10 +1,9 @@
 from flask import Flask
+from .barbearias.routes import barbearias_blueprint
 
 
 def create_app():
     app = Flask(__name__)
-
-    from .barbearias.routes import barbearias_blueprint
     app.register_blueprint(barbearias_blueprint)
 
     return app
