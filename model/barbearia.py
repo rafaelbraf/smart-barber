@@ -9,4 +9,4 @@ class Barbearia:
         self.senha = senha
 
     def __str__(self):
-        return f"Barbearia(id = {self.id}, cnpj={self.cnpj}, nome={self.nome}, endereco={self.endereco}, email=${self.email}, telefone={self.telefone}, senha=${self.senha}"
+        return f"Barbearia(id = {self.id}, cnpj={self.cnpj}, nome={self.nome}, endereco={self.endereco}, email=${self.email}, telefone={self.telefone}, senha=${self.senha})"

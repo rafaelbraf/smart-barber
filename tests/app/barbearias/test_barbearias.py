@@ -55,7 +55,7 @@ class TestBarbeariaRoutes(unittest.TestCase):
         mock_connection.cursor.return_value.__enter__.return_value = mock_cursor
         mock_get_db_connection.return_value = mock_connection
 
-        barbearia_id = '999'
+        barbearia_id = '1'
         response = self.client.get(f'/barbearias/{barbearia_id}')
 
         mock_get_db_connection.assert_called_once()
