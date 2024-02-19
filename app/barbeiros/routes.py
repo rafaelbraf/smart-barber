@@ -24,7 +24,6 @@ def get_barbeiros():
                            'idBarbearia': barbeiro[6]} for barbeiro in barbeiros]
 
         return jsonify({'barbeiros': barbeiros_json}), 200
-
     finally:
         connection.close()
 
@@ -54,6 +53,28 @@ def get_barbeiro_por_id(barbeiro_id):
         return jsonify({"mensagem": "Barbeiro não encontrado."}), 404
     except Exception as e:
         return jsonify({"mensagem": f"Erro ao buscar Barbeiro: {str(e)}"}), 500
+    finally:
+        connection.close()
+
+
+@barbeiros_blueprint.route('/barbeiros/barbearia/<barbearia_id>', methods=['GET'])
+def get_barbeiros_by_barbearia_id(barbearia_id):
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM barbeiros WHERE id_barbearia = %s", (barbearia_id,))
+            barbeiros = cursor.fetchall()
+
+        barbeiros_json = [{'id': barbeiro[0],
+                           'cpf': barbeiro[1],
+                           'nome': barbeiro[2],
+                           'email': barbeiro[3],
+                           'celular': barbeiro[4],
+                           'admin': barbeiro[5],
+                           'idBarbearia': barbeiro[6]} for barbeiro in barbeiros]
+
+        return jsonify({'barbeiros': barbeiros_json}), 200
     finally:
         connection.close()
 

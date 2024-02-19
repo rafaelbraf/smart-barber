@@ -46,6 +46,41 @@ class TestBarbeiroRoutes(unittest.TestCase):
         self.assertDictEqual(response.json, expected_result)
 
     @patch('app.barbeiros.routes.get_db_connection')
+    def test_get_barbeiros_by_barbearia_id(self, mock_get_db_connection):
+        mock_cursor = MagicMock()
+
+        expected_data = [(1, '012345678910', 'Barbeiro Teste', 'barbeiro@teste.com', '88888888', False, 1)]
+        mock_cursor.fetchall.return_value = expected_data
+
+        mock_connection = MagicMock()
+        mock_connection.cursor.return_value.__enter__.return_value = mock_cursor
+        mock_get_db_connection.return_value = mock_connection
+
+        barbearia_id = '1'
+        response = self.client.get(f'/barbeiros/barbearia/{barbearia_id}')
+
+        mock_get_db_connection.assert_called_once()
+        mock_connection.cursor.assert_called_once()
+        mock_cursor.execute.assert_called_once_with("SELECT * FROM barbeiros WHERE id_barbearia = %s", (barbearia_id,))
+
+        expected_result = {
+            "barbeiros": [
+                {
+                    'id': 1,
+                    'cpf': '012345678910',
+                    'nome': 'Barbeiro Teste',
+                    'email': 'barbeiro@teste.com',
+                    'celular': '88888888',
+                    'admin': False,
+                    'idBarbearia': 1
+                }
+            ]
+        }
+
+        self.assertEqual(response.status_code, 200)
+        self.assertDictEqual(response.json, expected_result)
+
+    @patch('app.barbeiros.routes.get_db_connection')
     def test_get_barbeiro_by_id(self, mock_get_db_connection):
         mock_cursor = MagicMock()
         mock_connection = MagicMock()
@@ -97,7 +132,8 @@ class TestBarbeiroRoutes(unittest.TestCase):
 
         expected_result = {"mensagem": "Barbeiro não encontrado."}
 
-        self.assertEqual(response.json, expected_result)
+        self.assertEqual(response.status_code, 404)
+        self.assertDictEqual(response.json, expected_result)
 
     @patch('app.barbeiros.routes.get_db_connection')
     def test_insert_barbeiro(self, mock_get_db_connection):
