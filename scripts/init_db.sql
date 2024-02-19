@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS servicos (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     preco NUMERIC(10, 2) NOT NULL,
-    tempo_duracao INTERVAL NOT NULL,
+    tempo_duracao_em_minutos INTEGER NOT NULL,
     id_barbearia INTEGER REFERENCES barbearias(id)
 );
 
