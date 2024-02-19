@@ -79,6 +79,27 @@ class TestBarbeiroRoutes(unittest.TestCase):
         self.assertDictEqual(response.json, expected_result)
 
     @patch('app.barbeiros.routes.get_db_connection')
+    def test_get_barbeiro_by_id_not_found(self, mock_get_db_connection):
+        mock_cursor = MagicMock()
+        mock_cursor.fetchone.return_value = None
+
+        mock_connection = MagicMock()
+        mock_connection.cursor.return_value.__enter__.return_value = mock_cursor
+        mock_get_db_connection.return_value = mock_connection
+
+        barbeiro_id = '999'
+        response = self.client.get(f'/barbeiros/{barbeiro_id}')
+
+        mock_get_db_connection.assert_called_once()
+        mock_connection.cursor.assert_called_once()
+        mock_cursor.execute.assert_called_once_with("SELECT * FROM barbeiros WHERE id = %s", (barbeiro_id,))
+        mock_cursor.fetchone.assert_called_once()
+
+        expected_result = {"mensagem": "Barbeiro não encontrado."}
+
+        self.assertEqual(response.json, expected_result)
+
+    @patch('app.barbeiros.routes.get_db_connection')
     def test_insert_barbeiro(self, mock_get_db_connection):
         mock_cursor = MagicMock()
         mock_cursor.execute.return_value.fetchone.return_value = (45,)
