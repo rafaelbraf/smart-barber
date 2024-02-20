@@ -40,11 +40,20 @@ CREATE TABLE IF NOT EXISTS usuarios (
 
 CREATE TABLE IF NOT EXISTS agendamentos (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    data TIMESTAMP NOT NULL,
+    data VARCHAR(10) NOT NULL,
+    hora VARCHAR(5) NOT NULL,
     valor_total NUMERIC(10, 2) NOT NULL,
-    tempo_duracao INTERVAL NOT NULL,
-    id_servico INTEGER REFERENCES servicos(id),
+    tempo_duracao_em_minutos INTEGER NOT NULL,
     id_barbearia INTEGER REFERENCES barbearias(id),
-    id_barbeiro INTEGER REFERENCES barbeiros(id),
     id_usuario UUID REFERENCES usuarios(id)
+);
+
+CREATE TABLE IF NOT EXISTS agendamento_servicos (
+    id_agendamento UUID REFERENCES agendamentos(id),
+    id_servico INTEGER REFERENCES servicos(id)
+);
+
+CREATE TABLE IF NOT EXISTS agendamento_barbeiros (
+    id_agendamento UUID REFERENCES agendamentos(id),
+    id_barbeiro INTEGER REFERENCES barbeiros(id)
 );
