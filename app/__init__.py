@@ -4,6 +4,7 @@ from .agendamentos.routes import agendamentos_blueprint
 from .barbearias.routes import barbearias_blueprint
 from .barbeiros.routes import barbeiros_blueprint
 from .servicos.routes import servicos_blueprint
+from .usuarios import usuarios_blueprint
 
 
 def create_app():
@@ -12,5 +13,6 @@ def create_app():
     app.register_blueprint(barbeiros_blueprint)
     app.register_blueprint(servicos_blueprint)
     app.register_blueprint(agendamentos_blueprint)
+    app.register_blueprint(usuarios_blueprint)
 
     return app
