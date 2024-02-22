@@ -58,37 +58,6 @@ def get_usuario_by_id(usuario_id):
         connection.close()
 
 
-@usuarios_blueprint.route('/usuarios', methods=['POST'])
-def insert_usuario():
-    usuario_data = request.json
-    usuario_dto = UsuarioRequestDto(cpf=usuario_data['cpf'],
-                                    nome=usuario_data['nome'],
-                                    data_nascimento=usuario_data['dataNascimento'],
-                                    email=usuario_data['email'],
-                                    celular=usuario_data['celular'],
-                                    senha=usuario_data['senha'])
-    usuario = Usuario(**usuario_dto.__dict__)
-    connection = get_db_connection()
-
-    usuario.senha = hash_senha(usuario.senha)
-
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO usuarios (cpf, nome, data_nascimento, email, celular, senha) VALUES (%s, "
-                           "%s, %s, %s, %s, %s) RETURNING id",
-                           (usuario.cpf, usuario.nome, usuario.data_nascimento, usuario.email, usuario.celular,
-                            usuario.senha))
-
-            id_novo_usuario = cursor.fetchone()[0]
-            connection.commit()
-
-        return jsonify({"mensagem": f"Usuário inserido com sucesso com id {id_novo_usuario}!"}), 201
-    except Exception as e:
-        return jsonify({"mensagem": f"Erro ao inserir Usuário: {str(e)}"})
-    finally:
-        connection.close()
-
-
 @usuarios_blueprint.route('/usuarios/<usuario_id>', methods=['PUT'])
 def update_usuario_by_id(usuario_id):
     dados_atualizados = request.json
@@ -129,14 +98,3 @@ def delete_usuario_by_id(usuario_id):
         return jsonify({}), 204
     finally:
         connection.close()
-
-
-def hash_senha(senha):
-    salt = bcrypt.gensalt()
-    hashed_senha = bcrypt.hashpw(senha.encode('utf-8'), salt)
-
-    return hashed_senha
-
-
-def is_senha_valida(senha, senha_hasheada):
-    return bcrypt.checkpw(senha.encode('utf-8'), senha_hasheada)

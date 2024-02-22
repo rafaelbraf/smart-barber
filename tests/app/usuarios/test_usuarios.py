@@ -4,7 +4,6 @@ from unittest.mock import patch, MagicMock, ANY, call
 from flask import Flask
 
 from app import usuarios_blueprint
-from app.usuarios.routes import hash_senha, is_senha_valida
 
 
 class TestUsuarioRoutes(unittest.TestCase):
@@ -104,36 +103,6 @@ class TestUsuarioRoutes(unittest.TestCase):
         self.assertDictEqual(response.json, expected_result)
 
     @patch('app.usuarios.routes.get_db_connection')
-    def test_insert_usuario(self, mock_get_db_connection):
-        usuario_id = 'adb39f57-9b5a-4859-bf9f-b5bb8f1f1bb3'
-        mock_cursor = MagicMock()
-        mock_cursor.execute.return_value.fetchone.return_value = (usuario_id,)
-
-        mock_connection = MagicMock()
-        mock_connection.cursor.return_value.__enter__.return_value = mock_cursor
-        mock_get_db_connection.return_value = mock_connection
-
-        novo_usuario = {
-            'cpf': '123456789',
-            'nome': 'Usuário Teste',
-            'dataNascimento': '01/01/2001',
-            'email': 'email@teste.com',
-            'celular': '12345678',
-            'senha': '123456'
-        }
-        response = self.client.post('/usuarios', json=novo_usuario)
-
-        mock_get_db_connection.assert_called_once()
-        mock_cursor.execute.assert_called_once_with(
-            "INSERT INTO usuarios (cpf, nome, data_nascimento, email, celular, senha) VALUES (%s, "
-            "%s, %s, %s, %s, %s) RETURNING id",
-            (novo_usuario['cpf'], novo_usuario['nome'], novo_usuario['dataNascimento'],
-             novo_usuario['email'], novo_usuario['celular'], ANY)
-        )
-
-        self.assertEqual(response.status_code, 201)
-
-    @patch('app.usuarios.routes.get_db_connection')
     def test_update_usuario_by_id(self, mock_get_db_connection):
         mock_cursor = MagicMock()
         mock_connection = MagicMock()
@@ -177,10 +146,3 @@ class TestUsuarioRoutes(unittest.TestCase):
         mock_cursor.execute.assert_called_once_with("DELETE FROM usuarios WHERE id = %s", (usuario_id,))
 
         self.assertEqual(response.status_code, 204)
-
-    def test_password_hashing(self):
-        original_password = 'senha123'
-        hashed_password = hash_senha(original_password)
-
-        self.assertTrue(is_senha_valida(original_password, hashed_password))
-        self.assertFalse(is_senha_valida('senha_errada', hashed_password))
