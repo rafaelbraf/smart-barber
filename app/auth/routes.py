@@ -1,10 +1,16 @@
+import os
+from datetime import datetime, timedelta
+
 import bcrypt
+import jwt
 from flask import request, jsonify
 
 from app.auth import auth_blueprint
 from db.connect_db import get_db_connection
 from model.usuario import Usuario
 from model.usuario_request_dto import UsuarioRequestDto
+
+secret_key = os.getenv('SECRET_KEY')
 
 
 @auth_blueprint.route('/auth/login', methods=['POST'])
@@ -23,7 +29,13 @@ def login():
                 if usuario:
                     senha_cadastrada_usuario = usuario[6]
                     if senha_cadastrada_usuario and is_valid_password(senha, senha_cadastrada_usuario):
-                        return jsonify({"access_token": "token"}), 200
+                        token_payload = {
+                            'email': email,
+                            'exp': datetime.utcnow() + timedelta(days=1)
+                        }
+                        token = jwt.encode(token_payload, secret_key, algorithm='HS256')
+
+                        return jsonify({"access_token": token}), 200
 
                 return jsonify({"não autorizado": "Email ou senha incorreta!"}), 401
         finally:
