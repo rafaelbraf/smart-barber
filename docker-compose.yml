@@ -11,3 +11,14 @@ services:
       - "5432:5432"
     volumes:
       - ./scripts:/docker-entrypoint-initdb.d
+
+  smart-barber:
+    build:
+      context: .
+    image: rafaelbrunof/smart-barber
+    depends_on:
+      - postgres
+    environment:
+      SECRET_KEY: secret-smart-barber
+    ports:
+      - "5000:5000"
