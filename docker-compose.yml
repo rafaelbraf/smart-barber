@@ -3,10 +3,8 @@ version: '3'
 services:
   postgres:
     image: postgres:latest
-    environment:
-      POSTGRES_DB: barbearia-app
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: minha_senha
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:
@@ -18,7 +16,7 @@ services:
     image: rafaelbrunof/smart-barber
     depends_on:
       - postgres
-    environment:
-      SECRET_KEY: secret-smart-barber
+    env_file:
+      - .env
     ports:
       - "5000:5000"
