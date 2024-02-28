@@ -1,0 +1,11 @@
+body {
+      background-color: #f8f9fa;
+}
+.login-container {
+  max-width: 400px;
+  margin: auto;
+  margin-top: 100px;
+}
+.login-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

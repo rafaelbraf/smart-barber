@@ -2,6 +2,7 @@ import os
 
 import jwt
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from .agendamentos.routes import agendamentos_blueprint
 from .auth import auth_blueprint
@@ -14,6 +15,8 @@ from .usuarios import usuarios_blueprint
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+    CORS(app)
 
     @app.before_request
     def before_request():
