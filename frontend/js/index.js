@@ -17,7 +17,9 @@ function fazerLogin() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Token: " + data.access_token);
+            localStorage.setItem('token', data.access_token);
+            
+            window.location.href = 'pages/home.html';
         })
         .catch(error => {
             console.log("Erro na requisição: " + error);
