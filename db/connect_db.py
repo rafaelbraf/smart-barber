@@ -1,6 +1,8 @@
 import os
-
+from dotenv import load_dotenv
 import psycopg2
+
+load_dotenv()
 
 db_params = {
     'dbname': os.getenv('DB_NAME'),
