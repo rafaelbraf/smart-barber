@@ -1,7 +1,7 @@
 from flask import jsonify, request
 
 from db.connect_db import get_db_connection
-from model.barbearia import Barbearia
+from model.barbearia.barbearia import Barbearia
 from . import barbearias_blueprint
 
 

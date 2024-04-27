@@ -1,5 +1,5 @@
 class Barbearia:
-    def __init__(self, id, cnpj, nome, endereco, email, telefone, senha):
+    def __init__(self, cnpj, nome, endereco, email, telefone, senha, id=None):
         self.id = id
         self.cnpj = cnpj
         self.nome = nome
