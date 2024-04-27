@@ -2,8 +2,8 @@ from flask import jsonify, request
 
 from app.barbeiros import barbeiros_blueprint
 from db.connect_db import get_db_connection
-from model.barbeiro import Barbeiro
-from model.barbeiro_dto import BarbeiroDTO
+from model.barbeiro.barbeiro import Barbeiro
+from model.barbeiro.barbeiro_dto import BarbeiroDTO
 
 
 @barbeiros_blueprint.route('/barbeiros', methods=['GET'])
@@ -23,7 +23,10 @@ def get_barbeiros():
                            'admin': barbeiro[5],
                            'idBarbearia': barbeiro[6]} for barbeiro in barbeiros]
 
-        return jsonify({'barbeiros': barbeiros_json}), 200
+        response = jsonify({"barbeiros": barbeiros_json})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+
+        return response, 200
     finally:
         connection.close()
 
@@ -72,7 +75,8 @@ def get_barbeiros_by_barbearia_id(barbearia_id):
                            'email': barbeiro[3],
                            'celular': barbeiro[4],
                            'admin': barbeiro[5],
-                           'idBarbearia': barbeiro[6]} for barbeiro in barbeiros]
+                           'idBarbearia': barbeiro[6],
+                           'ativo': barbeiro[7]} for barbeiro in barbeiros]
 
         return jsonify({'barbeiros': barbeiros_json}), 200
     finally:
@@ -87,7 +91,8 @@ def insert_barbeiro():
                                email=barbeiro_data['email'],
                                celular=barbeiro_data['celular'],
                                admin=barbeiro_data['admin'],
-                               id_barbearia=barbeiro_data['idBarbearia'])
+                               id_barbearia=barbeiro_data['idBarbearia'],
+                               ativo=barbeiro_data['ativo'])
     barbeiro = Barbeiro(**barbeiro_dto.__dict__)
     connection = get_db_connection()
 

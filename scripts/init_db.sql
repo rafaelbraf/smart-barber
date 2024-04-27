@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS barbeiros (
     email VARCHAR(100) UNIQUE NOT NULL,
     celular VARCHAR(20),
     admin BOOLEAN NOT NULL,
-    id_barbearia INTEGER REFERENCES barbearias(id)
+    id_barbearia INTEGER REFERENCES barbearias(id),
+    ativo BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS servicos (
