@@ -8,7 +8,7 @@ function fazerLogin() {
             senha: senha
         };
 
-        fetch('http://localhost:5000/auth/login', {
+        fetch('http://localhost:5000/auth/barbearia/login', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -18,6 +18,7 @@ function fazerLogin() {
         .then(response => response.json())
         .then(data => {
             localStorage.setItem('token', data.access_token);
+            localStorage.setItem('barbearia', data.barbearia.id);
             
             window.location.href = 'pages/home.html';
         })

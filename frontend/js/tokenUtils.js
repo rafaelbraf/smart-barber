@@ -7,7 +7,7 @@ document.getElementById(ID_LOGOUT_BUTTON).addEventListener('click', removerToken
 
 function verificarSeContemToken() {
     var token = localStorage.getItem(TOKEN_NAME);
-    if (!token) {
+    if (!token || token === 'undefined') {
         redirecionarPagina(PAGINA_INDEX);
     }
 }
