@@ -62,14 +62,13 @@ def get_servico_by_barbearia_id(barbearia_id):
             cursor.execute("SELECT * FROM servicos WHERE id_barbearia = %s", (barbearia_id,))
             servicos = cursor.fetchall()
 
-        if servicos:
-            servicos_json = [{'id': servico[0],
-                              'nome': servico[1],
-                              'preco': servico[2],
-                              'tempoDuracaoEmMinutos': servico[3],
-                              'idBarbearia': servico[4]} for servico in servicos]
-
-            return jsonify({"servicos": servicos_json}), 200
+        servicos_json = [{'id': servico[0],
+                          'nome': servico[1],
+                          'preco': servico[2],
+                          'tempoDuracaoEmMinutos': servico[3],
+                          'idBarbearia': servico[4]} for servico in servicos]
+            
+        return jsonify({"servicos": servicos_json}), 200
     except Exception as e:
         return jsonify({'mensagem': f'Erro ao buscar serviços: {str(e)}'}), 500
     finally:

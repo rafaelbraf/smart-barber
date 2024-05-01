@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Administrativo</title>
+    <!-- Link para o CSS do Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh; /* Garante que a barra lateral ocupe toda a altura da janela de visualização */
+        }
+    </style>
+</head>
+<body>
+    <header class="p-1 bg-primary text-white text-center">
+        <div class="container">
+            <p>Smart Barber</p>
+            <!-- Aqui você pode adicionar qualquer outra informação de cabeçalho -->
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Menu lateral -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <div class="p-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="home.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#agendamentos">Agendamentos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="barbeiros.html">Barbeiros</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="clientes.html">Clientes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#servicos">Serviços</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#configuracoes">Configurações</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="logoutButton" href="#sair">Sair</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Conteúdo principal -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <!-- Aqui você pode adicionar seu conteúdo -->
+                <div class="container mt-2">
+                    <div class="row align-items-center">
+                        <div class="col-md-8 col-6">
+                            <h1>Serviços</h1>
+                        </div>
+                        <div class="col-md-4 col-6 text-md-end text-start">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incluirServicoModal">
+                                <i class="bi bi-plus-lg"></i> Incluir Serviço
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-4">
+                    <div class="row d-flex justify-content-between align-items-center">
+                        <div class="col">
+                            <strong>ID</strong>
+                        </div>
+                        <div class="col">
+                            <strong>Nome</strong>
+                        </div>
+                        <div class="col">
+                            <strong>Preço</strong>
+                        </div>
+                        <div class="col">
+                            <strong>Duração</strong>
+                        </div>
+                        <div class="col">
+                            <strong>Ações</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mt-1">
+                    <div class="row" id="servicos-container">
+                        
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="incluirServicoModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Incluir Novo Serviço</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulário para incluir serviço -->
+                    <form>
+                        <div class="mb-3">
+                            <label for="nomeServico" class="form-label">Nome do Serviço</label>
+                            <input type="text" class="form-control" id="nomeServico" placeholder="Insira o nome do serviço" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="precoServico" class="form-label">Preço</label>
+                                <input type="text" class="form-control" id="precoServico" placeholder="Ex: 30,00" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="duracaoServico" class="form-label">Duração</label>
+                                <input type="text" class="form-control" id="duracaoServico" placeholder="Ex: 30" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="salvarServico()">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Link para o JavaScript do Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/tokenUtils.js"></script>
+    <script src="../js/servicos.js"></script>
+</body>
+</html>
