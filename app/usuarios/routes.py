@@ -57,6 +57,23 @@ def get_usuario_by_id(usuario_id):
     finally:
         connection.close()
 
+@usuarios_blueprint.route('/usuarios/barbearia/<barbearia_id>', methods=['GET'])
+def get_usuarios_by_barbearia_id(barbearia_id):
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT u.id, u.nome, u.email, u.celular FROM usuarios u INNER JOIN agendamentos a ON a.id_usuario = u.id WHERE a.id_barbearia = %s", (barbearia_id))
+            usuarios = cursor.fetchall()
+
+        usuarios_json = [{'id': usuario[0],
+                          'nome': usuario[1],
+                          'email': usuario[2],
+                          'celular': usuario[3]} for usuario in usuarios]
+        
+        return jsonify({ "usuarios": usuarios_json }), 200
+    finally:
+        connection.close()
 
 @usuarios_blueprint.route('/usuarios/<usuario_id>', methods=['PUT'])
 def update_usuario_by_id(usuario_id):
