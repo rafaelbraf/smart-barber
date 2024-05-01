@@ -147,6 +147,7 @@ def delete_barbeiro_by_id(barbeiro_id):
 
     try:
         with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM agendamento_barbeiros WHERE id_barbeiro = %s", (barbeiro_id))
             cursor.execute("DELETE FROM barbeiros WHERE id = %s", (barbeiro_id,))
             connection.commit()
 
