@@ -90,6 +90,8 @@ function salvarServico() {
                 response.json().then(data => {
                     console.log(data);
 
+                    limparCamposModalServico();
+
                     var modal = new bootstrap.Modal(document.getElementById('incluirServicoModal'));
                     modal.hide();
                 });
@@ -129,4 +131,10 @@ function deletarServico(servicoId) {
 
 function isNullOrEmptyOrUndefined(value) {
     return value === null || value === '' || value === undefined;
+}
+
+function limparCamposModalServico() {
+    document.getElementById('nomeServico').value = '';
+    document.getElementById('precoServico').value = '';
+    document.getElementById('duracaoServico').value = '';
 }
