@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', verificarSeContemToken);
 document.getElementById(ID_LOGOUT_BUTTON).addEventListener('click', removerTokenERecarregarPagina);
 
 function verificarSeContemToken() {
-    var token = localStorage.getItem(TOKEN_NAME);
-    if (!token || token === 'undefined') {
+    const token = localStorage.getItem(TOKEN_NAME);
+    if (isNullOrUndefined(token)) {
         redirecionarPagina(PAGINA_INDEX);
     }
 }
@@ -20,4 +20,8 @@ function removerTokenERecarregarPagina() {
 
 function redirecionarPagina(pagina) {
     window.location.href = pagina;
+}
+
+function isNullOrUndefined(value) {
+    return !value || value === 'undefined';
 }
