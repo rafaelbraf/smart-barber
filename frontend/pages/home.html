@@ -7,6 +7,13 @@
     <!-- Link para o CSS do Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        .card-header-transparente {
+            background-color: rgba(255, 255, 255, 0.3);
+            border: none;
+            text-align: center;
+            font-weight: bold;
+        }
+
         .sidebar {
             min-height: 100vh; /* Garante que a barra lateral ocupe toda a altura da janela de visualização */
         }
@@ -28,7 +35,7 @@
                     <div class="p-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+                                <a class="nav-link active" aria-current="page" href="home.html">Indicadores</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="agendamentos.html">Agendamentos</a>
@@ -54,12 +61,105 @@
             </nav>
             
             <!-- Conteúdo principal -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                    <h1 class="h2">Indicadores</h1>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card bg-primary">
+                            <div class="card-header card-header-transparente">
+                                Faturamento no mês
+                            </div>
+                            <div class="card-body text-white text-end">
+                                <h1>R$1200,00</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card bg-primary">
+                            <div class="card-header card-header-transparente">
+                                Serviços vendidos no mês
+                            </div>
+                            <div class="card-body text-white text-end">
+                                <h1>23</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card bg-primary">
+                            <div class="card-header card-header-transparente">
+                                Agendamentos para hoje
+                            </div>
+                            <div class="card-body text-white text-end">
+                                <h1>4</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header card-header-transparente">
+                                Gráfico de Vendas
+                            </div>
+                            <div class="card-body">
+                                <canvas id="grafico1"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header card-header-transparente">
+                                Serviços mais vendidos
+                            </div>
+                            <div class="card-body">
+                                <canvas id="grafico2"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header card-header-transparente">
+                                Serviços recentes
+                            </div>
+                            <div class="container">
+                                <div class="table-responsive-lg">
+                                    <table id="tabela-servicos" class="table table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th>Nome</th>
+                                            <th>Data</th>
+                                            <th>Valor total</th>
+                                            <th>Duração</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
             
         </div>
     </div>
 
     <!-- Link para o JavaScript do Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../js/tokenUtils.js"></script>
+    <script src="../js/graficosHome.js"></script>
+    <script src="../js/home.js"></script>
 </body>
 </html>
