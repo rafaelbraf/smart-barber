@@ -99,7 +99,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="cadastrarBarbeiroModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalLabel">Cadastrar barbeiro</h5>
@@ -108,27 +108,31 @@
                 <div class="modal-body">
                     <!-- Formulário para incluir barbeiro -->
                     <form>
-                        <div class="mb-3">
-                            <label for="cpfBarbeiro" class="form-label">CPF</label>
-                            <input type="text" class="form-control" id="cpfBarbeiro" placeholder="000.000.000-00" required>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="cpfBarbeiro" class="form-label">CPF</label>
+                                <input type="text" class="form-control" id="cpfBarbeiro" placeholder="000.000.000-00" required>
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <label for="nomeBarbeiro" class="form-label">Nome</label>
+                                <input type="text" class="form-control" id="nomeBarbeiro" placeholder="Insira o nome do barbeiro" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="nomeBarbeiro" class="form-label">Nome</label>
-                            <input type="text" class="form-control" id="nomeBarbeiro" placeholder="Insira o nome do barbeiro" required>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="celularBarbeiro" class="form-label">Celular</label>
+                                <input type="text" class="form-control" id="celularBarbeiro" placeholder="(88) 98888-8888" required>
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <label for="emailBarbeiro" class="form-label">Email</label>
+                                <input type="text" class="form-control" id="emailBarbeiro" placeholder="Insira o email do barbeiro" required>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="emailBarbeiro" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="emailBarbeiro" placeholder="Insira o email do barbeiro" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="celularBarbeiro" class="form-label">Celular</label>
-                            <input type="text" class="form-control" id="celularBarbeiro" placeholder="(88) 98888-8888" required>
-                        </div>
-                        <div class="form-check">
+                        <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="checkboxBarbeiroAtivo" checked>
                             <label class="form-check-label" for="checkbox1">Ativo</label>
                         </div>
-                        <div class="form-check">
+                        <div class="form-check mb-3">
                             <input class="form-check-input" type="checkbox" id="checkboxBarbeiroAdmin">
                             <label class="form-check-label" for="checkbox1">Admin</label>
                         </div>
