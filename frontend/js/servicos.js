@@ -23,36 +23,7 @@ function buscarServicosDaBarbearia() {
         container.innerHTML = '';
 
         const servicos = data.servicos;
-        servicos.forEach(servico => {
-            const card = document.createElement('div');
-            card.innerHTML = `
-                <div class="card mt-1" style="cursor: pointer;">
-                    <div class="card-body justify-content-between">
-                        <div class="row">
-                            <div class="col">
-                                ${servico.id}
-                            </div>
-                            <div class="col">
-                                ${servico.nome}
-                            </div>
-                            <div class="col">
-                                R$ ${formatarPreco(servico.preco)}
-                            </div>
-                            <div class="col">
-                                ${servico.tempoDuracaoEmMinutos} minutos
-                            </div>
-                            <div class="col text-end">
-                                <button class="btn btn-danger btn-sm" onclick="deletarServico(${servico.id})">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            container.appendChild(card);
-        });
+        popularTabela(servicos);
     })
     .catch((error) => {
         console.error('Erro: ', error);
@@ -137,4 +108,44 @@ function limparCamposModalServico() {
     document.getElementById('nomeServico').value = '';
     document.getElementById('precoServico').value = '';
     document.getElementById('duracaoServico').value = '';
+}
+
+function popularTabela(servicos) {
+    const tableBody = document.querySelector('.table tbody');
+    tableBody.innerHTML = '';
+
+    servicos.forEach(servico => {
+        const row = document.createElement('tr');
+        row.className = 'cursor-pointer'
+
+        const idCell = document.createElement('td');
+        idCell.textContent = servico.id;
+        row.appendChild(idCell);
+
+        const nomeCell = document.createElement('td');
+        nomeCell.textContent = servico.nome;
+        row.appendChild(nomeCell);
+
+        const precoCell = document.createElement('td');
+        precoCell.textContent = formatarPreco(servico.preco);
+        row.appendChild(precoCell);
+
+        const duracaoCell = document.createElement('td');
+        duracaoCell.textContent = `${servico.tempoDuracaoEmMinutos} minutos`;
+        row.appendChild(duracaoCell);
+
+        const actionsCell = document.createElement('td');
+        const editIcon = document.createElement('i');
+        editIcon.className = 'bi bi-pencil-square cursor-pointer';        
+        
+        const deleteIcon = document.createElement('i');
+        deleteIcon.className = 'bi bi-trash cursor-pointer';
+        deleteIcon.onclick = function() { deletarServico(servico.id) };
+
+        actionsCell.appendChild(editIcon);
+        actionsCell.appendChild(deleteIcon);
+        row.appendChild(actionsCell);
+
+        tableBody.appendChild(row);
+    });
 }
