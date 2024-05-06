@@ -63,16 +63,38 @@ def get_agendamento_by_barbearia_id(barbearia_id):
 
     try:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM agendamentos WHERE id_barbearia = %s", (barbearia_id,))
+            sql_query = """
+                SELECT 
+                    a.id as agendamento_id, 
+                    a.data || 'T' || a.hora || ':00' as data_hora_agendamento_inicio,
+                    to_char(to_timestamp(a.data || 'T' || a.hora || ':00', 'YYYY-MM-DD"T"HH24:MI:SS') + interval '1 minute' * a.tempo_duracao_em_minutos, 'YYYY-MM-DD"T"HH24:MI:SS')  as data_hora_agendamento_fim,
+                    a.valor_total, 
+                    a.tempo_duracao_em_minutos,
+                    a.id_barbearia,	
+                    u.id as usuario_id,
+                    u.nome as usuario_nome,
+                    u.email as usuario_email,
+                    u.celular as usuario_celular
+                FROM agendamentos a 
+                INNER JOIN usuarios u ON u.id = a.id_usuario
+                WHERE a.id_barbearia = %s;
+            """
+
+            cursor.execute(sql_query, (barbearia_id,))
             agendamentos = cursor.fetchall()
 
         agendamentos_json = [{'id': agendamento[0],
-                              'data': agendamento[1],
-                              'hora': agendamento[2],
+                              'dataHoraAgendamentoInicio': agendamento[1],
+                              'dataHoraAgendamentoFim': agendamento[2],
                               'valorTotal': agendamento[3],
                               'tempoDuracaoEmMinutos': agendamento[4],
                               'idBarbearia': agendamento[5],
-                              'idUsuario': agendamento[6]} for agendamento in agendamentos]
+                              'usuario': {
+                                  'id': agendamento[6],
+                                  'nome': agendamento[7],
+                                  'email': agendamento[8],
+                                  'celular': agendamento[9]
+                              }} for agendamento in agendamentos]
 
         return jsonify({"agendamentos": agendamentos_json}), 200
     except Exception as e:
@@ -80,6 +102,24 @@ def get_agendamento_by_barbearia_id(barbearia_id):
     finally:
         connection.close()
 
+@agendamentos_blueprint.route('/agendamentos/barbearia/<barbearia_id>/quantidade', methods=['GET'])
+def get_quantidade_agendamentos_by_data_agendamento(barbearia_id):
+    data_agendamentos = request.args.get('data_agendamentos')
+    if not data_agendamentos:
+        return jsonify({'error': 'O parâmetro data_agendamento é obrigatório.'}), 400
+
+    connection = get_db_connection()
+
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT count(*) FROM agendamentos WHERE data = %s and id_barbearia = %s", (data_agendamentos, barbearia_id, ))
+            quantidade_agendamentos = cursor.fetchone()
+
+        resultado_json = { 'quantidadeAgendamentos': quantidade_agendamentos[0] }
+
+        return jsonify(resultado_json), 200
+    finally:
+        connection.close()
 
 @agendamentos_blueprint.route('/agendamentos', methods=['POST'])
 def insert_agendamento():
