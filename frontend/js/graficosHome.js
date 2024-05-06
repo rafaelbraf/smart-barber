@@ -1,4 +1,6 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", renderizarGraficos);
+
+function renderizarGraficos() {
     const ctx1 = document.getElementById('grafico1').getContext('2d');
     new Chart(ctx1, {
         type: 'line',
@@ -36,4 +38,4 @@ document.addEventListener("DOMContentLoaded", function() {
             }]
         }
     });
-});
+}
