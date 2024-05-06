@@ -1,3 +1,9 @@
+const token = localStorage.getItem('token');
+const barbeariaId = localStorage.getItem('barbearia');
+
+document.addEventListener('DOMContentLoaded', popularTabelaServicos);
+document.addEventListener('DOMContentLoaded', buscarQuantidadeDeAgendamentosParaHoje);
+
 function popularTabelaServicos() {
     const dados = [
         { nome: 'Corte de Cabelo', data: '2024-05-01', valorTotal: 50.0, duracao: '30 minutos' },
@@ -37,5 +43,29 @@ function popularTabelaServicos() {
     });
 }
 
-// Chamar a função para popular a tabela ao carregar a página
-document.addEventListener('DOMContentLoaded', popularTabelaServicos);
+function buscarQuantidadeDeAgendamentosParaHoje() {
+    const hoje = new Date();
+
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+
+    const dataFormatada = `${ano}-${mes}-${dia}`;
+
+    fetch(`http://localhost:5000/agendamentos/barbearia/${barbeariaId}/quantidade?data_agendamentos=${dataFormatada}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Erro ao buscar a quantidade de agendamentos de hoje.');
+        }
+    })
+    .then(data => document.getElementById('quantidade-agendamentos-hoje').textContent = data.quantidadeAgendamentos)
+    .catch(error => console.error(error));
+}
