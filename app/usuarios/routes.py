@@ -63,7 +63,7 @@ def get_usuarios_by_barbearia_id(barbearia_id):
 
     try:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT u.id, u.nome, u.email, u.celular FROM usuarios u INNER JOIN agendamentos a ON a.id_usuario = u.id WHERE a.id_barbearia = %s", (barbearia_id))
+            cursor.execute("SELECT DISTINCT u.id, u.nome, u.email, u.celular FROM usuarios u INNER JOIN agendamentos a ON a.id_usuario = u.id WHERE a.id_barbearia = %s", (barbearia_id))
             usuarios = cursor.fetchall()
 
         usuarios_json = [{'id': usuario[0],
