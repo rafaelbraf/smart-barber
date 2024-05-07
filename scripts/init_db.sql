@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS barbeiros (
     email VARCHAR(100) UNIQUE NOT NULL,
     celular VARCHAR(20),
     admin BOOLEAN NOT NULL,
-    barbearia_id INTEGER REFERENCES barbearias(id),
+    id_barbearia INTEGER REFERENCES barbearias(id),
     ativo BOOLEAN NOT NULL
 );
 
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS servicos (
     nome VARCHAR(100) NOT NULL,
     preco NUMERIC(10, 2) NOT NULL,
     tempo_duracao_em_minutos INTEGER NOT NULL,
-    barbearia_id INTEGER REFERENCES barbearias(id),
+    id_barbearia INTEGER REFERENCES barbearias(id),
     ativo BOOLEAN NOT NULL DEFAULT true
 );
 
@@ -46,8 +46,8 @@ CREATE TABLE IF NOT EXISTS agendamentos (
     hora VARCHAR(5) NOT NULL,
     valor_total NUMERIC(10, 2) NOT NULL,
     tempo_duracao_em_minutos INTEGER NOT NULL,
-    barbearia_id INTEGER REFERENCES barbearias(id),
-    usuario_id UUID REFERENCES usuarios(id)
+    id_barbearia INTEGER REFERENCES barbearias(id),
+    id_usuario UUID REFERENCES usuarios(id)
 );
 
 CREATE TABLE IF NOT EXISTS agendamento_servicos (
