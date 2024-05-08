@@ -36,8 +36,8 @@ function formatarPreco(preco) {
 
 function salvarServico() {
     const nomeServico = document.getElementById('nomeServico').value;
-    const precoServico = document.getElementById('precoServico').value;
-    const duracaoServico = document.getElementById('duracaoServico').value;
+    const precoServico = parseFloat(document.getElementById('precoServico').value);
+    const duracaoServico = parseInt(document.getElementById('duracaoServico').value);
     const idBarbearia = localStorage.getItem('barbearia');
 
     if (!isNullOrEmptyOrUndefined(nomeServico) && !isNullOrEmptyOrUndefined(precoServico) && !isNullOrEmptyOrUndefined(duracaoServico) && !isNullOrEmptyOrUndefined(idBarbearia)) {
