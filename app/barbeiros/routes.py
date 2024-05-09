@@ -93,6 +93,13 @@ def insert_barbeiro():
                                admin=barbeiro_data['admin'],
                                id_barbearia=barbeiro_data['idBarbearia'],
                                ativo=barbeiro_data['ativo'])
+    
+    if not is_cpf_valido(barbeiro_dto.cpf):
+        return jsonify({"mensagem": "Erro ao cadastrar Barbeiro: Informe um CPF válido."}), 400
+    
+    if not is_celular_valido(barbeiro_dto.celular):
+        return jsonify({"mensagem": "Erro ao cadastrar Barbeiro: Informe um Celular válido."}), 400
+
     barbeiro = Barbeiro(**barbeiro_dto.__dict__)
     connection = get_db_connection()
 
@@ -108,7 +115,7 @@ def insert_barbeiro():
 
         return jsonify({"mensagem": f"Barbeiro criado com sucesso com id {id_novo_barbeiro}!"}), 201
     except Exception as e:
-        return jsonify({"mensagem": f"Erro ao criar Barbeiro: {str(e)}"})
+        return jsonify({"mensagem": f"Erro ao criar Barbeiro: {str(e)}"}), 400
     finally:
         connection.close()
 
@@ -154,3 +161,9 @@ def delete_barbeiro_by_id(barbeiro_id):
         return jsonify({}), 204
     finally:
         connection.close()
+
+def is_cpf_valido(cpf: str) -> bool:
+    return len(cpf) == 11
+
+def is_celular_valido(celular: str) -> bool:
+    return len(celular) == 9
