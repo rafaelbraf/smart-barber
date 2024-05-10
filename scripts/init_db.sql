@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS barbeiros (
     celular VARCHAR(20),
     admin BOOLEAN NOT NULL,
     id_barbearia INTEGER REFERENCES barbearias(id),
-    ativo BOOLEAN NOT NULL
+    ativo BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS servicos (
