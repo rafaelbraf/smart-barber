@@ -149,3 +149,19 @@ function popularTabela(servicos) {
         tableBody.appendChild(row);
     });
 }
+
+function exibirAlertaServicos(status, mensagem) {
+    var idAlerta = "";
+    if (status === "success"){
+        idAlerta = "alertSuccessServico";
+    } else{
+        idAlerta = "alertErrorServico";
+    }
+    var alert = document.getElementById(idAlerta);
+    alert.classList.add("show");
+    alert.innerHTML = mensagem;
+    alert.innerHTML += '<button type= "button" class= "btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    setTimeout(function() {
+        alert.classList.remove("show");
+    },3000);
+}
