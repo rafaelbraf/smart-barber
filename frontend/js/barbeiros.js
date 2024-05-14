@@ -91,14 +91,21 @@ function cadastrarBarbeiroNaBarbearia() {
     .then((response) => {
         if (response.status === 201) {
             response.json().then(data => {
-                console.log(data);
-
                 limparCamposModalBarbeiro();
 
                 var modal = new bootstrap.Modal(document.getElementById('cadastrarBarbeiroModal'));
                 modal.hide();
+                
+                exibirAlertaBarbeiro("success",data.mensagem);
+                buscarBarbeirosDaBarbearia();
             });
-        } else {
+        } else if (response.status === 400){
+            response.json().then(data =>{
+                console.log(data)
+                exibirAlertaBarbeiro("error",data.mensagem);
+            })
+        }
+         else {
             throw new Error('Erro ao salvar barbeiro.');
         }
     })
@@ -127,13 +134,30 @@ function deletarBarbeiro(barbeiroId) {
         })
         .then(response => {
             if (response.ok) {
-                alert('Barbeiro excluído com sucesso!');
-                
+                exibirAlertaBarbeiro("success",'Barbeiro excluído com sucesso!');
                 buscarBarbeirosDaBarbearia();
             } else {
+                exibirAlertaBarbeiro("error",'Erro ao excluir barbeiro.');
                 throw new Error('Erro ao excluir barbeiro.');
             }
         })
         .catch(error => console.error(error));
     }
+}
+
+function exibirAlertaBarbeiro(status, mensagem) {
+    var idAlerta = "";
+    if (status === "success"){
+        idAlerta = "alertSuccessBarbeiro";
+    } else{
+        idAlerta = "alertErrorBarbeiro";
+    }
+    var alert = document.getElementById(idAlerta);
+    alert.classList.add("show");
+    alert.innerHTML = mensagem;
+    alert.innerHTML +='<button type= "button" class= "btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    setTimeout(function() {
+        alert.classList.remove("show");
+    },3000);
+
 }
