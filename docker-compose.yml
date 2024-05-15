@@ -13,10 +13,17 @@ services:
   smart-barber:
     build:
       context: .
-    image: rafaelbrunof/smart-barber
+    image: rafaelbrunof/smart-barber-backend
     depends_on:
       - postgres
     env_file:
       - .env
     ports:
       - "5000:5000"
+
+  frontend:
+    build:
+      context: ./frontend
+    image: rafaelbrunof/smart-barber-frontend
+    ports:
+      - "8080:80"
