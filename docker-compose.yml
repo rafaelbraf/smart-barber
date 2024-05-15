@@ -12,7 +12,7 @@ services:
 
   smart-barber:
     build:
-      context: .
+      context: ./backend
     image: rafaelbrunof/smart-barber-backend
     depends_on:
       - postgres
