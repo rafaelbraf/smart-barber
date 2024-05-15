@@ -10,14 +10,14 @@ services:
     volumes:
       - ./scripts:/docker-entrypoint-initdb.d
 
-  smart-barber:
+  backend:
     build:
       context: ./backend
     image: rafaelbrunof/smart-barber-backend
     depends_on:
       - postgres
     env_file:
-      - .env
+      - ./backend/.env
     ports:
       - "5000:5000"
 
