@@ -10,10 +10,10 @@ resource "aws_default_vpc" "default_vpc" {
     }  
 }
 
-data "aws_availability_zones" "available_zones" {}
+data "aws_availability_zones" "availability_zones" {}
 
 resource "aws_default_subnet" "default_az1" {
-    availability_zone = data.aws_availability_zones.available_zones.names[0]  
+    availability_zone = data.aws_availability_zones.availability_zones.names[0]
     tags = {
         Name = "default subnet"
     }
@@ -24,20 +24,22 @@ resource "aws_security_group" "ec2_security_group" {
     description = "allow access on ports 8080 and 22"
     vpc_id = aws_default_vpc.default_vpc.id
 
+    #allow access on port 8080
     ingress {
         description = "http proxy access"
         from_port = 8080
         to_port = 8080
         protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
+        cidr_blocks = [ "0.0.0.0/0" ]
     }
 
+    #allow access on port 22
     ingress {
         description = "ssh access"
         from_port = 22
         to_port = 22
         protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
+        cidr_blocks = [ "0.0.0.0/0" ]
     }
 
     egress {
@@ -52,39 +54,39 @@ resource "aws_security_group" "ec2_security_group" {
     }
 }
 
-data "aws_ami" "amazon-linux-2" {
+data "aws_ami" "amazon_linux_2" {
     most_recent = true
     owners = [ "amazon" ]
 
     filter {
-      name = "owner-alias"
-      values = [ "amazon" ]
+        name = "owner-alias"
+        values = [ "amazon" ]
     }
 
     filter {
-      name = "name"
-      values = ["amzn2-ami-hvm*"]
+        name = "name"
+        values = [ "amzn2-ami-hvm*" ]
     }
 }
 
 resource "aws_instance" "ec2_instance" {
-    ami = data.aws_ami.amazon-linux-2.id
+    ami = data.aws_ami.amazon_linux_2.id
     instance_type = "t2.micro"
     subnet_id = aws_default_subnet.default_az1.id
     vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
     key_name = "teste-terraform-jenkins"
 
     tags = {
-      Name = "jenkins server"
+        Name = "jenkins server"
     }
 }
 
 resource "null_resource" "name" {
     connection {
-      type = "ssh"
-      user = "ec2-user"
-      private_key = file()
-      host = aws_instance.ec2_instance.public_ip
+        type = "ssh"
+        user = "ec2-user"
+        private_key = file("")
+        host = aws_instance.ec2_instance.public_ip
     }
 
     provisioner "file" {
@@ -96,12 +98,12 @@ resource "null_resource" "name" {
         inline = [ 
             "sudo chmod +x /tmp/install_jenkins.sh",
             "sh /tmp/install_jenkins.sh"
-         ]
+        ]
     }
 
     depends_on = [ aws_instance.ec2_instance ]
 }
 
 output "website_url" {
-  value = join("", ["http://", aws_instance.ec2_instance.public_dns, ":", "8080"])
+    value = join("", ["http://", aws_instance.ec2_instance.public_dns, ":", "8080"])
 }
