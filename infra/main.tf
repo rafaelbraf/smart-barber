@@ -90,12 +90,19 @@ resource "null_resource" "name" {
     }
 
     provisioner "file" {
+        source = "install_docker.sh"
+        destination = "/tmp/install_docker.sh"
+    }
+
+    provisioner "file" {
         source = "install_jenkins.sh"
         destination = "/tmp/install_jenkins.sh"
     }
 
     provisioner "remote-exec" {
-        inline = [ 
+        inline = [            
+            "sudo chmod +x /tmp/install_docker.sh",            
+            "sh /tmp/install_docker.sh",
             "sudo chmod +x /tmp/install_jenkins.sh",
             "sh /tmp/install_jenkins.sh"
         ]
