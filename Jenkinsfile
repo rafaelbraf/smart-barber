@@ -13,6 +13,8 @@ pipeline {
     stages {
         stage('Create .env files') {
             steps {
+                echo 'Criando arquivos .env...'
+
                 script {
                     // Cria o arquivo .env para o banco de dados
                     writeFile file: '.env', text: """
@@ -31,6 +33,8 @@ pipeline {
                         SECRET_KEY = ${env.SECRET_KEY}
                     """
                 }
+
+                echo 'Arquivos .env criados.'
             }
         }
 
