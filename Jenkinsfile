@@ -36,11 +36,15 @@ pipeline {
 
         stage('Build and run docker containers') {
             steps {
+                echo 'Iniciando build e execução dos containers Docker...'
+
                 script {
                     sh 'docker-compose down'
                     sh 'docker-compose build'
                     sh 'docker-compose up -d'
                 }
+
+                echo 'Build e execução dos containers Docker concluídos.'
             }
         }
     }
