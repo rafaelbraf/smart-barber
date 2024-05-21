@@ -65,8 +65,16 @@ function salvarServico() {
 
                     var modal = new bootstrap.Modal(document.getElementById('incluirServicoModal'));
                     modal.hide();
+
+                    exibirAlertaServicos("success",data.mensagem);
+                    buscarServicosDaBarbearia();
                 });
-            } else {
+            } else if (response.status === 400){
+                response.json().then(data =>{
+                    console.log(data)
+                    exibirAlertaServicos("error",data.mensagem);
+                })
+             
                 throw new Error('Erro ao salvar serviço.');
             }
         })
@@ -89,10 +97,10 @@ function deletarServico(servicoId) {
         })
         .then(response => {
             if (response.ok) {
-                alert('Serviço excluído com sucesso!');
-                
+                exibirAlertaServicos("success",'Serviço excluído com sucesso!');
                 buscarServicosDaBarbearia();
             } else {
+                exibirAlertaServicos("error",'Erro ao excluir serviço.');
                 throw new Error('Erro ao excluir serviço.');
             }
         })
@@ -148,4 +156,20 @@ function popularTabela(servicos) {
 
         tableBody.appendChild(row);
     });
+}
+
+function exibirAlertaServicos(status, mensagem) {
+    var idAlerta = "";
+    if (status === "success"){
+        idAlerta = "alertSuccessServico";
+    } else{
+        idAlerta = "alertErrorServico";
+    }
+    var alert = document.getElementById(idAlerta);
+    alert.classList.add("show");
+    alert.innerHTML = mensagem;
+    alert.innerHTML += '<button type= "button" class= "btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    setTimeout(function() {
+        alert.classList.remove("show");
+    },3000);
 }
