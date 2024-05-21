@@ -1,0 +1,29 @@
+name: Docker Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy-database:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        run: actions/checkout@v2
+
+      - name: Login to Docker hub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Pull Docker image for database
+        run: docker pull postgres:latest
+
+      - name: Run Docker container for database
+        run: |
+          docker run -d --name db-container \
+          -e POSTGRES_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
+          -e POSTGRES_USER=${{ secrets.DATABASE_USER }}
+          -e POSTGRES_DB=${{ secrets.DABATASE_NAME }}
+          -v path/to/your/scripts:/docker-entrypoint-initdb.d \
+            postgres:latest
