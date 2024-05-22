@@ -25,6 +25,6 @@ jobs:
           -e POSTGRES_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
           -e POSTGRES_USER=${{ secrets.DATABASE_USER }} \
           -e POSTGRES_DB=${{ secrets.DATABASE_NAME }} \
-          -p ${{ secrets.DATABASE_PORT }}:5432
+          -p ${{ secrets.DATABASE_PORT }}:5432 \
           -v ${{ github.workspace }}/scripts:/docker-entrypoint-initdb.d \
             postgres:latest
