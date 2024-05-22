@@ -28,3 +28,20 @@ jobs:
           tags: |
             rafaelbrunof/backend-smart-barber:v${{ github.run_number }}
             rafaelbrunof/backend-smart-barber:latest
+
+  CD:
+    runs-on: self-hosted
+
+    steps: 
+      - name: Pull docker image for backend
+        run: docker pull rafaelbrunof/backend-smart-barber:latest
+
+      - name: Run docker container for backend
+        run: |
+          docker run -d --name backend-smart-barber \
+          -e DB_NAME=${{ secrets.DATABASE_NAME }}
+          -e DB_USER=${{ secrets.DATABASE_USER }}
+          -e DB_PASS=${{ secrets.DATABASE_PASSWORD }}
+          -e DB_HOST=${{ secrets.DATABASE_HOST }}
+          -e DB_PORT=${{ secrets.DATABASE_PORT }}
+          -e SECRET_KEY=${{ secrets.SECRET_KEY }}
