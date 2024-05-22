@@ -22,8 +22,8 @@ jobs:
       - name: Run Docker container for database
         run: |
           docker run -d --name db-container \
-          -e POSTGRES_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
-          -e POSTGRES_USER=${{ secrets.DATABASE_USER }}
-          -e POSTGRES_DB=${{ secrets.DABATASE_NAME }}
-          -v ./scripts:/docker-entrypoint-initdb.d \
+          -e POSTGRES_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+          -e POSTGRES_USER=${{ secrets.DATABASE_USER }} \
+          -e POSTGRES_DB=${{ secrets.DABATASE_NAME }} \
+          -v ${{ github.workspace }}/scripts:/docker-entrypoint-initdb.d \
             postgres:latest
