@@ -44,5 +44,6 @@ jobs:
           -e DB_PASS=${{ secrets.DATABASE_PASSWORD }} \
           -e DB_HOST=${{ secrets.DATABASE_HOST }} \
           -e DB_PORT=${{ secrets.DATABASE_PORT }} \
-          -e SECRET_KEY=${{ secrets.SECRET_KEY }} \ 
+          -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
+          -p 5000:5000 \
           rafaelbrunof/backend-smart-barber:latest
