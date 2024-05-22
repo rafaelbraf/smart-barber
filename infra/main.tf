@@ -33,11 +33,27 @@ resource "aws_security_group" "ec2_security_group" {
         cidr_blocks = [ "0.0.0.0/0" ]
     }
 
-    #allow access on port 22
+    #allow access on port 8080
     ingress {
         description = "ssh access"
         from_port = 22
         to_port = 22
+        protocol = "tcp"
+        cidr_blocks = [ "0.0.0.0/0" ]
+    }
+
+    ingress {
+        description = "frontend access"
+        from_port = 80
+        to_port = 80
+        protocol = "tcp"
+        cidr_blocks = [ "0.0.0.0/0" ]
+    }
+
+    ingress {
+        description = "backend access"
+        from_port = 5000
+        to_port = 5000
         protocol = "tcp"
         cidr_blocks = [ "0.0.0.0/0" ]
     }
@@ -54,27 +70,13 @@ resource "aws_security_group" "ec2_security_group" {
     }
 }
 
-data "aws_ami" "amazon_linux_2" {
-    most_recent = true
-    owners = [ "amazon" ]
-
-    filter {
-        name = "owner-alias"
-        values = [ "amazon" ]
-    }
-
-    filter {
-        name = "name"
-        values = [ "amzn2-ami-hvm*" ]
-    }
-}
-
 resource "aws_instance" "ec2_instance" {
-    ami = data.aws_ami.amazon_linux_2.id
+    ami = "ami-0bb84b8ffd87024d8"
     instance_type = "t2.micro"
     subnet_id = aws_default_subnet.default_az1.id
     vpc_security_group_ids = [aws_security_group.ec2_security_group.id]
     key_name = "teste-terraform-jenkins"
+    user_data = file("install_packages.sh")
 
     tags = {
         Name = "jenkins server"
@@ -87,25 +89,6 @@ resource "null_resource" "name" {
         user = "ec2-user"
         private_key = file("")
         host = aws_instance.ec2_instance.public_ip
-    }
-
-    provisioner "file" {
-        source = "install_docker.sh"
-        destination = "/tmp/install_docker.sh"
-    }
-
-    provisioner "file" {
-        source = "install_jenkins.sh"
-        destination = "/tmp/install_jenkins.sh"
-    }
-
-    provisioner "remote-exec" {
-        inline = [            
-            "sudo chmod +x /tmp/install_docker.sh",            
-            "sh /tmp/install_docker.sh",
-            "sudo chmod +x /tmp/install_jenkins.sh",
-            "sh /tmp/install_jenkins.sh"
-        ]
     }
 
     depends_on = [ aws_instance.ec2_instance ]
