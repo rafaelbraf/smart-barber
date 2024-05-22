@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }} 
 
-      - name: Docker build e push da imagem
+      - name: Docker build e push da imagem do backend
         uses: docker/build-push-action@v5.3.0
         with:
           context: ./backend
@@ -28,6 +28,16 @@ jobs:
           tags: |
             rafaelbrunof/backend-smart-barber:v${{ github.run_number }}
             rafaelbrunof/backend-smart-barber:latest
+
+      - name: Docker build e push da imagem do  frontend
+        uses: docker/build-push-action@v5.3.0
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            rafaelbrunof/frontend-smart-barber:v${{ github.run_number }}
+            rafaelbrunof/frontend-smart-barber:latest
 
   CD:
     runs-on: self-hosted
@@ -47,3 +57,12 @@ jobs:
           -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
           -p 5000:5000 \
           rafaelbrunof/backend-smart-barber:latest
+
+      - name: Pull docker image for frontend
+        run: rafaelbrunof/frontend-smart-barber:latest
+
+      - name: Run docker container for frontend
+        run: |
+          docker run -d --name frontend-smart-barber \
+          -p 80:80 \
+          rafaelbrunof/frontend-smart-barber:latest
