@@ -25,5 +25,5 @@ jobs:
           -e POSTGRES_PASSWORD=${{ secrets.DATABASE_PASSWORD }}
           -e POSTGRES_USER=${{ secrets.DATABASE_USER }}
           -e POSTGRES_DB=${{ secrets.DABATASE_NAME }}
-          -v path/to/your/scripts:/docker-entrypoint-initdb.d \
+          -v ./scripts:/docker-entrypoint-initdb.d \
             postgres:latest
