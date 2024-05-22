@@ -59,7 +59,7 @@ jobs:
           rafaelbrunof/backend-smart-barber:latest
 
       - name: Pull docker image for frontend
-        run: rafaelbrunof/frontend-smart-barber:latest
+        run: docker pull rafaelbrunof/frontend-smart-barber:latest
 
       - name: Run docker container for frontend
         run: |
