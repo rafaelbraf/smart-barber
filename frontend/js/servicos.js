@@ -86,6 +86,80 @@ function salvarServico() {
     }
 }
 
+async function mostrarServicoPorId(servicoId) {
+    var modal = new bootstrap.Modal(document.getElementById('editarServicoModal'));
+    modal.show();
+    const servico = await buscarServico(servicoId);
+    document.getElementById('idServico').value = servico.id;
+    document.getElementById('nomeServicoEditar').value = servico.nome;
+    document.getElementById('precoServicoEditar').value = servico.preco;
+    document.getElementById('duracaoServicoEditar').value = servico.tempoDuracaoEmMinutos;
+}
+
+function editarServico() {
+    const idServico = document.getElementById('idServico').value;
+    const nomeServico = document.getElementById('nomeServicoEditar').value;
+    const precoServico = parseFloat(document.getElementById('precoServicoEditar').value);
+    const duracaoServico = parseInt(document.getElementById('duracaoServicoEditar').value);
+
+    if (!isNullOrEmptyOrUndefined(nomeServico) && !isNullOrEmptyOrUndefined(precoServico) && !isNullOrEmptyOrUndefined(duracaoServico)) {
+        const servico = {
+            nome: nomeServico,
+            preco: precoServico,
+            tempoDuracaoEmMinutos: duracaoServico,
+        };
+
+        fetch(`http://localhost:5000/servicos/${idServico}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(servico)
+        })
+        .then((response) => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    limparCamposModalEditarServico();
+
+                    var modal = new bootstrap.Modal(document.getElementById('editarServicoModal'));
+                    modal.hide();
+
+                    exibirAlertaServicos("success",data.mensagem);
+                    buscarServicosDaBarbearia();
+                });
+            } else if (response.status === 400){
+                response.json().then(data =>{
+                    exibirAlertaServicos("error",data.mensagem);
+                })
+             
+                throw new Error('Erro ao editar serviço.');
+            }
+        })
+        .catch(error => console.error(error)) ;
+    }
+}
+
+async function buscarServico(servicoId) {
+    try {
+        const response = await fetch(`http://localhost:5000/servicos/${servicoId}`,{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            return await response.json();
+        } else {
+            throw new Error(`Erro ao buscar servico: ${servicoId}.`);
+        }
+    } catch (error) {
+        console.error('Erro: ', error);
+    }
+}
+ 
 function deletarServico(servicoId) {
     if (confirm('Tem certeza que deseja excluir o serviço?')) {
         fetch(`http://localhost:5000/servicos/${servicoId}`, {
@@ -117,6 +191,14 @@ function limparCamposModalServico() {
     document.getElementById('precoServico').value = '';
     document.getElementById('duracaoServico').value = '';
 }
+ 
+function limparCamposModalEditarServico() {
+    document.getElementById('nomeServicoEditar').value = '';
+    document.getElementById('precoServicoEditar').value = '';
+    document.getElementById('duracaoServicoEditar').value = '';
+    document.getElementById('idServico').value = '';
+
+}
 
 function popularTabela(servicos) {
     const tableBody = document.querySelector('.table tbody');
@@ -144,8 +226,9 @@ function popularTabela(servicos) {
 
         const actionsCell = document.createElement('td');
         const editIcon = document.createElement('i');
-        editIcon.className = 'bi bi-pencil-square cursor-pointer';        
-        
+        editIcon.className = 'bi bi-pencil-square cursor-pointer';
+        editIcon.onclick = function() { mostrarServicoPorId(servico.id) };
+
         const deleteIcon = document.createElement('i');
         deleteIcon.className = 'bi bi-trash cursor-pointer';
         deleteIcon.onclick = function() { deletarServico(servico.id) };
