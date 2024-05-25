@@ -2,24 +2,22 @@ version: '3'
 
 services:
   postgres:
-    image: postgres:latest
-    env_file:
-      - .env
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=click-barber_db'
+      - 'POSTGRES_PASSWORD=clbb'
+      - 'POSTGRES_USER=clbb'
     ports:
-      - "5432:5432"
-    volumes:
-      - ./scripts:/docker-entrypoint-initdb.d
+      - '5432:5432'
 
   backend:
     build:
       context: ./backend
-    image: rafaelbrunof/smart-barber-backend
+    image: rafaelbrunof/clickbarber-backend
     depends_on:
       - postgres
-    env_file:
-      - ./backend/.env
     ports:
-      - "5000:5000"
+      - "8080:8080"
 
   frontend:
     build:
