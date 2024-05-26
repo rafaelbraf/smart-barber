@@ -1,3 +1,7 @@
+let urlBackend;
+
+document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+
 function fazerLogin() {
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
@@ -8,7 +12,7 @@ function fazerLogin() {
             senha: senha
         };
 
-        fetch('http://localhost:8081/auth/barbearias/login', {
+        fetch(`${urlBackend}/auth/barbearias/login`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -26,4 +30,15 @@ function fazerLogin() {
             console.log("Erro na requisição: " + error);
         });
     }
+}
+
+function carregarVariaveisDeAmbiente() {
+    fetch('/config')
+        .then(response => response.json())
+        .then(config => {
+            urlBackend = config.apiUrl
+        })
+        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
+
+    console.log(urlBackend);
 }
