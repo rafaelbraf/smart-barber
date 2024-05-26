@@ -8,7 +8,7 @@ function fazerLogin() {
             senha: senha
         };
 
-        fetch('http://localhost:5000/auth/barbearia/login', {
+        fetch('http://localhost:8081/auth/barbearias/login', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
