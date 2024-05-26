@@ -24,11 +24,15 @@ public class BarbeariaService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
-    public BarbeariaDto findByEmail(String email) {
+    public BarbeariaDto buscarPorEmail(String email) {
         var barbearia = barbeariaRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("Não foi encontrada Barbearia com email " + email));
 
         return barbeariaMapper.toDto(barbearia);
+    }
+
+    public String buscarSenha(Integer id) {
+        return barbeariaRepository.findPasswordById(id);
     }
 
     public BarbeariaDto cadastrar(BarbeariaCadastroDto barbeariaCadastro) {

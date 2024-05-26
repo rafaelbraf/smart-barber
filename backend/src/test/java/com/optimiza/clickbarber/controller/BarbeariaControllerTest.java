@@ -58,7 +58,7 @@ public class BarbeariaControllerTest {
         String email = "barbearia@mail.com";
         BarbeariaDto barbearia = BarbeariaDto.builder().email(email).nome("Barbearia Teste").build();
 
-        when(barbeariaService.findByEmail(anyString())).thenReturn(barbearia);
+        when(barbeariaService.buscarPorEmail(anyString())).thenReturn(barbearia);
 
         mockMvc.perform(get("/barbearias/" + email)
                 .accept(MediaType.APPLICATION_JSON))
@@ -74,7 +74,7 @@ public class BarbeariaControllerTest {
     void testBuscarBarbeariaPorEmail_NaoEncontrado() throws Exception {
         String email = "naoexiste@teste.com";
 
-        Mockito.when(barbeariaService.findByEmail(email)).thenThrow(new NoSuchElementException("Não foi encontrada Barbearia com email " + email));
+        Mockito.when(barbeariaService.buscarPorEmail(email)).thenThrow(new NoSuchElementException("Não foi encontrada Barbearia com email " + email));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/barbearias/" + email)
                         .contentType(MediaType.APPLICATION_JSON))

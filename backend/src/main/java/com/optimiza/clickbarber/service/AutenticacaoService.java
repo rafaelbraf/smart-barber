@@ -3,45 +3,47 @@ package com.optimiza.clickbarber.service;
 import com.optimiza.clickbarber.config.JwtUtil;
 import com.optimiza.clickbarber.model.RespostaAutenticacao;
 import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
+import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
-import com.optimiza.clickbarber.repository.BarbeariaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 @Service
 public class AutenticacaoService {
 
-    private final BarbeariaRepository barbeariaRepository;
-    private final BarbeariaMapper barbeariaMapper;
+    private final BarbeariaService barbeariaService;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public AutenticacaoService(BarbeariaRepository barbeariaRepository, BarbeariaMapper barbeariaMapper, JwtUtil jwtUtil) {
-        this.barbeariaRepository = barbeariaRepository;
-        this.barbeariaMapper = barbeariaMapper;
+    public AutenticacaoService(BarbeariaService barbeariaService, JwtUtil jwtUtil) {
+        this.barbeariaService = barbeariaService;
         this.jwtUtil = jwtUtil;
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
     public RespostaAutenticacao<Object> loginBarbearia(LoginRequestDto loginRequest) {
-        Objects.requireNonNull(loginRequest.getEmail(), "Email não pode ser nulo.");
-        Objects.requireNonNull(loginRequest.getSenha(), "Senha não pode ser nulo.");
+        requireNonNull(loginRequest.getEmail(), "Email não pode ser nulo.");
+        requireNonNull(loginRequest.getSenha(), "Senha não pode ser nulo.");
 
-        var barbearia = barbeariaRepository.findByEmail(loginRequest.getEmail()).orElseThrow();
-        if (isSenhaValida(loginRequest.getSenha(), barbearia.getSenha())) {
-            var barbeariaDto = barbeariaMapper.toDto(barbearia);
+        var barbearia = barbeariaService.buscarPorEmail(loginRequest.getEmail());
+        var senhaBarbearia = barbeariaService.buscarSenha(barbearia.getId());
+        if (isSenhaValida(loginRequest.getSenha(), senhaBarbearia)) {
             var mensagem = "Login realizado com sucesso!";
-
-            return montarRespostaAutenticacao(gerarToken(barbeariaDto.getEmail()), true, HttpStatus.OK.value(), mensagem, barbeariaDto);
+            return montarRespostaAutenticacao(gerarToken(barbearia.getEmail()), true, HttpStatus.OK.value(), mensagem, barbearia);
         }
 
-        return montarRespostaAutenticacao(null, false, HttpStatus.UNAUTHORIZED.value(), "Email ou senha incorreta!", null);
+        return montarRespostaAutenticacao(
+                null, false, HttpStatus.UNAUTHORIZED.value(), "Email ou senha incorreta!", null);
+    }
+
+    public BarbeariaDto cadastrarBarbearia(BarbeariaCadastroDto barbeariaCadastro) {
+        return barbeariaService.cadastrar(barbeariaCadastro);
     }
 
     private String gerarToken(String email) {
