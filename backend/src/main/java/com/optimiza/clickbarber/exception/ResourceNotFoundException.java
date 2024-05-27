@@ -1,5 +1,6 @@
 package com.optimiza.clickbarber.exception;
 
+import com.optimiza.clickbarber.utils.Constants;
 import lombok.Getter;
 
 import java.util.NoSuchElementException;
@@ -12,7 +13,7 @@ public class ResourceNotFoundException extends NoSuchElementException {
     private final String fieldValue;
 
     public ResourceNotFoundException(String resourceName, String fieldName, String fieldValue) {
-        super(String.format("Não foi encontrado(a) %s com %s = %s.", resourceName, fieldName, fieldValue));
+        super(String.format(Constants.Error.RESOURCE_NOT_FOUND_EXCEPTION, resourceName, fieldName, fieldValue));
         this.resourceName = resourceName;
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;

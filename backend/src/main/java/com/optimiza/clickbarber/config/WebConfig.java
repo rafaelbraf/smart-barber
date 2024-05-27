@@ -1,5 +1,6 @@
 package com.optimiza.clickbarber.config;
 
+import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -8,9 +9,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -25,8 +24,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
+                .allowedOrigins(Constants.FRONTEND_URL)
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
@@ -37,8 +36,8 @@ public class WebConfig implements WebMvcConfigurer {
         registrationBean.setFilter(jwtRequestFilter);
 
         var listUrlPatterns = List.of(
-                "/barbearias/*",
-                "/servicos/*");
+                Constants.UrlPattern.BARBEARIAS_URL_PATTERN,
+                Constants.UrlPattern.SERVICOS_URL_PATTERN);
         var collectionUrlPatterns = new ArrayList<>(listUrlPatterns);
         registrationBean.setUrlPatterns(collectionUrlPatterns);
 

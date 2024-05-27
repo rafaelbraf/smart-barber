@@ -7,6 +7,7 @@ import com.optimiza.clickbarber.model.dto.servico.ServicoAtualizarDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoMapper;
 import com.optimiza.clickbarber.repository.ServicoRepository;
+import com.optimiza.clickbarber.utils.Constants;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,14 +21,12 @@ public class ServicoService {
     private final ServicoRepository servicoRepository;
     private final ServicoMapper servicoMapper;
     private final BarbeariaService barbeariaService;
-    private final BarbeariaMapper barbeariaMapper;
 
     @Autowired
     public ServicoService(ServicoRepository servicoRepository, ServicoMapper servicoMapper, BarbeariaService barbeariaService, BarbeariaMapper barbeariaMapper) {
         this.servicoRepository = servicoRepository;
         this.servicoMapper = servicoMapper;
         this.barbeariaService = barbeariaService;
-        this.barbeariaMapper = barbeariaMapper;
     }
 
     public List<Servico> buscarTodos() {
@@ -35,7 +34,7 @@ public class ServicoService {
     }
 
     public Servico buscarPorId(UUID id) {
-        return servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço", "id", id.toString()));
+        return servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.SERVICO, Constants.Attribute.ID, id.toString()));
     }
 
     public List<Servico> buscarPorBarbeariaId(Integer barbeariaId) {
@@ -44,15 +43,17 @@ public class ServicoService {
 
     @Transactional
     public Servico cadastrar(ServicoDto servicoDto) {
-        barbeariaService.buscarPorId(servicoDto.getBarbearia().getId());
+        var barbeariaId = servicoDto.getBarbearia().getId();
+        if (!barbeariaService.existePorId(barbeariaId)) {
+            throw new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.ID, barbeariaId.toString());
+        }
         var servico = servicoMapper.toEntity(servicoDto);
-
         return servicoRepository.save(servico);
     }
 
     public Servico atualizar(ServicoAtualizarDto servicoAtualizar) {
         var servico = servicoRepository.findById(servicoAtualizar.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Servico", "id", servicoAtualizar.getId().toString()));
+                .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.SERVICO, Constants.Attribute.ID, servicoAtualizar.getId().toString()));
 
         servico.setNome(servicoAtualizar.getNome());
         servico.setAtivo(servicoAtualizar.isAtivo());

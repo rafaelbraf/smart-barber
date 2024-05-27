@@ -1,5 +1,8 @@
 package com.optimiza.clickbarber.config;
 
+import com.optimiza.clickbarber.utils.Constants;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +20,6 @@ public class JwtUtil {
 
     public String gerarToken(String email) {
         Map<String, Object> claims = new HashMap<>();
-
         return criarToken(claims, email);
     }
 
@@ -25,15 +27,20 @@ public class JwtUtil {
         try {
             Jwts.parser().setSigningKey(secret).build().parseClaimsJws(token);
             return true;
-        } catch (Exception e){
+        } catch (JwtException e) {
             return false;
         }
     }
 
     public String extraiEmail(String token) {
-        var claims = Jwts.parser().setSigningKey(secret).build().parseClaimsJws(token).getPayload();
-
-        return claims.getSubject();
+        try {
+            var claims = Jwts.parser().setSigningKey(secret).build().parseClaimsJws(token).getPayload();
+            return claims.getSubject();
+        } catch (ExpiredJwtException e) {
+            throw e;
+        } catch (JwtException e) {
+            throw new IllegalArgumentException(Constants.Error.TOKEN_INVALIDO);
+        }
     }
 
     private String criarToken(Map<String, Object> claims, String subject) {

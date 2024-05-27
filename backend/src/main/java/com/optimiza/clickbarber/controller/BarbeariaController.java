@@ -3,6 +3,7 @@ package com.optimiza.clickbarber.controller;
 import com.optimiza.clickbarber.model.Resposta;
 import com.optimiza.clickbarber.model.RespostaUtils;
 import com.optimiza.clickbarber.service.BarbeariaService;
+import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ public class BarbeariaController {
     @GetMapping("/{email}")
     public Resposta<Object> findByEmail(@PathVariable String email) {
         var barbearia = barbeariaService.buscarPorEmail(email);
-        return RespostaUtils.ok("Barbearia encontrada com sucesso!", barbearia);
+        return RespostaUtils.ok(Constants.Success.BARBEARIA_ENCONTRADA_COM_SUCESSO, barbearia);
     }
 
 }

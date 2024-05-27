@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 
 public class RespostaUtils {
 
+    private RespostaUtils() {}
+
     public static <T> Resposta<T> criarResposta(int statusCode, boolean success, String message, T result) {
         return Resposta.<T>builder()
                 .statusCode(statusCode)

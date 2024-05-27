@@ -21,18 +21,6 @@ public class BarbeariaMapper {
                 .build();
     }
 
-    public BarbeariaDto toDto(BarbeariaCadastroDto barbeariaCadastro) {
-        if (isNull(barbeariaCadastro)) return null;
-
-        return BarbeariaDto.builder()
-                .nome(barbeariaCadastro.getNome())
-                .cnpj(barbeariaCadastro.getCnpj())
-                .email(barbeariaCadastro.getEmail())
-                .telefone(barbeariaCadastro.getTelefone())
-                .endereco(barbeariaCadastro.getEndereco())
-                .build();
-    }
-
     public Barbearia toEntity(BarbeariaCadastroDto barbeariaCadastro) {
         if (isNull(barbeariaCadastro)) return null;
 
@@ -43,18 +31,6 @@ public class BarbeariaMapper {
                 .senha(barbeariaCadastro.getSenha())
                 .endereco(barbeariaCadastro.getEndereco())
                 .telefone(barbeariaCadastro.getTelefone())
-                .build();
-    }
-
-    public Barbearia toEntity(BarbeariaDto barbeariaDto) {
-        if (isNull(barbeariaDto)) return null;
-
-        return Barbearia.builder()
-                .nome(barbeariaDto.getNome())
-                .cnpj(barbeariaDto.getCnpj())
-                .email(barbeariaDto.getEmail())
-                .endereco(barbeariaDto.getEndereco())
-                .telefone(barbeariaDto.getTelefone())
                 .build();
     }
 

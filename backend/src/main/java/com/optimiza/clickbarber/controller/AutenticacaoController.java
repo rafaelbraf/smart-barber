@@ -7,6 +7,7 @@ import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.service.AutenticacaoService;
+import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,7 @@ public class AutenticacaoController {
     @PostMapping("/barbearias/cadastrar")
     public ResponseEntity<Resposta<BarbeariaDto>> cadastrarBarbearia(@RequestBody BarbeariaCadastroDto barbeariaCadastro) {
         var barbeariaCadastrada = autenticacaoService.cadastrarBarbearia(barbeariaCadastro);
-        var resposta = RespostaUtils.created("Barbearia cadastrada com sucesso!", barbeariaCadastrada);
+        var resposta = RespostaUtils.created(Constants.Success.BARBEARIA_CADASTRADA_COM_SUCESSO, barbeariaCadastrada);
 
         return ResponseEntity.status(resposta.getStatusCode()).body(resposta);
     }

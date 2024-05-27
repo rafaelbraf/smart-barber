@@ -6,7 +6,10 @@ import com.optimiza.clickbarber.model.Servico;
 import com.optimiza.clickbarber.model.dto.servico.ServicoAtualizarDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoDto;
 import com.optimiza.clickbarber.service.ServicoService;
+import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,31 +29,33 @@ public class ServicoController {
     @GetMapping
     public Resposta<List<Servico>> buscarTodos() {
         var servicos = servicoService.buscarTodos();
-        return RespostaUtils.ok("Serviços encontrados", servicos);
+        return RespostaUtils.ok(Constants.Success.SERVICOS_ENCONTRADOS, servicos);
     }
 
     @GetMapping("/{id}")
     public Resposta<Servico> buscarPorId(@PathVariable UUID id) {
         var servicoEncontrado = servicoService.buscarPorId(id);
-        return RespostaUtils.ok("Serviço encontrado com sucesso!", servicoEncontrado);
+        return RespostaUtils.ok(Constants.Success.SERVICO_ENCONTRADO_COM_SUCESSO, servicoEncontrado);
     }
 
     @GetMapping("/barbearia/{barbeariaId}")
     public Resposta<List<Servico>> buscarPorBarbeariaId(@PathVariable Integer barbeariaId) {
         var servicosEncontrados = servicoService.buscarPorBarbeariaId(barbeariaId);
-        return RespostaUtils.ok("Serviços encontrados para Barbearia com id " + barbeariaId, servicosEncontrados);
+        return RespostaUtils.ok(Constants.Success.SERVICOS_ENCONTRADOS_DA_BARBEARIA + barbeariaId, servicosEncontrados);
     }
 
     @PostMapping
-    public Resposta<Servico> cadastrar(@RequestBody ServicoDto servico) {
+    public ResponseEntity<Resposta<Servico>> cadastrar(@RequestBody ServicoDto servico) {
         var servicoCadastrado = servicoService.cadastrar(servico);
-        return RespostaUtils.created("Serviço cadastrado com sucesso!", servicoCadastrado);
+        var resposta = RespostaUtils.created(Constants.Success.SERVICO_CADASTRADO_COM_SUCESSO, servicoCadastrado);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
     @PutMapping
     public Resposta<Servico> atualizar(@RequestBody ServicoAtualizarDto servicoAtualizar) {
         var servicoAtualizado = servicoService.atualizar(servicoAtualizar);
-        return RespostaUtils.ok("Serviço atualizado com sucesso!", servicoAtualizado);
+        return RespostaUtils.ok(Constants.Success.SERVICO_ATUALIZADO_COM_SUCESSO, servicoAtualizado);
     }
 
     @DeleteMapping("/{id}")

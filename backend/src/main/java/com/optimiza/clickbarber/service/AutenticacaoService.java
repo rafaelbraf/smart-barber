@@ -5,6 +5,7 @@ import com.optimiza.clickbarber.model.RespostaLogin;
 import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
+import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,15 +31,13 @@ public class AutenticacaoService {
         requireNonNull(loginRequest.getSenha(), "Senha não pode ser nulo.");
 
         var barbearia = barbeariaService.buscarPorEmail(loginRequest.getEmail());
-        var senhaBarbearia = barbeariaService.buscarSenha(barbearia.getId());
 
-        var mensagem = "Login realizado com sucesso!";
+        var senhaBarbearia = barbeariaService.buscarSenha(barbearia.getId());
         if (!isSenhaValida(loginRequest.getSenha(), senhaBarbearia)) {
-            mensagem = "Email ou senha incorreta!";
-            return montarRespostaLogin(mensagem, false, null, null);
+            return montarRespostaLogin(Constants.Error.EMAIL_OU_SENHA_INCORRETA, false, null, null);
         }
 
-        return montarRespostaLogin(mensagem, true, barbearia, gerarToken(barbearia.getEmail()));
+        return montarRespostaLogin(Constants.Success.LOGIN_REALIZADO_COM_SUCESSO, true, barbearia, gerarToken(barbearia.getEmail()));
     }
 
     public BarbeariaDto cadastrarBarbearia(BarbeariaCadastroDto barbeariaCadastro) {

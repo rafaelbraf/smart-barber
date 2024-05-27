@@ -5,6 +5,7 @@ import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
 import com.optimiza.clickbarber.repository.BarbeariaRepository;
+import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,14 @@ public class BarbeariaService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
-    public BarbeariaDto buscarPorId(Integer id) {
-        var barbearia = barbeariaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Barbearia", "id", id.toString()));
-        return barbeariaMapper.toDto(barbearia);
+    public boolean existePorId(Integer id) {
+        return barbeariaRepository.existsById(id);
     }
 
     public BarbeariaDto buscarPorEmail(String email) {
-        var barbearia = barbeariaRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Barbearia", "email", email));
+        var barbearia = barbeariaRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.EMAIL, email));
+
         return barbeariaMapper.toDto(barbearia);
     }
 
