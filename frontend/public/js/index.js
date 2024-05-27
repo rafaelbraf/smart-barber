@@ -34,11 +34,15 @@ function fazerLogin() {
 
 function carregarVariaveisDeAmbiente() {
     fetch('/config')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao carregar variáveis de ambiente.");
+            }
+            
+            return response.json();
+        })
         .then(config => {
             urlBackend = config.apiUrl
         })
         .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
-
-    console.log(urlBackend);
 }

@@ -10,7 +10,7 @@ app.get('/config', (req, res) => {
         apiUrl: process.env.API_URL
     };
 
-    res.json(config);
+    res.status(200).json(config);
 });
 
 const port = process.env.PORT || 3000;
