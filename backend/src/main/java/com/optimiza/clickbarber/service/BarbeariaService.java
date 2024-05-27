@@ -1,5 +1,6 @@
 package com.optimiza.clickbarber.service;
 
+import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
@@ -25,8 +26,7 @@ public class BarbeariaService {
     }
 
     public BarbeariaDto buscarPorEmail(String email) {
-        var barbearia = barbeariaRepository.findByEmail(email)
-                .orElseThrow(() -> new NoSuchElementException("Não foi encontrada Barbearia com email " + email));
+        var barbearia = barbeariaRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Barbearia", "email", email));
 
         return barbeariaMapper.toDto(barbearia);
     }

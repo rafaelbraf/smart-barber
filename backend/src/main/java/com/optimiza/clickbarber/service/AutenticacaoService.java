@@ -7,6 +7,7 @@ import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,13 +34,15 @@ public class AutenticacaoService {
 
         var barbearia = barbeariaService.buscarPorEmail(loginRequest.getEmail());
         var senhaBarbearia = barbeariaService.buscarSenha(barbearia.getId());
+        var mensagem = "";
         if (isSenhaValida(loginRequest.getSenha(), senhaBarbearia)) {
-            var mensagem = "Login realizado com sucesso!";
+            mensagem = "Login realizado com sucesso!";
             return montarRespostaAutenticacao(gerarToken(barbearia.getEmail()), true, HttpStatus.OK.value(), mensagem, barbearia);
         }
 
-        return montarRespostaAutenticacao(
-                null, false, HttpStatus.UNAUTHORIZED.value(), "Email ou senha incorreta!", null);
+        mensagem = "Email ou senha incorreta!";
+
+        return montarRespostaAutenticacao(null, false, HttpStatus.UNAUTHORIZED.value(), mensagem, null);
     }
 
     public BarbeariaDto cadastrarBarbearia(BarbeariaCadastroDto barbeariaCadastro) {

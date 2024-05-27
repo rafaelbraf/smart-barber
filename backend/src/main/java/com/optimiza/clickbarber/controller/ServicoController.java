@@ -25,7 +25,7 @@ public class ServicoController {
 
     @GetMapping
     public ResponseEntity<Resposta<Object>> buscarTodos() {
-        var servicos = servicoService.findAll();
+        var servicos = servicoService.buscarTodos();
         var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviços encontrados", servicos);
 
         return ResponseEntity.ok(resposta);
@@ -33,23 +33,15 @@ public class ServicoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Resposta<Object>> buscarPorId(@PathVariable UUID id) {
-        try {
-            var servico = servicoService.findById(id);
-            var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviço encontrado com sucesso!", servico);
+        var servico = servicoService.buscarPorId(id);
+        var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviço encontrado com sucesso!", servico);
 
-            return ResponseEntity.ok(resposta);
-        } catch (NoSuchElementException e) {
-            var resposta = montarResposta(HttpStatus.NOT_FOUND.value(), false, "Não foi encontrado Serviço com id " + id, null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(resposta);
-        } catch (Exception e) {
-            var resposta = montarResposta(HttpStatus.INTERNAL_SERVER_ERROR.value(), false, e.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(resposta);
-        }
+        return ResponseEntity.ok(resposta);
     }
 
     @GetMapping("/barbearia/{barbeariaId}")
     public ResponseEntity<Resposta<Object>> buscarPorBarbeariaId(@PathVariable Integer barbeariaId) {
-        var servicos = servicoService.findByBarbeariaId(barbeariaId);
+        var servicos = servicoService.buscarPorBarbeariaId(barbeariaId);
         var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviços encontrados para Barbearia com id " + barbeariaId, servicos);
 
         return ResponseEntity.ok(resposta);
@@ -57,28 +49,18 @@ public class ServicoController {
 
     @PostMapping
     public ResponseEntity<Resposta<Object>> cadastrar(@RequestBody ServicoDto servico) {
-        try {
-            var servicoCadastrado = servicoService.cadastrar(servico);
-            var resposta = montarResposta(HttpStatus.CREATED.value(), true, "Serviço cadastrado com sucesso!", servicoCadastrado);
+        var servicoCadastrado = servicoService.cadastrar(servico);
+        var resposta = montarResposta(HttpStatus.CREATED.value(), true, "Serviço cadastrado com sucesso!", servicoCadastrado);
 
-            return ResponseEntity.status(HttpStatus.CREATED.value()).body(resposta);
-        } catch (Exception e) {
-            var resposta = montarResposta(HttpStatus.INTERNAL_SERVER_ERROR.value(), false, e.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(resposta);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED.value()).body(resposta);
     }
 
     @PutMapping
     public ResponseEntity<Resposta<Object>> atualizar(@RequestBody ServicoAtualizarDto servico) {
-        try {
-            var servicoAtualizado = servicoService.atualizar(servico);
-            var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviço atualizado com sucesso!", servicoAtualizado);
+        var servicoAtualizado = servicoService.atualizar(servico);
+        var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviço atualizado com sucesso!", servicoAtualizado);
 
-            return ResponseEntity.ok(resposta);
-        } catch (Exception e) {
-            var resposta = montarResposta(HttpStatus.INTERNAL_SERVER_ERROR.value(), false, e.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(resposta);
-        }
+        return ResponseEntity.ok(resposta);
     }
 
     @DeleteMapping("/{id}")

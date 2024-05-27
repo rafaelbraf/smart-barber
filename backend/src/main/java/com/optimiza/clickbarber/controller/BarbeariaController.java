@@ -22,15 +22,10 @@ public class BarbeariaController {
 
     @GetMapping("/{email}")
     public ResponseEntity<Resposta<BarbeariaDto>> findByEmail(@PathVariable String email) {
-        try {
-            var barbearia = barbeariaService.buscarPorEmail(email);
-            var resposta = montarResposta(HttpStatus.OK.value(), true, "Barbearia encontrada com sucesso!", barbearia);
+        var barbearia = barbeariaService.buscarPorEmail(email);
+        var resposta = montarResposta(HttpStatus.OK.value(), true, "Barbearia encontrada com sucesso!", barbearia);
 
-            return ResponseEntity.ok(resposta);
-        } catch (Exception e) {
-            var resposta = montarResposta(HttpStatus.NOT_FOUND.value(), false, e.getMessage(), null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
-        }
+        return ResponseEntity.ok(resposta);
     }
 
     private Resposta<BarbeariaDto> montarResposta(int statusCode, boolean success, String message, BarbeariaDto result) {

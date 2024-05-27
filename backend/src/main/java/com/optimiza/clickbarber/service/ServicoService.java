@@ -1,5 +1,6 @@
 package com.optimiza.clickbarber.service;
 
+import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.Servico;
 import com.optimiza.clickbarber.model.dto.servico.ServicoAtualizarDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoDto;
@@ -23,15 +24,15 @@ public class ServicoService {
         this.servicoMapper = servicoMapper;
     }
 
-    public List<Servico> findAll() {
+    public List<Servico> buscarTodos() {
         return servicoRepository.findAll();
     }
 
-    public Servico findById(UUID id) {
-        return servicoRepository.findById(id).orElseThrow();
+    public Servico buscarPorId(UUID id) {
+        return servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço", "id", id.toString()));
     }
 
-    public List<Servico> findByBarbeariaId(Integer barbeariaId) {
+    public List<Servico> buscarPorBarbeariaId(Integer barbeariaId) {
         return servicoRepository.findByBarbeariaId(barbeariaId);
     }
 
@@ -41,7 +42,9 @@ public class ServicoService {
     }
 
     public Servico atualizar(ServicoAtualizarDto servicoAtualizar) {
-        var servico = servicoRepository.findById(servicoAtualizar.getId()).orElseThrow();
+        var servico = servicoRepository.findById(servicoAtualizar.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Servico", "id", servicoAtualizar.getId().toString()));
+
         servico.setNome(servicoAtualizar.getNome());
         servico.setAtivo(servicoAtualizar.isAtivo());
         servico.setPreco(servicoAtualizar.getPreco());
