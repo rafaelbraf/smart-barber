@@ -1,13 +1,13 @@
 package com.optimiza.clickbarber.controller;
 
 import com.optimiza.clickbarber.model.Resposta;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
+import com.optimiza.clickbarber.model.RespostaUtils;
 import com.optimiza.clickbarber.service.BarbeariaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/barbearias")
@@ -21,20 +21,9 @@ public class BarbeariaController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<Resposta<BarbeariaDto>> findByEmail(@PathVariable String email) {
+    public Resposta<Object> findByEmail(@PathVariable String email) {
         var barbearia = barbeariaService.buscarPorEmail(email);
-        var resposta = montarResposta(HttpStatus.OK.value(), true, "Barbearia encontrada com sucesso!", barbearia);
-
-        return ResponseEntity.ok(resposta);
-    }
-
-    private Resposta<BarbeariaDto> montarResposta(int statusCode, boolean success, String message, BarbeariaDto result) {
-        return Resposta.<BarbeariaDto>builder()
-                .statusCode(statusCode)
-                .success(success)
-                .message(message)
-                .result(result)
-                .build();
+        return RespostaUtils.ok("Barbearia encontrada com sucesso!", barbearia);
     }
 
 }

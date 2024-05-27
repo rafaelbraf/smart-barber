@@ -2,11 +2,12 @@ package com.optimiza.clickbarber.controller;
 
 import com.optimiza.clickbarber.model.Resposta;
 import com.optimiza.clickbarber.model.RespostaAutenticacao;
+import com.optimiza.clickbarber.model.RespostaUtils;
 import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
+import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.service.AutenticacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,25 +29,21 @@ public class AutenticacaoController {
     @PostMapping("/barbearias/login")
     public ResponseEntity<RespostaAutenticacao<Object>> loginBarbearia(@RequestBody LoginRequestDto loginRequest) {
         var respostaLogin = autenticacaoService.loginBarbearia(loginRequest);
+        if (!respostaLogin.isSuccess()) {
+            var resposta = RespostaUtils.unauthorized(respostaLogin.getMessage(), respostaLogin.getResult());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resposta);
+        }
 
-        return respostaLogin.isSuccess() ? ResponseEntity.ok(respostaLogin) : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respostaLogin);
+        var resposta = RespostaUtils.authorized(respostaLogin.getMessage(), respostaLogin.getResult(), respostaLogin.getAccessToken());
+        return ResponseEntity.ok(resposta);
     }
 
     @PostMapping("/barbearias/cadastrar")
-    public ResponseEntity<Resposta<Object>> cadastrarBarbearia(@RequestBody BarbeariaCadastroDto barbeariaCadastro) {
+    public ResponseEntity<Resposta<BarbeariaDto>> cadastrarBarbearia(@RequestBody BarbeariaCadastroDto barbeariaCadastro) {
         var barbeariaCadastrada = autenticacaoService.cadastrarBarbearia(barbeariaCadastro);
-        var resposta = montarResposta(HttpStatus.CREATED.value(), true, "Barbearia cadastrada com sucesso!", barbeariaCadastrada);
+        var resposta = RespostaUtils.created("Barbearia cadastrada com sucesso!", barbeariaCadastrada);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
-    }
-
-    private Resposta<Object> montarResposta(int statusCode, boolean success, String message, Object result) {
-        return Resposta.builder()
-                .statusCode(statusCode)
-                .success(success)
-                .message(message)
-                .result(result)
-                .build();
+        return ResponseEntity.status(resposta.getStatusCode()).body(resposta);
     }
 
 }

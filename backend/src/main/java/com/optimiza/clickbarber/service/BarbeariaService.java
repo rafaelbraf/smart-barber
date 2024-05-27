@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-
 @Service
 public class BarbeariaService {
 
@@ -25,9 +23,13 @@ public class BarbeariaService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
+    public BarbeariaDto buscarPorId(Integer id) {
+        var barbearia = barbeariaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Barbearia", "id", id.toString()));
+        return barbeariaMapper.toDto(barbearia);
+    }
+
     public BarbeariaDto buscarPorEmail(String email) {
         var barbearia = barbeariaRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Barbearia", "email", email));
-
         return barbeariaMapper.toDto(barbearia);
     }
 
@@ -39,7 +41,7 @@ public class BarbeariaService {
         var senhaCriptografada = bCryptPasswordEncoder.encode(barbeariaCadastro.getSenha());
         barbeariaCadastro.setSenha(senhaCriptografada);
 
-        var barbearia = barbeariaMapper.toBarbearia(barbeariaCadastro);
+        var barbearia = barbeariaMapper.toEntity(barbeariaCadastro);
         var barbeariaCadastrada = barbeariaRepository.save(barbearia);
 
         return barbeariaMapper.toDto(barbeariaCadastrada);

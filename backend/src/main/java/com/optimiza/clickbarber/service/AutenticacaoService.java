@@ -1,14 +1,11 @@
 package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.config.JwtUtil;
-import com.optimiza.clickbarber.model.RespostaAutenticacao;
+import com.optimiza.clickbarber.model.RespostaLogin;
 import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,21 +25,20 @@ public class AutenticacaoService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
-    public RespostaAutenticacao<Object> loginBarbearia(LoginRequestDto loginRequest) {
+    public RespostaLogin loginBarbearia(LoginRequestDto loginRequest) {
         requireNonNull(loginRequest.getEmail(), "Email não pode ser nulo.");
         requireNonNull(loginRequest.getSenha(), "Senha não pode ser nulo.");
 
         var barbearia = barbeariaService.buscarPorEmail(loginRequest.getEmail());
         var senhaBarbearia = barbeariaService.buscarSenha(barbearia.getId());
-        var mensagem = "";
-        if (isSenhaValida(loginRequest.getSenha(), senhaBarbearia)) {
-            mensagem = "Login realizado com sucesso!";
-            return montarRespostaAutenticacao(gerarToken(barbearia.getEmail()), true, HttpStatus.OK.value(), mensagem, barbearia);
+
+        var mensagem = "Login realizado com sucesso!";
+        if (!isSenhaValida(loginRequest.getSenha(), senhaBarbearia)) {
+            mensagem = "Email ou senha incorreta!";
+            return montarRespostaLogin(mensagem, false, null, null);
         }
 
-        mensagem = "Email ou senha incorreta!";
-
-        return montarRespostaAutenticacao(null, false, HttpStatus.UNAUTHORIZED.value(), mensagem, null);
+        return montarRespostaLogin(mensagem, true, barbearia, gerarToken(barbearia.getEmail()));
     }
 
     public BarbeariaDto cadastrarBarbearia(BarbeariaCadastroDto barbeariaCadastro) {
@@ -57,13 +53,12 @@ public class AutenticacaoService {
         return bCryptPasswordEncoder.matches(senha, senhaCadastrada);
     }
 
-    private RespostaAutenticacao<Object> montarRespostaAutenticacao(String accessToken, boolean success, int statusCode, String message, BarbeariaDto barbearia) {
-        return RespostaAutenticacao.builder()
+    private RespostaLogin montarRespostaLogin(String message, boolean success, Object result, String accessToken) {
+        return RespostaLogin.builder()
+                .message(message)
+                .result(result)
                 .accessToken(accessToken)
                 .success(success)
-                .statusCode(statusCode)
-                .message(message)
-                .result(barbearia)
                 .build();
     }
 

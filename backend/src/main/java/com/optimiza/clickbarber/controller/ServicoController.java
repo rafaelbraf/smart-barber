@@ -1,15 +1,15 @@
 package com.optimiza.clickbarber.controller;
 
 import com.optimiza.clickbarber.model.Resposta;
+import com.optimiza.clickbarber.model.RespostaUtils;
+import com.optimiza.clickbarber.model.Servico;
 import com.optimiza.clickbarber.model.dto.servico.ServicoAtualizarDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoDto;
 import com.optimiza.clickbarber.service.ServicoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.NoSuchElementException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,57 +24,39 @@ public class ServicoController {
     }
 
     @GetMapping
-    public ResponseEntity<Resposta<Object>> buscarTodos() {
+    public Resposta<List<Servico>> buscarTodos() {
         var servicos = servicoService.buscarTodos();
-        var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviços encontrados", servicos);
-
-        return ResponseEntity.ok(resposta);
+        return RespostaUtils.ok("Serviços encontrados", servicos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Resposta<Object>> buscarPorId(@PathVariable UUID id) {
-        var servico = servicoService.buscarPorId(id);
-        var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviço encontrado com sucesso!", servico);
-
-        return ResponseEntity.ok(resposta);
+    public Resposta<Servico> buscarPorId(@PathVariable UUID id) {
+        var servicoEncontrado = servicoService.buscarPorId(id);
+        return RespostaUtils.ok("Serviço encontrado com sucesso!", servicoEncontrado);
     }
 
     @GetMapping("/barbearia/{barbeariaId}")
-    public ResponseEntity<Resposta<Object>> buscarPorBarbeariaId(@PathVariable Integer barbeariaId) {
-        var servicos = servicoService.buscarPorBarbeariaId(barbeariaId);
-        var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviços encontrados para Barbearia com id " + barbeariaId, servicos);
-
-        return ResponseEntity.ok(resposta);
+    public Resposta<List<Servico>> buscarPorBarbeariaId(@PathVariable Integer barbeariaId) {
+        var servicosEncontrados = servicoService.buscarPorBarbeariaId(barbeariaId);
+        return RespostaUtils.ok("Serviços encontrados para Barbearia com id " + barbeariaId, servicosEncontrados);
     }
 
     @PostMapping
-    public ResponseEntity<Resposta<Object>> cadastrar(@RequestBody ServicoDto servico) {
+    public Resposta<Servico> cadastrar(@RequestBody ServicoDto servico) {
         var servicoCadastrado = servicoService.cadastrar(servico);
-        var resposta = montarResposta(HttpStatus.CREATED.value(), true, "Serviço cadastrado com sucesso!", servicoCadastrado);
-
-        return ResponseEntity.status(HttpStatus.CREATED.value()).body(resposta);
+        return RespostaUtils.created("Serviço cadastrado com sucesso!", servicoCadastrado);
     }
 
     @PutMapping
-    public ResponseEntity<Resposta<Object>> atualizar(@RequestBody ServicoAtualizarDto servico) {
-        var servicoAtualizado = servicoService.atualizar(servico);
-        var resposta = montarResposta(HttpStatus.OK.value(), true, "Serviço atualizado com sucesso!", servicoAtualizado);
-
-        return ResponseEntity.ok(resposta);
+    public Resposta<Servico> atualizar(@RequestBody ServicoAtualizarDto servicoAtualizar) {
+        var servicoAtualizado = servicoService.atualizar(servicoAtualizar);
+        return RespostaUtils.ok("Serviço atualizado com sucesso!", servicoAtualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPorId(@PathVariable UUID id) {
+    public Resposta<Void> deletarPorId(@PathVariable UUID id) {
         servicoService.deletarPorId(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return RespostaUtils.noContent();
     }
 
-    private Resposta<Object> montarResposta(int statusCode, boolean success, String message, Object result) {
-        return Resposta.<Object>builder()
-                .statusCode(statusCode)
-                .success(success)
-                .message(message)
-                .result(result)
-                .build();
-    }
 }
