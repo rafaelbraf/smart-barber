@@ -86,14 +86,22 @@ function salvarServico() {
     }
 }
 
-async function mostrarServicoPorId(servicoId) {
-    var modal = new bootstrap.Modal(document.getElementById('editarServicoModal'));
+async function mostrarServicoPorId(servicoId,modalId) {
+    var modal = new bootstrap.Modal(document.getElementById(modalId));
     modal.show();
     const servico = await buscarServico(servicoId);
-    document.getElementById('idServico').value = servico.id;
-    document.getElementById('nomeServicoEditar').value = servico.nome;
-    document.getElementById('precoServicoEditar').value = servico.preco;
-    document.getElementById('duracaoServicoEditar').value = servico.tempoDuracaoEmMinutos;
+    const idServico = isMostrarServicoModal(modalId) ? 'idServicoVisualizar' :'idServico';
+    const nomeServico = isMostrarServicoModal(modalId) ? 'nomeServicoVisualizar' : 'nomeServicoEditar'
+    const precoServico = isMostrarServicoModal(modalId) ? 'precoServicoVisualizar' : 'precoServicoEditar'
+    const duracaoServico = isMostrarServicoModal(modalId) ? 'duracaoServicoVisualizar' : 'duracaoServicoEditar'
+    document.getElementById(idServico).value = servico.id;
+    document.getElementById(nomeServico).value = servico.nome;
+    document.getElementById(precoServico).value = servico.preco;
+    document.getElementById(duracaoServico).value = servico.tempoDuracaoEmMinutos;
+}
+
+function isMostrarServicoModal(modalId) {
+    return modalId === 'mostrarServicoModal';
 }
 
 function editarServico() {
@@ -201,7 +209,7 @@ function limparCamposModalEditarServico() {
 }
 
 function popularTabela(servicos) {
-    const tableBody = document.querySelector('.table tbody');
+    const tableBody = document.querySelector('.table tbody'); 
     tableBody.innerHTML = '';
 
     servicos.forEach(servico => {
@@ -227,12 +235,17 @@ function popularTabela(servicos) {
         const actionsCell = document.createElement('td');
         const editIcon = document.createElement('i');
         editIcon.className = 'bi bi-pencil-square cursor-pointer';
-        editIcon.onclick = function() { mostrarServicoPorId(servico.id) };
+        editIcon.onclick = function() { mostrarServicoPorId(servico.id,'editarServicoModal') };
+        const viewIcon = document.createElement('i');
+        viewIcon.className = 'bi bi-eye cursor-pointer';
+        viewIcon.onclick = function() { mostrarServicoPorId(servico.id,'mostrarServicoModal') };
+
 
         const deleteIcon = document.createElement('i');
         deleteIcon.className = 'bi bi-trash cursor-pointer';
         deleteIcon.onclick = function() { deletarServico(servico.id) };
 
+        actionsCell.appendChild(viewIcon);
         actionsCell.appendChild(editIcon);
         actionsCell.appendChild(deleteIcon);
         row.appendChild(actionsCell);
