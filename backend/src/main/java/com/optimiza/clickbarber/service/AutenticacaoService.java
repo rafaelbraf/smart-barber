@@ -37,11 +37,11 @@ public class AutenticacaoService {
         var barbearia = barbeariaService.buscarPorEmail(loginRequest.getEmail());
 
         var senhaBarbearia = barbeariaService.buscarSenha(barbearia.getId());
-        if (!isSenhaValida(loginRequest.getSenha(), senhaBarbearia)) {
-            return montarRespostaLogin(Constants.Error.EMAIL_OU_SENHA_INCORRETA, false, null, null);
+        if (isSenhaValida(loginRequest.getSenha(), senhaBarbearia)) {
+            return RespostaLogin.authorized(barbearia, gerarToken(barbearia.getEmail()));
         }
 
-        return montarRespostaLogin(Constants.Success.LOGIN_REALIZADO_COM_SUCESSO, true, barbearia, gerarToken(barbearia.getEmail()));
+        return RespostaLogin.unauthorized();
     }
 
     public BarbeariaDto cadastrarBarbearia(BarbeariaCadastroDto barbeariaCadastro) {
@@ -55,11 +55,11 @@ public class AutenticacaoService {
         var usuario = usuarioService.buscarPorEmail(loginRequest.getEmail());
 
         var senhaUsuario = usuarioService.buscarSenhaCriptografada(usuario.getId());
-        if (!isSenhaValida(loginRequest.getSenha(), senhaUsuario)) {
-            return montarRespostaLogin(Constants.Error.EMAIL_OU_SENHA_INCORRETA, false, null, null);
+        if (isSenhaValida(loginRequest.getSenha(), senhaUsuario)) {
+            return RespostaLogin.authorized(usuario, gerarToken(usuario.getEmail()));
         }
 
-        return montarRespostaLogin(Constants.Success.LOGIN_REALIZADO_COM_SUCESSO, true, usuario, gerarToken(usuario.getEmail()));
+        return RespostaLogin.unauthorized();
     }
 
     public UsuarioDto cadastrarUsuario(UsuarioCadastroDto usuarioCadastro) {
@@ -72,15 +72,6 @@ public class AutenticacaoService {
 
     private boolean isSenhaValida(String senha, String senhaCadastrada) {
         return bCryptPasswordEncoder.matches(senha, senhaCadastrada);
-    }
-
-    private RespostaLogin montarRespostaLogin(String message, boolean success, Object result, String accessToken) {
-        return RespostaLogin.builder()
-                .message(message)
-                .result(result)
-                .accessToken(accessToken)
-                .success(success)
-                .build();
     }
 
 }
