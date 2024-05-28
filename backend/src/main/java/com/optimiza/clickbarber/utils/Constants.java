@@ -23,6 +23,7 @@ public class Constants {
         public static final String BARBEIRO_ENCONTRADO_COM_SUCESSO = "Barbeiro encontrado com sucesso!";
         public static final String BARBEIRO_ATUALIZADO_COM_SUCESSO = "Barbeiro atualizado com sucesso!";
         public static final String BARBEIRO_CADASTRADO_COM_SUCESSO = "Barbeiro cadastrado com sucesso!";
+        public static final String USUARIO_CADASTRADO_COM_SUCESSO = "Usuário cadastrado com sucesso!";
     }
 
     public static class Error {
@@ -31,16 +32,18 @@ public class Constants {
         public static final String EMAIL_OU_SENHA_INCORRETA = "Email ou senha incorreta!";
         public static final String RESOURCE_NOT_FOUND_EXCEPTION = "Não foi encontrado(a) %s com %s = %s.";
         public static final String ERRO_AO_CADASTRAR_OBJETO = "Erro ao cadastrar objeto.";
-        public static final String EXISTE_BARBEARIA_COM_ESSE_CNPJ = "Já existe barbearia com esse CNPJ.";
-        public static final String EXISTE_BARBEARIA_COM_ESSE_EMAIL = "Já existe barbearia com esse Email.";
+        public static final String EXISTE_BARBEARIA_COM_ESSE_CNPJ = "Já existe barbearia cadastrada com esse CNPJ.";
+        public static final String EXISTE_BARBEARIA_COM_ESSE_EMAIL = "Já existe barbearia cadastrada com esse Email.";
         public static final String ERRO_INTERNO_SERVIDOR = "Erro interno do servidor.";
         public static final String BARBEARIA_NAO_ENCONTRADA_PRO_SERVICO = "Barbearia não encontrada pro serviço.";
         public static final String RESOURCE_NOT_FOUND = "%s não encontrado(a).";
         public static final String TOKEN_INVALIDO = "Token inválido!";
         public static final String TOKEN_EXPIRADO = "Token expirado!";
-        public static final String EXISTE_BARBEIRO_COM_ESSE_CPF = "Já existe Barbeiro com esse CPF.";
-        public static final String EXISTE_BARBEIRO_COM_ESSE_EMAIL = "Já existe Barbeiro com esse email.";
+        public static final String EXISTE_BARBEIRO_COM_ESSE_CPF = "Já existe Barbeiro cadastrado com esse CPF.";
+        public static final String EXISTE_BARBEIRO_COM_ESSE_EMAIL = "Já existe Barbeiro cadastrado com esse email.";
         public static final String BARBEARIA_NAO_ENCONTRADA_PRO_BARBEIRO = "Barbearia não encontrada pro Barbeiro.";
+        public static final String EXISTE_USUARIO_COM_ESSE_CPF = "Já existe Usuário cadastrado com esse CPF.";
+        public static final String EXISTE_USUARIO_COM_ESSE_EMAIL = "Já existe Usuário cadastrado com esse email.";
     }
 
     public static class UrlPattern {
@@ -57,6 +60,7 @@ public class Constants {
         public static final String BARBEARIA = "Barbearia";
         public static final String SERVICO = "Servico";
         public static final String BARBEIRO = "Barbeiro";
+        public static final String USUARIO = "Usuario";
     }
 
     public static class Attribute {
