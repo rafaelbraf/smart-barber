@@ -1,3 +1,7 @@
+let urlBackend;
+
+document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
@@ -5,7 +9,7 @@ document.addEventListener('DOMContentLoaded', buscarAgendamentosDaBarbearia);
 
 async function buscarAgendamentosDaBarbearia() {
     try {
-        const response = await fetch(`http://localhost:5000/agendamentos/barbearia/${barbeariaId}`, {
+        const response = await fetch(`${urlBackend}/agendamentos/barbearia/${barbeariaId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,7 +29,7 @@ async function buscarAgendamentosDaBarbearia() {
 }
 
 function verAgendamento(agendamentoId) {
-    fetch(`http://localhost:5000/agendamentos/${agendamentoId}`, {
+    fetch(`${urlBackend}/agendamentos/${agendamentoId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -60,7 +64,7 @@ async function buscarClienteDoAgendamento(agendamento) {
     const idUsuario = agendamento.idUsuario;
 
     try {
-        const response = await fetch(`http://localhost:5000/usuarios/${idUsuario}`, {
+        const response = await fetch(`${urlBackend}/usuarios/${idUsuario}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -116,7 +120,7 @@ async function renderizarCalendarioDeAgendamentos(agendamentos) {
 
 async function buscarInformacoesDoAgendamento(agendamentoId) {
     try {
-        const response = await fetch(`http://localhost:5000/agendamentos/${agendamentoId}`, {
+        const response = await fetch(`${urlBackend}/agendamentos/${agendamentoId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -143,4 +147,18 @@ function limparCamposModal() {
     document.getElementById('nomeCliente').value = '';
     document.getElementById('celularCliente').value = '';
     document.getElementById('emailCliente').value = '';
+}
+function carregarVariaveisDeAmbiente() {
+    fetch('/config')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao carregar variáveis de ambiente.");
+            }
+            
+            return response.json();
+        })
+        .then(config => {
+            urlBackend = config.apiUrl
+        })
+        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }

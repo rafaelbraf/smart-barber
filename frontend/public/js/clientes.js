@@ -1,10 +1,29 @@
+let urlBackend;
+
+document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
 buscarClientesDaBarbearia();
 
+function carregarVariaveisDeAmbiente() {
+    fetch('/config')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao carregar variáveis de ambiente.");
+            }
+            
+            return response.json();
+        })
+        .then(config => {
+            urlBackend = config.apiUrl
+        })
+        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
+}
+
 function buscarClientesDaBarbearia() {
-    fetch(`http://localhost:5000/usuarios/barbearia/${barbeariaId}`, {
+    fetch(`${urlBackend}/usuarios/barbearia/${barbeariaId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

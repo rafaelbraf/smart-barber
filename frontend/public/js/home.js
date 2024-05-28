@@ -1,3 +1,7 @@
+let urlBackend;
+
+document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
@@ -52,7 +56,7 @@ function buscarQuantidadeDeAgendamentosParaHoje() {
 
     const dataFormatada = `${ano}-${mes}-${dia}`;
 
-    fetch(`http://localhost:5000/agendamentos/barbearia/${barbeariaId}/quantidade?data_agendamentos=${dataFormatada}`, {
+    fetch(`${urlBackend}/agendamentos/barbearia/${barbeariaId}/quantidade?data_agendamentos=${dataFormatada}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -68,4 +72,18 @@ function buscarQuantidadeDeAgendamentosParaHoje() {
     })
     .then(data => document.getElementById('quantidade-agendamentos-hoje').textContent = data.quantidadeAgendamentos)
     .catch(error => console.error(error));
+}
+function carregarVariaveisDeAmbiente() {
+    fetch('/config')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao carregar variáveis de ambiente.");
+            }
+            
+            return response.json();
+        })
+        .then(config => {
+            urlBackend = config.apiUrl
+        })
+        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }

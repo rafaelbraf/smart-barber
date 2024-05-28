@@ -1,10 +1,14 @@
+let urlBackend;
+
+document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
 buscarBarbeirosDaBarbearia();
 
 function buscarBarbeirosDaBarbearia() {
-    fetch(`http://localhost:5000/barbeiros/barbearia/${barbeariaId}`, {
+    fetch(`${urlBackend}/barbeiros/barbearia/${barbeariaId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -80,7 +84,7 @@ function cadastrarBarbeiroNaBarbearia() {
         idBarbearia: idBarbearia
     };
 
-    fetch('http://localhost:5000/barbeiros', {
+    fetch(`${urlBackend}/barbeiros`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -125,7 +129,7 @@ function limparCamposModalBarbeiro() {
 
 function deletarBarbeiro(barbeiroId) {
     if (confirm('Tem certeza que deseja excluir o barbeiro?')) {
-        fetch(`http://localhost:5000/barbeiros/${barbeiroId}`, {
+        fetch(`${urlBackend}/barbeiros/${barbeiroId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -160,4 +164,18 @@ function exibirAlertaBarbeiro(status, mensagem) {
         alert.classList.remove("show");
     },3000);
 
+}
+function carregarVariaveisDeAmbiente() {
+    fetch('/config')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao carregar variáveis de ambiente.");
+            }
+            
+            return response.json();
+        })
+        .then(config => {
+            urlBackend = config.apiUrl
+        })
+        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }
