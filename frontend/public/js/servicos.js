@@ -1,10 +1,14 @@
+let urlBackend;
+
+document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
 buscarServicosDaBarbearia();
 
 function buscarServicosDaBarbearia() {
-    fetch(`http://localhost:5000/servicos/barbearia/${barbeariaId}`, {
+    fetch(`${urlBackend}/servicos/barbearia/${barbeariaId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -48,7 +52,7 @@ function salvarServico() {
             idBarbearia: idBarbearia
         };
     
-        fetch('http://localhost:5000/servicos', {
+        fetch(`${urlBackend}/servicos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -117,7 +121,7 @@ function editarServico() {
             tempoDuracaoEmMinutos: duracaoServico,
         };
 
-        fetch(`http://localhost:5000/servicos/${idServico}`, {
+        fetch(`${urlBackend}/servicos/${idServico}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -150,7 +154,7 @@ function editarServico() {
 
 async function buscarServico(servicoId) {
     try {
-        const response = await fetch(`http://localhost:5000/servicos/${servicoId}`,{
+        const response = await fetch(`${urlBackend}/servicos/${servicoId}`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -170,7 +174,7 @@ async function buscarServico(servicoId) {
  
 function deletarServico(servicoId) {
     if (confirm('Tem certeza que deseja excluir o serviço?')) {
-        fetch(`http://localhost:5000/servicos/${servicoId}`, {
+        fetch(`${urlBackend}/servicos/${servicoId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -268,4 +272,19 @@ function exibirAlertaServicos(status, mensagem) {
     setTimeout(function() {
         alert.classList.remove("show");
     },3000);
+}
+
+function carregarVariaveisDeAmbiente() {
+    fetch('/config')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Erro ao carregar variáveis de ambiente.");
+            }
+            
+            return response.json();
+        })
+        .then(config => {
+            urlBackend = config.apiUrl
+        })
+        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }
