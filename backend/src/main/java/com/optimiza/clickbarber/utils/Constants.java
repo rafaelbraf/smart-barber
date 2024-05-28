@@ -19,6 +19,10 @@ public class Constants {
         public static final String SERVICOS_ENCONTRADOS_DA_BARBEARIA = "Serviços encontrados para Barbearia com id ";
         public static final String SERVICO_CADASTRADO_COM_SUCESSO = "Serviço cadastrado com sucesso!";
         public static final String SERVICO_ATUALIZADO_COM_SUCESSO = "Serviço atualizado com sucesso!";
+        public static final String BARBEIROS_ENCONTRADOS_DA_BARBEARIA = "Barbeiros encontrados para Barbearia com id ";
+        public static final String BARBEIRO_ENCONTRADO_COM_SUCESSO = "Barbeiro encontrado com sucesso!";
+        public static final String BARBEIRO_ATUALIZADO_COM_SUCESSO = "Barbeiro atualizado com sucesso!";
+        public static final String BARBEIRO_CADASTRADO_COM_SUCESSO = "Barbeiro cadastrado com sucesso!";
     }
 
     public static class Error {
@@ -34,6 +38,9 @@ public class Constants {
         public static final String RESOURCE_NOT_FOUND = "%s não encontrado(a).";
         public static final String TOKEN_INVALIDO = "Token inválido!";
         public static final String TOKEN_EXPIRADO = "Token expirado!";
+        public static final String EXISTE_BARBEIRO_COM_ESSE_CPF = "Já existe Barbeiro com esse CPF.";
+        public static final String EXISTE_BARBEIRO_COM_ESSE_EMAIL = "Já existe Barbeiro com esse email.";
+        public static final String BARBEARIA_NAO_ENCONTRADA_PRO_BARBEIRO = "Barbearia não encontrada pro Barbeiro.";
     }
 
     public static class UrlPattern {
@@ -41,6 +48,7 @@ public class Constants {
 
         public static final String BARBEARIAS_URL_PATTERN = "/barbearias/*";
         public static final String SERVICOS_URL_PATTERN= "/servicos/*";
+        public static final String BARBEIROS_URL_PATTERN = "/barbeiros/*";
     }
 
     public static class Entity {
@@ -48,6 +56,7 @@ public class Constants {
 
         public static final String BARBEARIA = "Barbearia";
         public static final String SERVICO = "Servico";
+        public static final String BARBEIRO = "Barbeiro";
     }
 
     public static class Attribute {
