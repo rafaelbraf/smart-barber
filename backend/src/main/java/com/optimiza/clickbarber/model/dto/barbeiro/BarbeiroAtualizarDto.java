@@ -1,0 +1,20 @@
+package com.optimiza.clickbarber.model.dto.barbeiro;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+@Builder
+public class BarbeiroAtualizarDto {
+
+    private Integer id;
+    private String nome;
+    private String celular;
+    private boolean ativo;
+    private boolean admin;
+
+}

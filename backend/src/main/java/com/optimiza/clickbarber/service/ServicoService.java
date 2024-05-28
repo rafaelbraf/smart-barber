@@ -52,14 +52,11 @@ public class ServicoService {
     }
 
     public Servico atualizar(ServicoAtualizarDto servicoAtualizar) {
-        var servico = servicoRepository.findById(servicoAtualizar.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.SERVICO, Constants.Attribute.ID, servicoAtualizar.getId().toString()));
-
+        var servico = buscarPorId(servicoAtualizar.getId());
         servico.setNome(servicoAtualizar.getNome());
         servico.setAtivo(servicoAtualizar.isAtivo());
         servico.setPreco(servicoAtualizar.getPreco());
         servico.setTempoDuracaoEmMinutos(servicoAtualizar.getTempoDuracaoEmMinutos());
-
         return servicoRepository.save(servico);
     }
 

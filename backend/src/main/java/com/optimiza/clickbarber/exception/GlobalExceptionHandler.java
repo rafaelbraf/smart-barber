@@ -12,27 +12,33 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    private static final Map<String, String> constraintsErrorMessages = new HashMap<>();
+
+    static {
+        constraintsErrorMessages.put("barbearias_cnpj_key", Constants.Error.EXISTE_BARBEARIA_COM_ESSE_CNPJ);
+        constraintsErrorMessages.put("barbearias_email_key", Constants.Error.EXISTE_BARBEARIA_COM_ESSE_EMAIL);
+        constraintsErrorMessages.put("fk_barbearia", Constants.Error.BARBEARIA_NAO_ENCONTRADA_PRO_SERVICO);
+        constraintsErrorMessages.put("barbeiros_cpf_key", Constants.Error.EXISTE_BARBEIRO_COM_ESSE_CPF);
+        constraintsErrorMessages.put("barbeiros_email_key", Constants.Error.EXISTE_BARBEIRO_COM_ESSE_EMAIL);
+        constraintsErrorMessages.put("barbeiros_barbearia_id_fkey", Constants.Error.BARBEARIA_NAO_ENCONTRADA_PRO_BARBEIRO);
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Resposta<String>> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
-        String mensagem = Constants.Error.ERRO_AO_CADASTRAR_OBJETO;
+        String mensagem;
 
         if (e.getRootCause() instanceof SQLException sqlException) {
-            var sqlErroMessage = sqlException.getMessage();
-            if (sqlErroMessage.contains("barbearias_cnpj_key")) {
-                mensagem = Constants.Error.EXISTE_BARBEARIA_COM_ESSE_CNPJ;
-            } else if (sqlErroMessage.contains("barbearias_email_key")) {
-                mensagem = Constants.Error.EXISTE_BARBEARIA_COM_ESSE_EMAIL;
-            } else if (sqlErroMessage.contains("fk_barbearia")) {
-                mensagem = Constants.Error.BARBEARIA_NAO_ENCONTRADA_PRO_SERVICO;
-            }
-
             logger.error("DataIntegrityViolationException: {}", e.getMessage());
+            var sqlMensagemErro = sqlException.getMessage();
+            mensagem = defineMensagemDeErroSQL(sqlMensagemErro);
             var resposta = RespostaUtils.conflict(mensagem, e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(resposta);
         }
@@ -50,6 +56,14 @@ public class GlobalExceptionHandler {
         var resposta = RespostaUtils.notFound(mensagem, e.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resposta);
+    }
+
+    private String defineMensagemDeErroSQL(String mensagemErroSQL) {
+        return constraintsErrorMessages.entrySet().stream()
+                .filter(entry -> mensagemErroSQL.contains(entry.getKey()))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(Constants.Error.ERRO_AO_CADASTRAR_OBJETO);
     }
 
 }

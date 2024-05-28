@@ -33,4 +33,8 @@ public class Barbearia {
     @JsonManagedReference
     private List<Servico> servicos;
 
+    @OneToMany(mappedBy = "barbearia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Barbeiro> barbeiros;
+
 }

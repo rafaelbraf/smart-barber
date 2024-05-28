@@ -37,7 +37,9 @@ public class WebConfig implements WebMvcConfigurer {
 
         var listUrlPatterns = List.of(
                 Constants.UrlPattern.BARBEARIAS_URL_PATTERN,
-                Constants.UrlPattern.SERVICOS_URL_PATTERN);
+                Constants.UrlPattern.SERVICOS_URL_PATTERN,
+                Constants.UrlPattern.BARBEIROS_URL_PATTERN);
+
         var collectionUrlPatterns = new ArrayList<>(listUrlPatterns);
         registrationBean.setUrlPatterns(collectionUrlPatterns);
 
