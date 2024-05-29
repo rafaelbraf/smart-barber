@@ -7,6 +7,7 @@ public class Constants {
     public static final String FRONTEND_URL = "http://localhost:3000";
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String AUTHORIZATION_NAME = "Authorization";
+    public static final String OPTIONS_METHOD = "OPTIONS";
 
     public static class Success {
         private Success() {}
