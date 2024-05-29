@@ -31,6 +31,8 @@ public class GlobalExceptionHandler {
         constraintsErrorMessages.put("barbeiros_barbearia_id_fkey", Constants.Error.BARBEARIA_NAO_ENCONTRADA_PRO_BARBEIRO);
         constraintsErrorMessages.put("usuarios_cpf_key", Constants.Error.EXISTE_USUARIO_COM_ESSE_CPF);
         constraintsErrorMessages.put("usuarios_email_key", Constants.Error.EXISTE_USUARIO_COM_ESSE_EMAIL);
+        constraintsErrorMessages.put("agendamentos_barbearia_id_fkey", Constants.Error.BARBEARIA_NAO_ENCONTRADA_PRO_AGENDAMENTO);
+        constraintsErrorMessages.put("agendamentos_usuario_id_fkey", Constants.Error.USUARIO_NAO_ENCONTRADO_PRO_AGENDAMENTO);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
