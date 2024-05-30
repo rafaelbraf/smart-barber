@@ -2,7 +2,6 @@ package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.Barbeiro;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAtualizarDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;

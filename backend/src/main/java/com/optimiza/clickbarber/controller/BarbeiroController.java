@@ -8,7 +8,6 @@ import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.service.BarbeiroService;
 import com.optimiza.clickbarber.utils.Constants;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

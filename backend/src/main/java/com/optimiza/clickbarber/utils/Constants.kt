@@ -1,0 +1,72 @@
+package com.optimiza.clickbarber.utils
+
+object Constants {
+
+    const val FRONTEND_URL: String = "http://localhost:3000"
+    const val BEARER_PREFIX: String = "Bearer "
+    const val AUTHORIZATION_NAME: String = "Authorization"
+    const val OPTIONS_METHOD: String = "OPTIONS"
+
+    object Success {
+        const val LOGIN_REALIZADO_COM_SUCESSO = "Login realizado com sucesso!"
+        const val BARBEARIA_CADASTRADA_COM_SUCESSO: String = "Barbearia cadastrada com sucesso!"
+        const val BARBEARIA_ENCONTRADA_COM_SUCESSO: String = "Barbearia encontrada com sucesso!"
+        const val SERVICOS_ENCONTRADOS: String = "Serviços encontrados"
+        const val SERVICO_ENCONTRADO_COM_SUCESSO: String = "Serviço encontrado com sucesso!"
+        const val SERVICOS_ENCONTRADOS_DA_BARBEARIA: String = "Serviços encontrados para Barbearia com id "
+        const val SERVICO_CADASTRADO_COM_SUCESSO: String = "Serviço cadastrado com sucesso!"
+        const val SERVICO_ATUALIZADO_COM_SUCESSO: String = "Serviço atualizado com sucesso!"
+        const val BARBEIROS_ENCONTRADOS_DA_BARBEARIA: String = "Barbeiros encontrados para Barbearia com id "
+        const val BARBEIRO_ENCONTRADO_COM_SUCESSO: String = "Barbeiro encontrado com sucesso!"
+        const val BARBEIRO_ATUALIZADO_COM_SUCESSO: String = "Barbeiro atualizado com sucesso!"
+        const val BARBEIRO_CADASTRADO_COM_SUCESSO: String = "Barbeiro cadastrado com sucesso!"
+        const val USUARIO_CADASTRADO_COM_SUCESSO: String = "Usuário cadastrado com sucesso!"
+        const val AGENDAMENTO_ENCONTRADO_COM_SUCESSO: String = "Agendamento encontrado com sucesso!"
+        const val AGENDAMENTOS_ENCONTRADOS: String = "Agendamentos encontrados"
+        const val AGENDAMENTO_CADASTRADO_COM_SUCESSO: String = "Agendamento cadastrado com sucesso!"
+        const val AGENDAMENTO_ATUALIZADO_COM_SUCESSO: String = "Agendamento atualizado com sucesso!"
+    }
+
+    object Error {
+        const val EMAIL_OU_SENHA_INCORRETA: String = "Email ou senha incorreta!"
+        const val RESOURCE_NOT_FOUND_EXCEPTION: String = "Não foi encontrado(a) %s com %s = %s."
+        const val ERRO_AO_CADASTRAR_OBJETO: String = "Erro ao cadastrar objeto."
+        const val EXISTE_BARBEARIA_COM_ESSE_CNPJ: String = "Já existe barbearia cadastrada com esse CNPJ."
+        const val EXISTE_BARBEARIA_COM_ESSE_EMAIL: String = "Já existe barbearia cadastrada com esse Email."
+        const val ERRO_INTERNO_SERVIDOR: String = "Erro interno do servidor."
+        const val BARBEARIA_NAO_ENCONTRADA_PRO_SERVICO: String = "Barbearia não encontrada pro serviço."
+        const val RESOURCE_NOT_FOUND: String = "%s não encontrado(a)."
+        const val TOKEN_INVALIDO: String = "Token inválido!"
+        const val TOKEN_EXPIRADO: String = "Token expirado!"
+        const val EXISTE_BARBEIRO_COM_ESSE_CPF: String = "Já existe Barbeiro cadastrado com esse CPF."
+        const val EXISTE_BARBEIRO_COM_ESSE_EMAIL: String = "Já existe Barbeiro cadastrado com esse email."
+        const val BARBEARIA_NAO_ENCONTRADA_PRO_BARBEIRO: String = "Barbearia não encontrada pro Barbeiro."
+        const val EXISTE_USUARIO_COM_ESSE_CPF: String = "Já existe Usuário cadastrado com esse CPF."
+        const val EXISTE_USUARIO_COM_ESSE_EMAIL: String = "Já existe Usuário cadastrado com esse email."
+        const val BARBEARIA_NAO_ENCONTRADA_PRO_AGENDAMENTO: String = "Barbearia não encontrada pro Agendamento."
+        const val USUARIO_NAO_ENCONTRADO_PRO_AGENDAMENTO: String = "Usuário não encontrado pro Agendamento."
+    }
+
+    object UrlPattern {
+        const val BARBEARIAS_URL_PATTERN: String = "/barbearias/*"
+        const val SERVICOS_URL_PATTERN: String = "/servicos/*"
+        const val BARBEIROS_URL_PATTERN: String = "/barbeiros/*"
+        const val AGENDAMENTOS_URL_PATTERN: String = "/agendamentos/*"
+    }
+
+    object Entity {
+        const val BARBEARIA: String = "Barbearia"
+        const val SERVICO: String = "Servico"
+        const val BARBEIRO: String = "Barbeiro"
+        const val USUARIO: String = "Usuario"
+        const val AGENDAMENTO: String = "Agendamento"
+        const val CLIENTE: String = "Cliente"
+    }
+
+    object Attribute {
+        const val ID: String = "id"
+        const val EMAIL: String = "email"
+        const val USUARIO_ID: String = "usuario_id"
+    }
+
+}

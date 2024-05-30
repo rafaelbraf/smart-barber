@@ -1,12 +1,7 @@
 package com.optimiza.clickbarber.controller;
 
-import com.optimiza.clickbarber.model.Resposta;
-import com.optimiza.clickbarber.model.RespostaUtils;
 import com.optimiza.clickbarber.service.BarbeariaService;
-import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

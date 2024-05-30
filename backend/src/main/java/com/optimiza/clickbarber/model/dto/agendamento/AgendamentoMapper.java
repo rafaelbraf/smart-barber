@@ -23,7 +23,7 @@ public class AgendamentoMapper {
     public AgendamentoDto toDto(Agendamento agendamento) {
         if (isNull(agendamento)) return null;
 
-        var usuario = usuarioMapper.toAgendamentoDto(agendamento.getUsuario());
+        var cliente = agendamento.getCliente();
         var barbearia = barbeariaMapper.toDto(agendamento.getBarbearia());
 
         return AgendamentoDto.builder()
@@ -31,7 +31,7 @@ public class AgendamentoMapper {
                 .dataHora(agendamento.getDataHora())
                 .valorTotal(agendamento.getValorTotal())
                 .tempoDuracaoEmMinutos(agendamento.getTempoDuracaoEmMinutos())
-                .usuario(usuario)
+                .cliente(cliente)
                 .barbearia(barbearia)
                 .build();
     }
@@ -39,14 +39,14 @@ public class AgendamentoMapper {
     public AgendamentoRespostaDto toAgendamentoRespostaDto(Agendamento agendamento) {
         if (isNull(agendamento)) return null;
 
-        var usuario = usuarioMapper.toAgendamentoDto(agendamento.getUsuario());
+        var cliente = agendamento.getCliente();
 
         return AgendamentoRespostaDto.builder()
                 .id(agendamento.getId())
                 .dataHora(agendamento.getDataHora())
                 .valorTotal(agendamento.getValorTotal())
                 .tempoDuracaoEmMinutos(agendamento.getTempoDuracaoEmMinutos())
-                .usuario(usuario)
+                .cliente(cliente)
                 .build();
     }
 

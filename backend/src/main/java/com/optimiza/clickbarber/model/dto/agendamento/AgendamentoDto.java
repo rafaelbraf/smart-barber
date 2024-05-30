@@ -1,8 +1,8 @@
 package com.optimiza.clickbarber.model.dto.agendamento;
 
+import com.optimiza.clickbarber.model.Cliente;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.usuario.UsuarioAgendamentoDto;
-import com.optimiza.clickbarber.model.dto.usuario.UsuarioDto;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -23,6 +23,6 @@ public class AgendamentoDto {
     private BigDecimal valorTotal;
     private Integer tempoDuracaoEmMinutos;
     private BarbeariaDto barbearia;
-    private UsuarioAgendamentoDto usuario;
+    private Cliente cliente;
 
 }

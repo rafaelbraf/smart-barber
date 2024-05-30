@@ -1,5 +1,6 @@
 package com.optimiza.clickbarber.model.dto.usuario;
 
+import com.optimiza.clickbarber.model.Cliente;
 import com.optimiza.clickbarber.model.Usuario;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +18,7 @@ public class UsuarioMapper {
     public UsuarioAgendamentoDto toAgendamentoDto(Usuario usuario) {
         return UsuarioAgendamentoDto.builder()
                 .id(usuario.getId())
-                .nome(usuario.getNome())
                 .email(usuario.getEmail())
-                .celular(usuario.getCelular())
-                .cpf(usuario.getCpf())
                 .build();
     }
 

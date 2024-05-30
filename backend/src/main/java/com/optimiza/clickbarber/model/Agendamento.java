@@ -31,7 +31,7 @@ public class Agendamento {
     private Barbearia barbearia;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
 
 }

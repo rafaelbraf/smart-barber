@@ -1,5 +1,6 @@
 package com.optimiza.clickbarber.model.dto.agendamento;
 
+import com.optimiza.clickbarber.model.Cliente;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.usuario.UsuarioAgendamentoDto;
 import lombok.*;
@@ -21,6 +22,6 @@ public class AgendamentoRespostaDto {
     private ZonedDateTime dataHora;
     private BigDecimal valorTotal;
     private Integer tempoDuracaoEmMinutos;
-    private UsuarioAgendamentoDto usuario;
+    private Cliente cliente;
 
 }
