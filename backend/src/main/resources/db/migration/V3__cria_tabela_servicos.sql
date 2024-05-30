@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE servicos (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,

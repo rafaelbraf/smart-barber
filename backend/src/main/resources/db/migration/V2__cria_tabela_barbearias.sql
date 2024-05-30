@@ -3,7 +3,7 @@ CREATE TABLE barbearias (
     cnpj VARCHAR(14) UNIQUE NOT NULL,
     nome VARCHAR(100) NOT NULL,
     endereco VARCHAR(255),
-    email VARCHAR(100) UNIQUE NOT NULL,
     telefone VARCHAR(20),
-    senha VARCHAR(255) NOT NULL
+    usuario_id UUID REFERENCES usuarios(id),
+    CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );

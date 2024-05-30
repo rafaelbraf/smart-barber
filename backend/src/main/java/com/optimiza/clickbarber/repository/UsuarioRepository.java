@@ -1,19 +1,15 @@
 package com.optimiza.clickbarber.repository;
 
 import com.optimiza.clickbarber.model.Usuario;
-import com.optimiza.clickbarber.model.dto.usuario.UsuarioDto;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     Optional<Usuario> findByEmail(String email);
-
-    @Query("SELECT u.senha FROM Usuario u WHERE u.id = :id")
-    String findSenhaPorId(@Param("id") UUID id);
 
 }

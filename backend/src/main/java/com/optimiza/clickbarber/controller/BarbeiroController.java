@@ -4,6 +4,8 @@ import com.optimiza.clickbarber.model.Barbeiro;
 import com.optimiza.clickbarber.model.Resposta;
 import com.optimiza.clickbarber.model.RespostaUtils;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAtualizarDto;
+import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
+import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.service.BarbeiroService;
 import com.optimiza.clickbarber.utils.Constants;
 import org.apache.tomcat.util.bcel.Const;
@@ -36,8 +38,8 @@ public class BarbeiroController {
     }
 
     @PostMapping
-    public ResponseEntity<Resposta<Barbeiro>> cadastrar(@RequestBody Barbeiro barbeiro) {
-        var barbeiroCadastrado = barbeiroService.cadastrar(barbeiro);
+    public ResponseEntity<Resposta<BarbeiroDto>> cadastrar(@RequestBody BarbeiroCadastroDto barbeiroCadastro) {
+        var barbeiroCadastrado = barbeiroService.cadastrar(barbeiroCadastro);
         var resposta = RespostaUtils.created(Constants.Success.BARBEIRO_CADASTRADO_COM_SUCESSO, barbeiroCadastrado);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);

@@ -3,7 +3,6 @@ package com.optimiza.clickbarber.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Table(name = "usuarios")
@@ -21,11 +20,10 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String cpf;
-    private String nome;
-    private LocalDate dataNascimento;
     private String email;
-    private String celular;
     private String senha;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 }

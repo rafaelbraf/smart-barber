@@ -1,5 +1,6 @@
-package com.optimiza.clickbarber.model.dto.usuario;
+package com.optimiza.clickbarber.model.dto.cliente;
 
+import com.optimiza.clickbarber.model.Usuario;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -9,16 +10,13 @@ import java.util.UUID;
 @Setter
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class UsuarioDto {
+public class ClienteCadastroDto {
 
-    private UUID id;
-    private String cpf;
     private String nome;
+    private String cpf;
     private LocalDate dataNascimento;
-    private String email;
     private String celular;
+    private Usuario usuario;
 
 }

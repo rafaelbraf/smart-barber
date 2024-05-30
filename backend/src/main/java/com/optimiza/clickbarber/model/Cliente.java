@@ -1,10 +1,12 @@
 package com.optimiza.clickbarber.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name = "barbeiros")
+import java.time.LocalDate;
+import java.util.UUID;
+
+@Table(name = "clientes")
 @Entity
 @Getter
 @Setter
@@ -13,7 +15,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Barbeiro {
+public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +23,8 @@ public class Barbeiro {
 
     private String cpf;
     private String nome;
+    private LocalDate dataNascimento;
     private String celular;
-    private boolean admin;
-    private boolean ativo;
-
-    @ManyToOne
-    @JoinColumn(name = "barbearia_id")
-    @JsonBackReference
-    private Barbearia barbearia;
 
     @OneToOne
     @JoinColumn(name = "usuario_id")

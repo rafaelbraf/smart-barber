@@ -25,9 +25,11 @@ public class Barbearia {
     private String cnpj;
     private String nome;
     private String endereco;
-    private String email;
-    private String senha;
     private String telefone;
+
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "barbearia", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

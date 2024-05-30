@@ -1,5 +1,6 @@
 package com.optimiza.clickbarber.model.dto.barbearia;
 
+import com.optimiza.clickbarber.model.Usuario;
 import lombok.*;
 
 @Getter
@@ -12,8 +13,7 @@ public class BarbeariaCadastroDto {
     private String cnpj;
     private String nome;
     private String endereco;
-    private String email;
-    private String senha;
     private String telefone;
+    private Usuario usuario;
 
 }

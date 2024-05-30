@@ -1,16 +1,14 @@
 package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
-import com.optimiza.clickbarber.model.dto.usuario.UsuarioCadastroDto;
-import com.optimiza.clickbarber.model.dto.usuario.UsuarioDto;
+import com.optimiza.clickbarber.model.Usuario;
 import com.optimiza.clickbarber.model.dto.usuario.UsuarioMapper;
+import com.optimiza.clickbarber.model.dto.usuario.UsuarioCadastrarDto;
 import com.optimiza.clickbarber.repository.UsuarioRepository;
 import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class UsuarioService {
@@ -26,25 +24,14 @@ public class UsuarioService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
-    public UsuarioDto buscarPorEmail(String email) {
-        var usuarioEncontrado = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.USUARIO, Constants.Attribute.EMAIL, email));
-
-        return usuarioMapper.toDto(usuarioEncontrado);
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.USUARIO, Constants.Attribute.EMAIL, email));
     }
 
-    public String buscarSenhaCriptografada(UUID id) {
-        return usuarioRepository.findSenhaPorId(id);
+    public Usuario cadastrarUsuario(UsuarioCadastrarDto usuarioRegistrar) {
+        var senhaCriptografada = bCryptPasswordEncoder.encode(usuarioRegistrar.getSenha());
+        usuarioRegistrar.setSenha(senhaCriptografada);
+        var usuario = usuarioMapper.toEntity(usuarioRegistrar);
+        return usuarioRepository.save(usuario);
     }
-
-    public UsuarioDto cadastrar(UsuarioCadastroDto usuarioCadastro) {
-        var senhaCriptografada = bCryptPasswordEncoder.encode(usuarioCadastro.getSenha());
-        usuarioCadastro.setSenha(senhaCriptografada);
-
-        var usuario = usuarioMapper.toEntity(usuarioCadastro);
-        var usuarioCadastrado = usuarioRepository.save(usuario);
-
-        return usuarioMapper.toDto(usuarioCadastrado);
-    }
-
 }

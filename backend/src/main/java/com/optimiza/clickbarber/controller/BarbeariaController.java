@@ -21,10 +21,4 @@ public class BarbeariaController {
         this.barbeariaService = barbeariaService;
     }
 
-    @GetMapping("/{email}")
-    public Resposta<Object> findByEmail(@PathVariable String email) {
-        var barbearia = barbeariaService.buscarPorEmail(email);
-        return RespostaUtils.ok(Constants.Success.BARBEARIA_ENCONTRADA_COM_SUCESSO, barbearia);
-    }
-
 }

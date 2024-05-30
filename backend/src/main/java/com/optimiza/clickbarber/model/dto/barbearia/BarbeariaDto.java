@@ -15,7 +15,6 @@ public class BarbeariaDto {
     private String cnpj;
     private String nome;
     private String endereco;
-    private String email;
     private String telefone;
 
 }
