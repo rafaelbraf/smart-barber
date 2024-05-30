@@ -28,4 +28,14 @@ public class UsuarioMapper {
                 .build();
     }
 
+    public UsuarioAgendamentoDto toAgendamentoDto(Usuario usuario) {
+        return UsuarioAgendamentoDto.builder()
+                .id(usuario.getId())
+                .nome(usuario.getNome())
+                .email(usuario.getEmail())
+                .celular(usuario.getCelular())
+                .cpf(usuario.getCpf())
+                .build();
+    }
+
 }

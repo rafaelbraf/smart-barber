@@ -25,6 +25,10 @@ public class Constants {
         public static final String BARBEIRO_ATUALIZADO_COM_SUCESSO = "Barbeiro atualizado com sucesso!";
         public static final String BARBEIRO_CADASTRADO_COM_SUCESSO = "Barbeiro cadastrado com sucesso!";
         public static final String USUARIO_CADASTRADO_COM_SUCESSO = "Usuário cadastrado com sucesso!";
+        public static final String AGENDAMENTO_ENCONTRADO_COM_SUCESSO = "Agendamento encontrado com sucesso!";
+        public static final String AGENDAMENTOS_ENCONTRADOS = "Agendamentos encontrados";
+        public static final String AGENDAMENTO_CADASTRADO_COM_SUCESSO = "Agendamento cadastrado com sucesso!";
+        public static final String AGENDAMENTO_ATUALIZADO_COM_SUCESSO = "Agendamento atualizado com sucesso!";
     }
 
     public static class Error {
@@ -45,6 +49,8 @@ public class Constants {
         public static final String BARBEARIA_NAO_ENCONTRADA_PRO_BARBEIRO = "Barbearia não encontrada pro Barbeiro.";
         public static final String EXISTE_USUARIO_COM_ESSE_CPF = "Já existe Usuário cadastrado com esse CPF.";
         public static final String EXISTE_USUARIO_COM_ESSE_EMAIL = "Já existe Usuário cadastrado com esse email.";
+        public static final String BARBEARIA_NAO_ENCONTRADA_PRO_AGENDAMENTO = "Barbearia não encontrada pro Agendamento.";
+        public static final String USUARIO_NAO_ENCONTRADO_PRO_AGENDAMENTO = "Usuário não encontrado pro Agendamento.";
     }
 
     public static class UrlPattern {
@@ -53,6 +59,7 @@ public class Constants {
         public static final String BARBEARIAS_URL_PATTERN = "/barbearias/*";
         public static final String SERVICOS_URL_PATTERN= "/servicos/*";
         public static final String BARBEIROS_URL_PATTERN = "/barbeiros/*";
+        public static final String AGENDAMENTOS_URL_PATTERN = "/agendamentos/*";
     }
 
     public static class Entity {
@@ -62,6 +69,7 @@ public class Constants {
         public static final String SERVICO = "Servico";
         public static final String BARBEIRO = "Barbeiro";
         public static final String USUARIO = "Usuario";
+        public static final String AGENDAMENTO = "Agendamento";
     }
 
     public static class Attribute {
