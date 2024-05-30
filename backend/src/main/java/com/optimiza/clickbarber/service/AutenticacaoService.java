@@ -10,12 +10,15 @@ import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteCadastroDto;
 import com.optimiza.clickbarber.model.dto.usuario.UsuarioCadastrarDto;
+import com.optimiza.clickbarber.utils.Constants;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
 
 import static java.util.Objects.*;
 
@@ -41,22 +44,25 @@ public class AutenticacaoService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
-    public RespostaLogin loginBarbearia(LoginRequestDto loginRequest) {
-        requireNonNull(loginRequest.getEmail(), "Email não pode ser nulo.");
-        requireNonNull(loginRequest.getSenha(), "Senha não pode ser nulo.");
+    public RespostaLogin login(LoginRequestDto loginRequest) {
+        requireNonNull(loginRequest.getEmail(), Constants.Error.EMAIL_NAO_PODE_SER_NULO);
+        requireNonNull(loginRequest.getSenha(), Constants.Error.SENHA_NAO_PODE_SER_NULA);
 
         var usuario = usuarioService.buscarPorEmail(loginRequest.getEmail());
-        if (isSenhaValida(loginRequest.getSenha(), usuario.getSenha())) {
-            if (usuario.getRole().equals(Role.CLIENTE)) {
-                var cliente = clienteService.buscarPorUsuarioId(usuario.getId());
-                return RespostaLogin.authorized(cliente, gerarToken(usuario.getEmail()));
-            } else if (usuario.getRole().equals(Role.BARBEARIA)) {
-                var barbearia = barbeariaService.buscarPorUsuarioId(usuario.getId());
-                return RespostaLogin.authorized(barbearia, gerarToken(usuario.getEmail()));
-            } else if (usuario.getRole().equals(Role.BARBEIRO)) {
-                var barbeiro = barbeiroService.buscarPorUsuarioId(usuario.getId());
-                return RespostaLogin.authorized(barbeiro, gerarToken(usuario.getEmail()));
-            }
+        if (!isSenhaValida(loginRequest.getSenha(), usuario.getSenha())) {
+            return RespostaLogin.unauthorized();
+        }
+
+        var acoesRole = Map.of(
+                Role.CLIENTE, clienteService::buscarPorUsuarioId,
+                Role.BARBEARIA, barbeariaService::buscarPorUsuarioId,
+                Role.BARBEIRO, (Function<UUID, Object>) barbeiroService::buscarPorUsuarioId
+        );
+
+        var acaoRole = acoesRole.get(usuario.getRole());
+        if (nonNull(acaoRole)) {
+            var entity = acaoRole.apply(usuario.getId());
+            return RespostaLogin.authorized(entity, gerarToken(usuario.getEmail()));
         }
 
         return RespostaLogin.unauthorized();

@@ -27,7 +27,7 @@ public class AutenticacaoController {
 
     @PostMapping("/login")
     public ResponseEntity<RespostaAutenticacao<Object>> login(@RequestBody LoginRequestDto loginRequest) {
-        var respostaLogin = autenticacaoService.loginBarbearia(loginRequest);
+        var respostaLogin = autenticacaoService.login(loginRequest);
         var resposta = RespostaUtils.authorized(respostaLogin.getMessage(), respostaLogin.getResult(), respostaLogin.getAccessToken());
         return ResponseEntity.ok(resposta);
     }
