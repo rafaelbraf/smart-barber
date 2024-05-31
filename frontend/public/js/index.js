@@ -1,48 +1,43 @@
+import { carregarVariaveisDeAmbiente } from "./utils/utils.js";
+import { fazerRequisicaoPost } from "./utils/request.js";
+
 let urlBackend;
 
-document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+document.addEventListener('DOMContentLoaded', async () => {
+    urlBackend = await carregarVariaveisDeAmbiente();
+});
 
-function fazerLogin() {
+const buttonLogin = document.getElementById('buttonLogin');
+buttonLogin.addEventListener('click', fazerLogin);
+
+async function fazerLogin() {
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
 
     if (email && senha) {
-        const dadosLogin = {
-            email: email,
-            senha: senha
+        const url = `${urlBackend}/auth/login`;
+        const dadosLogin = { 
+            email: email, 
+            senha: senha 
+        };
+        const headers = { 
+            'Content-Type': 'application/json' 
         };
 
-        fetch(`${urlBackend}/auth/barbearias/login`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dadosLogin)
-        })
-        .then(response => response.json())
-        .then(data => {
-            localStorage.setItem('token', data.access_token);
-            localStorage.setItem('barbearia', data.barbearia.id);
-            
-            window.location.href = 'pages/home.html';
-        })
-        .catch(error => {
-            console.log("Erro na requisição: " + error);
-        });
-    }
-}
+        const response = await fazerRequisicaoPost(url, headers, dadosLogin);
 
-function carregarVariaveisDeAmbiente() {
-    fetch('/config')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro ao carregar variáveis de ambiente.");
+        const data = await response.json();
+        if (data.success) {
+            localStorage.setItem('token', data.accessToken);
+            localStorage.setItem('barbearia', data.result.id);
+
+            window.location.href = 'pages/home.html';
+        } else {
+            if (data.statusCode === '401') {
+                console.log('Credenciais inválidas');
+            } else {
+                console.log('Erro ao fazer login.');
             }
-            
-            return response.json();
-        })
-        .then(config => {
-            urlBackend = config.apiUrl
-        })
-        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
+        }
+    }
 }
