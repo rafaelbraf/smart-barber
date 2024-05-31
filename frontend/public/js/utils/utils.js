@@ -1,10 +1,8 @@
+import { fazerRequisicaoGet } from "./request.js";
+
 export async function carregarVariaveisDeAmbiente() {
     try {
-        const response = await fetch('/config');
-        if (!response.ok) {
-            throw new Error('Erro ao carregar variáveis de ambiente.');
-        }
-
+        const response = await fazerRequisicaoGet('/config')
         const config = await response.json();
 
         return config.apiUrl;
