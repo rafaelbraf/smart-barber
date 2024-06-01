@@ -1,7 +1,9 @@
-import { carregarVariaveisDeAmbiente } from "./utils/utils.js";
-import { fazerRequisicaoPost } from "./utils/request.js";
+import { carregarVariaveisDeAmbiente } from "./utils/loadEnvs.js";
+import { ApiClient } from "./utils/apiClient.js";
 
 let urlBackend;
+
+const apiClient = new ApiClient();
 
 document.addEventListener('DOMContentLoaded', async () => {
     urlBackend = await carregarVariaveisDeAmbiente();
@@ -23,8 +25,7 @@ async function fazerLogin() {
         const headers = { 
             'Content-Type': 'application/json' 
         };
-
-        const response = await fazerRequisicaoPost(url, headers, dadosLogin);
+        const response = await apiClient.post(url, headers, dadosLogin);
 
         const data = await response.json();
         if (data.success) {

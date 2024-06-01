@@ -1,8 +1,10 @@
-import { fazerRequisicaoGet } from "./request.js";
+import { ApiClient } from "./apiClient.js";
+
+const apiClient = new ApiClient();
 
 export async function carregarVariaveisDeAmbiente() {
     try {
-        const response = await fazerRequisicaoGet('/config')
+        const response = await apiClient.get('/config', {})
         const config = await response.json();
 
         return config.apiUrl;
