@@ -1,6 +1,7 @@
 package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
+import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
@@ -25,6 +26,10 @@ public class BarbeariaService {
 
     public boolean existePorId(Integer id) {
         return barbeariaRepository.existsById(id);
+    }
+
+    public Barbearia buscarPorId(Integer id) {
+        return barbeariaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.ID, id.toString()));
     }
 
     public BarbeariaDto buscarPorUsuarioId(UUID usuarioId) {

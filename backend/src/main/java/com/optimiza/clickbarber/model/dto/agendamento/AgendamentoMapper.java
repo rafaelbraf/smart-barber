@@ -2,6 +2,7 @@ package com.optimiza.clickbarber.model.dto.agendamento;
 
 import com.optimiza.clickbarber.model.Agendamento;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
+import com.optimiza.clickbarber.model.dto.cliente.ClienteMapper;
 import com.optimiza.clickbarber.model.dto.usuario.UsuarioMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,19 +12,19 @@ import static java.util.Objects.isNull;
 @Component
 public class AgendamentoMapper {
 
-    private final UsuarioMapper usuarioMapper;
     private final BarbeariaMapper barbeariaMapper;
+    private final ClienteMapper clienteMapper;
 
     @Autowired
-    public AgendamentoMapper(UsuarioMapper usuarioMapper, BarbeariaMapper barbeariaMapper) {
-        this.usuarioMapper = usuarioMapper;
+    public AgendamentoMapper(BarbeariaMapper barbeariaMapper, ClienteMapper clienteMapper) {
         this.barbeariaMapper = barbeariaMapper;
+        this.clienteMapper = clienteMapper;
     }
 
     public AgendamentoDto toDto(Agendamento agendamento) {
         if (isNull(agendamento)) return null;
 
-        var cliente = agendamento.getCliente();
+        var cliente = clienteMapper.toDto(agendamento.getCliente());
         var barbearia = barbeariaMapper.toDto(agendamento.getBarbearia());
 
         return AgendamentoDto.builder()
@@ -33,6 +34,7 @@ public class AgendamentoMapper {
                 .tempoDuracaoEmMinutos(agendamento.getTempoDuracaoEmMinutos())
                 .cliente(cliente)
                 .barbearia(barbearia)
+                .servicos(agendamento.getServicos())
                 .build();
     }
 

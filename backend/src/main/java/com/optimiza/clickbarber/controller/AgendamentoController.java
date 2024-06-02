@@ -4,6 +4,7 @@ import com.optimiza.clickbarber.model.Agendamento;
 import com.optimiza.clickbarber.model.Resposta;
 import com.optimiza.clickbarber.model.RespostaUtils;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoAtualizarDto;
+import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoCadastroDto;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoDto;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoRespostaDto;
 import com.optimiza.clickbarber.service.AgendamentoService;
@@ -47,8 +48,8 @@ public class AgendamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<Resposta<Agendamento>> cadastrar(@RequestBody Agendamento agendamento) {
-        var agendamentoCadastrado = agendamentoService.cadastrar(agendamento);
+    public ResponseEntity<Resposta<AgendamentoDto>> cadastrar(@RequestBody AgendamentoCadastroDto agendamentoCadastro) {
+        var agendamentoCadastrado = agendamentoService.cadastrar(agendamentoCadastro);
         var resposta = RespostaUtils.created(Constants.Success.AGENDAMENTO_CADASTRADO_COM_SUCESSO, agendamentoCadastrado);
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }

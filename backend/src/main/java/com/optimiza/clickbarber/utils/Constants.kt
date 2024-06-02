@@ -47,6 +47,8 @@ object Constants {
         const val USUARIO_NAO_ENCONTRADO_PRO_AGENDAMENTO: String = "Usuário não encontrado pro Agendamento."
         const val EMAIL_NAO_PODE_SER_NULO: String = "Email não pode ser nulo."
         const val SENHA_NAO_PODE_SER_NULA: String = "Senha não pode ser nula."
+        const val CLIENTE_NAO_ENCONTRADO_PRO_AGENDAMENTO: String = "Cliente não encontrado pro Agendamento."
+        const val SERVICO_NAO_ENCONTRADO_PRO_AGENDAMENTO: String = "Serviço não encontrado pro Agendamento."
     }
 
     object UrlPattern {

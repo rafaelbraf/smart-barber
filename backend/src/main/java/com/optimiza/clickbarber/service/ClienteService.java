@@ -1,6 +1,7 @@
 package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
+import com.optimiza.clickbarber.model.Cliente;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteCadastroDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteMapper;
@@ -27,6 +28,10 @@ public class ClienteService {
         var clienteEncontrado = clienteRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.CLIENTE, Constants.Attribute.USUARIO_ID, usuarioId.toString()));
         return clienteMapper.toDto(clienteEncontrado);
+    }
+
+    public Cliente buscarPorId(Integer id) {
+        return clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.CLIENTE, Constants.Attribute.ID, id.toString()));
     }
 
     public ClienteDto cadastrar(ClienteCadastroDto usuarioCadastro) {
