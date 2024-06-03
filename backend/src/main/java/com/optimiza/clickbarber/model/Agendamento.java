@@ -43,4 +43,12 @@ public class Agendamento {
     )
     private Set<Servico> servicos;
 
+    @ManyToMany
+    @JoinTable(
+            name = "agendamentos_barbeiros",
+            joinColumns = @JoinColumn(name = "agendamento_id"),
+            inverseJoinColumns = @JoinColumn(name = "barbeiro_id")
+    )
+    private Set<Barbeiro> barbeiros;
+
 }

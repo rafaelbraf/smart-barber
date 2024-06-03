@@ -5,6 +5,9 @@ import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Component
 public class BarbeiroMapper {
 
@@ -16,20 +19,19 @@ public class BarbeiroMapper {
     }
 
     public Barbeiro toEntity(BarbeiroCadastroDto barbeiroCadastro) {
-        var barbearia = barbeariaMapper.toEntity(barbeiroCadastro.getBarbearia());
-
         return Barbeiro.builder()
                 .nome(barbeiroCadastro.getNome())
                 .cpf(barbeiroCadastro.getCpf())
                 .celular(barbeiroCadastro.getCelular())
                 .ativo(barbeiroCadastro.isAtivo())
                 .admin(barbeiroCadastro.isAdmin())
-                .barbearia(barbearia)
                 .usuario(barbeiroCadastro.getUsuario())
                 .build();
     }
 
     public BarbeiroDto toDto(Barbeiro barbeiro) {
+        var barbeariaDto = barbeariaMapper.toDto(barbeiro.getBarbearia());
+
         return BarbeiroDto.builder()
                 .id(barbeiro.getId())
                 .nome(barbeiro.getNome())
@@ -37,8 +39,28 @@ public class BarbeiroMapper {
                 .celular(barbeiro.getCelular())
                 .admin(barbeiro.isAdmin())
                 .ativo(barbeiro.isAtivo())
-                .barbearia(barbeiro.getBarbearia())
+                .barbearia(barbeariaDto)
                 .build();
+    }
+
+    public BarbeiroAgendamentoDto toAgendamentoDto(Barbeiro barbeiro) {
+        return BarbeiroAgendamentoDto.builder()
+                .id(barbeiro.getId())
+                .nome(barbeiro.getNome())
+                .cpf(barbeiro.getCpf())
+                .celular(barbeiro.getCelular())
+                .ativo(barbeiro.isAtivo())
+                .admin(barbeiro.isAdmin())
+                .build();
+    }
+
+    public Set<BarbeiroAgendamentoDto> toSetAgendamentoDto(Set<Barbeiro> barbeiros) {
+        var barbeirosDto = new HashSet<BarbeiroAgendamentoDto>();
+        for (var barbeiro : barbeiros) {
+            var barbeiroDto = toAgendamentoDto(barbeiro);
+            barbeirosDto.add(barbeiroDto);
+        }
+        return barbeirosDto;
     }
 
 }

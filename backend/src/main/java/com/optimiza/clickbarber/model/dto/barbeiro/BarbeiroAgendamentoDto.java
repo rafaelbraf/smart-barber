@@ -1,15 +1,15 @@
 package com.optimiza.clickbarber.model.dto.barbeiro;
 
-import com.optimiza.clickbarber.model.Barbearia;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 @Builder
-public class BarbeiroDto {
+public class BarbeiroAgendamentoDto {
 
     private Integer id;
     private String cpf;
@@ -17,6 +17,5 @@ public class BarbeiroDto {
     private String celular;
     private boolean admin;
     private boolean ativo;
-    private BarbeariaDto barbearia;
 
 }

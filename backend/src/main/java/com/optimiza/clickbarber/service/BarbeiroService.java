@@ -44,8 +44,14 @@ public class BarbeiroService {
         if (!isExisteBarbearia(barbeariaId)) {
             throw new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.ID, barbeariaId.toString());
         }
+
         var barbeiro = barbeiroMapper.toEntity(barbeiroCadastroDto);
+
+        var barbearia = barbeariaService.buscarPorId(barbeariaId);
+        barbeiro.setBarbearia(barbearia);
+
         var barbeiroCadastrado = barbeiroRepository.save(barbeiro);
+
         return barbeiroMapper.toDto(barbeiroCadastrado);
     }
 

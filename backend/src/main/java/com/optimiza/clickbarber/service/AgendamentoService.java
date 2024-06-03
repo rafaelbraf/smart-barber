@@ -23,14 +23,16 @@ public class AgendamentoService {
     private final BarbeariaService barbeariaService;
     private final ClienteService clienteService;
     private final ServicoService servicoService;
+    private final BarbeiroService barbeiroService;
 
     @Autowired
-    public AgendamentoService(AgendamentoRepository agendamentoRepository, AgendamentoMapper agendamentoMapper, BarbeariaService barbeariaService, ClienteService clienteService, ServicoService servicoService) {
+    public AgendamentoService(AgendamentoRepository agendamentoRepository, AgendamentoMapper agendamentoMapper, BarbeariaService barbeariaService, ClienteService clienteService, ServicoService servicoService, BarbeiroService barbeiroService) {
         this.agendamentoRepository = agendamentoRepository;
         this.agendamentoMapper = agendamentoMapper;
         this.barbeariaService = barbeariaService;
         this.clienteService = clienteService;
         this.servicoService = servicoService;
+        this.barbeiroService = barbeiroService;
     }
 
     public AgendamentoDto buscarPorId(UUID id) {
@@ -74,6 +76,11 @@ public class AgendamentoService {
                 .map(servicoService::buscarPorId)
                 .collect(Collectors.toSet());
         agendamento.setServicos(servicos);
+
+        var barbeiros = agendamentoCadastro.getBarbeiros().stream()
+                .map(barbeiroService::buscarPorId)
+                .collect(Collectors.toSet());
+        agendamento.setBarbeiros(barbeiros);
 
         var agendamentoCadastrado = agendamentoRepository.save(agendamento);
 

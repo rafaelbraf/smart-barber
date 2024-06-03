@@ -22,5 +22,6 @@ public class AgendamentoCadastroDto {
     private Integer barbeariaId;
     private Integer clienteId;
     private List<UUID> servicos;
+    private List<Integer> barbeiros;
 
 }

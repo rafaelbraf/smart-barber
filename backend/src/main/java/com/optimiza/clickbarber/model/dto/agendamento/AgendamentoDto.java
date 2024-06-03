@@ -1,8 +1,11 @@
 package com.optimiza.clickbarber.model.dto.agendamento;
 
+import com.optimiza.clickbarber.model.Barbeiro;
 import com.optimiza.clickbarber.model.Cliente;
 import com.optimiza.clickbarber.model.Servico;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
+import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAgendamentoDto;
+import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import lombok.*;
 
@@ -27,5 +30,6 @@ public class AgendamentoDto {
     private BarbeariaDto barbearia;
     private ClienteDto cliente;
     private Set<Servico> servicos;
+    private Set<BarbeiroAgendamentoDto> barbeiros;
 
 }
