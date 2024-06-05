@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
-document.addEventListener('DOMContentLoaded', buscarAgendamentosDaBarbearia);
 
 async function buscarAgendamentosDaBarbearia() {
     try {

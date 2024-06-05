@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
-buscarBarbeirosDaBarbearia();
 
 function buscarBarbeirosDaBarbearia() {
     fetch(`${urlBackend}/barbeiros/barbearia/${barbeariaId}`, {
@@ -26,7 +25,7 @@ function buscarBarbeirosDaBarbearia() {
         const container = document.getElementById('barbeiros-container');
         container.innerHTML = '';
 
-        const barbeiros = data.barbeiros;
+        const barbeiros = data.result;
         barbeiros.forEach(barbeiro => {
             const card = document.createElement('div');
             card.innerHTML = `
@@ -81,7 +80,9 @@ function cadastrarBarbeiroNaBarbearia() {
         email: emailBarbeiro,
         admin: isBarbeiroAdmin,
         ativo: isBarbeiroAtivo,
-        idBarbearia: idBarbearia
+        barbearia: {
+            id:idBarbearia
+        }
     };
 
     fetch(`${urlBackend}/barbeiros`, {
@@ -95,18 +96,19 @@ function cadastrarBarbeiroNaBarbearia() {
     .then((response) => {
         if (response.status === 201) {
             response.json().then(data => {
+
                 limparCamposModalBarbeiro();
 
                 var modal = new bootstrap.Modal(document.getElementById('cadastrarBarbeiroModal'));
                 modal.hide();
                 
-                exibirAlertaBarbeiro("success",data.mensagem);
+                exibirAlertaBarbeiro("success",data.message);
                 buscarBarbeirosDaBarbearia();
             });
         } else if (response.status === 400){
             response.json().then(data =>{
                 console.log(data)
-                exibirAlertaBarbeiro("error",data.mensagem);
+                exibirAlertaBarbeiro("error",data.message);
             })
         }
          else {
@@ -149,7 +151,7 @@ function deletarBarbeiro(barbeiroId) {
     }
 }
 
-function exibirAlertaBarbeiro(status, mensagem) {
+function exibirAlertaBarbeiro(status, message) {
     var idAlerta = "";
     if (status === "success"){
         idAlerta = "alertSuccessBarbeiro";
@@ -176,6 +178,7 @@ function carregarVariaveisDeAmbiente() {
         })
         .then(config => {
             urlBackend = config.apiUrl
+            buscarBarbeirosDaBarbearia();
         })
         .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }
