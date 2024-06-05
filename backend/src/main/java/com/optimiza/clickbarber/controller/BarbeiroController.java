@@ -51,9 +51,9 @@ public class BarbeiroController {
     }
 
     @DeleteMapping("/{id}")
-    public Resposta<Void> deletarPorId(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarPorId(@PathVariable Integer id) {
         barbeiroService.deletarPorId(id);
-        return RespostaUtils.noContent();
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.optimiza.clickbarber.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,7 +37,7 @@ public class Barbearia {
     private List<Servico> servicos;
 
     @OneToMany(mappedBy = "barbearia", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIgnoreProperties("barbearia")
     private List<Barbeiro> barbeiros;
 
 }

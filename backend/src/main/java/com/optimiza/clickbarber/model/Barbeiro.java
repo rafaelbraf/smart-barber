@@ -1,6 +1,7 @@
 package com.optimiza.clickbarber.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,7 +28,7 @@ public class Barbeiro {
 
     @ManyToOne
     @JoinColumn(name = "barbearia_id")
-    @JsonBackReference
+    @JsonIgnoreProperties("barbeiros")
     private Barbearia barbearia;
 
     @OneToOne
