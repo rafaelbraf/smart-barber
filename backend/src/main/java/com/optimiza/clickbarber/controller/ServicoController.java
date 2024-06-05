@@ -59,9 +59,9 @@ public class ServicoController {
     }
 
     @DeleteMapping("/{id}")
-    public Resposta<Void> deletarPorId(@PathVariable UUID id) {
+    public ResponseEntity<Void> deletarPorId(@PathVariable UUID id) {
         servicoService.deletarPorId(id);
-        return RespostaUtils.noContent();
+        return ResponseEntity.noContent().build();
     }
 
 }
