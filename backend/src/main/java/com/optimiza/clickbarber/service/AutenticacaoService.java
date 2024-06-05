@@ -7,8 +7,11 @@ import com.optimiza.clickbarber.model.Role;
 import com.optimiza.clickbarber.model.Usuario;
 import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
+import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
+import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteCadastroDto;
+import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.model.dto.usuario.UsuarioCadastrarDto;
 import com.optimiza.clickbarber.utils.Constants;
 import jakarta.transaction.Transactional;
@@ -90,25 +93,38 @@ public class AutenticacaoService {
 
         if (data instanceof Map) {
             Map<String, Object> dataMap = (Map<String, Object>) data;
-            if (role.equals(Role.BARBEARIA)) {
-                var barbeariaCadastro = objectMapper.convertValue(dataMap, BarbeariaCadastroDto.class);
-                barbeariaCadastro.setUsuario(usuarioCadastrado);
-
-                return barbeariaService.cadastrar(barbeariaCadastro);
-            } else if (role.equals(Role.CLIENTE)) {
-                var clienteCadastro = objectMapper.convertValue(dataMap, ClienteCadastroDto.class);
-                clienteCadastro.setUsuario(usuarioCadastrado);
-
-                return clienteService.cadastrar(clienteCadastro);
-            } else if (role.equals(Role.BARBEIRO)) {
-                var barbeiroCadastro = objectMapper.convertValue(dataMap, BarbeiroCadastroDto.class);
-                barbeiroCadastro.setUsuario(usuarioCadastrado);
-
-                return barbeiroService.cadastrar(barbeiroCadastro);
+            switch (role) {
+                case Role.BARBEARIA -> {
+                    return cadastrarBarbearia(dataMap, usuarioCadastrado);
+                }
+                case Role.CLIENTE -> {
+                    return cadastrarCliente(dataMap, usuarioCadastrado);
+                }
+                case Role.BARBEIRO -> {
+                    return cadastrarBarbeiro(dataMap, usuarioCadastrado);
+                }
             }
         }
 
         return null;
+    }
+
+    private BarbeariaDto cadastrarBarbearia(Map<String, Object> dataMap, Usuario usuarioCadastrado) {
+        var barbeariaCadastro = objectMapper.convertValue(dataMap, BarbeariaCadastroDto.class);
+        barbeariaCadastro.setUsuario(usuarioCadastrado);
+        return barbeariaService.cadastrar(barbeariaCadastro);
+    }
+
+    private ClienteDto cadastrarCliente(Map<String, Object> dataMap, Usuario usuarioCadastrado) {
+        var clienteCadastro = objectMapper.convertValue(dataMap, ClienteCadastroDto.class);
+        clienteCadastro.setUsuario(usuarioCadastrado);
+        return clienteService.cadastrar(clienteCadastro);
+    }
+
+    private BarbeiroDto cadastrarBarbeiro(Map<String, Object> dataMap, Usuario usuarioCadastrado) {
+        var barbeiroCadastro = objectMapper.convertValue(dataMap, BarbeiroCadastroDto.class);
+        barbeiroCadastro.setUsuario(usuarioCadastrado);
+        return barbeiroService.cadastrar(barbeiroCadastro);
     }
 
 }
