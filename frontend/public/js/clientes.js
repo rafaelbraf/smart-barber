@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
-buscarClientesDaBarbearia();
 
 function carregarVariaveisDeAmbiente() {
     fetch('/config')
@@ -18,6 +17,7 @@ function carregarVariaveisDeAmbiente() {
         })
         .then(config => {
             urlBackend = config.apiUrl
+            buscarClientesDaBarbearia();
         })
         .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }

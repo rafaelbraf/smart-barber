@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
-buscarServicosDaBarbearia();
 
 function buscarServicosDaBarbearia() {
     fetch(`${urlBackend}/servicos/barbearia/${barbeariaId}`, {
@@ -26,7 +25,8 @@ function buscarServicosDaBarbearia() {
         const container = document.getElementById('servicos-container');
         container.innerHTML = '';
 
-        const servicos = data.servicos;
+
+        const servicos = data.result;
         popularTabela(servicos);
     })
     .catch((error) => {
@@ -49,7 +49,10 @@ function salvarServico() {
             nome: nomeServico,
             preco: precoServico,
             tempoDuracaoEmMinutos: duracaoServico,
-            idBarbearia: idBarbearia
+            barbearia: {
+                id: idBarbearia
+            },
+            ativo: true
         };
     
         fetch(`${urlBackend}/servicos`, {
@@ -70,13 +73,13 @@ function salvarServico() {
                     var modal = new bootstrap.Modal(document.getElementById('incluirServicoModal'));
                     modal.hide();
 
-                    exibirAlertaServicos("success",data.mensagem);
+                    exibirAlertaServicos("success",data.message);
                     buscarServicosDaBarbearia();
                 });
             } else if (response.status === 400){
                 response.json().then(data =>{
                     console.log(data)
-                    exibirAlertaServicos("error",data.mensagem);
+                    exibirAlertaServicos("error",data.message);
                 })
              
                 throw new Error('Erro ao salvar serviço.');
@@ -119,9 +122,11 @@ function editarServico() {
             nome: nomeServico,
             preco: precoServico,
             tempoDuracaoEmMinutos: duracaoServico,
+            id: idServico,
+            ativo: true,
         };
 
-        fetch(`${urlBackend}/servicos/${idServico}`, {
+        fetch(`${urlBackend}/servicos`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -137,12 +142,12 @@ function editarServico() {
                     var modal = new bootstrap.Modal(document.getElementById('editarServicoModal'));
                     modal.hide();
 
-                    exibirAlertaServicos("success",data.mensagem);
+                    exibirAlertaServicos("success",data.message);
                     buscarServicosDaBarbearia();
                 });
             } else if (response.status === 400){
                 response.json().then(data =>{
-                    exibirAlertaServicos("error",data.mensagem);
+                    exibirAlertaServicos("error",data.message);
                 })
              
                 throw new Error('Erro ao editar serviço.');
@@ -163,7 +168,8 @@ async function buscarServico(servicoId) {
         });
 
         if (response.ok) {
-            return await response.json();
+            const resposta = await response.json();
+            return resposta.result
         } else {
             throw new Error(`Erro ao buscar servico: ${servicoId}.`);
         }
@@ -285,6 +291,7 @@ function carregarVariaveisDeAmbiente() {
         })
         .then(config => {
             urlBackend = config.apiUrl
+            buscarServicosDaBarbearia();
         })
         .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }
