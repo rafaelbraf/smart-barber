@@ -1,44 +1,40 @@
+import { carregarVariaveisDeAmbiente } from "./utils/loadEnvs.js";
+import { ApiClient } from "./utils/apiClient.js";
+
 let urlBackend;
 
-document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+document.addEventListener('DOMContentLoaded', async () => {
+    urlBackend = await carregarVariaveisDeAmbiente();
+});
 
+const apiClient = new ApiClient();
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
+const buttonSalvarServico = document.getElementById("buttonSalvarServico")
+buttonSalvarServico.addEventListener('click',salvarServico)
+const buttonEditarServico = document.getElementById("buttonEditarServico")
+buttonEditarServico.addEventListener('click',editarServico)
 
+async function buscarServicosDaBarbearia() {
+    const url = `${urlBackend}/servicos/barbearia/${barbeariaId}`
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    }
+    const response = await apiClient.get(url,headers) 
+    const data = await response.json();
+    const container = document.getElementById('servicos-container');
+    container.innerHTML = '';
 
-function buscarServicosDaBarbearia() {
-    fetch(`${urlBackend}/servicos/barbearia/${barbeariaId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        }
-    })
-    .then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Erro ao buscar serviços.');
-        }
-    })
-    .then((data) => {
-        const container = document.getElementById('servicos-container');
-        container.innerHTML = '';
-
-
-        const servicos = data.result;
-        popularTabela(servicos);
-    })
-    .catch((error) => {
-        console.error('Erro: ', error);
-    })
+    const servicos = data.result;
+    popularTabela(servicos);
 }
-
+    
 function formatarPreco(preco) {
     return preco.toString().replace(/\./g, ",");
 }
 
-function salvarServico() {
+async function salvarServico() {
     const nomeServico = document.getElementById('nomeServico').value;
     const precoServico = parseFloat(document.getElementById('precoServico').value);
     const duracaoServico = parseInt(document.getElementById('duracaoServico').value);
@@ -54,38 +50,23 @@ function salvarServico() {
             },
             ativo: true
         };
-    
-        fetch(`${urlBackend}/servicos`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
+        const url = `${urlBackend}/servicos`    
+        const headers = {
+            'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(servico)
-        })
-        .then((response) => {
-            if (response.status === 201) {
-                response.json().then(data => {
-                    console.log(data);
+        }
+        const response = await apiClient.post(url,headers,servico)
+        const data = await response.json()
+        if (data.statusCode === 201) {
+            limparCamposModalServico();
+            var modal = new bootstrap.Modal(document.getElementById('incluirServicoModal'));
+            modal.hide();
 
-                    limparCamposModalServico();
-
-                    var modal = new bootstrap.Modal(document.getElementById('incluirServicoModal'));
-                    modal.hide();
-
-                    exibirAlertaServicos("success",data.message);
-                    buscarServicosDaBarbearia();
-                });
-            } else if (response.status === 400){
-                response.json().then(data =>{
-                    console.log(data)
-                    exibirAlertaServicos("error",data.message);
-                })
-             
-                throw new Error('Erro ao salvar serviço.');
-            }
-        })
-        .catch(error => console.error(error));
+            exibirAlertaServicos("success",data.message);
+            buscarServicosDaBarbearia();
+        } else {
+            exibirAlertaServicos("error",data.message);
+        }
     
         buscarServicosDaBarbearia();
     } else {
@@ -111,7 +92,7 @@ function isMostrarServicoModal(modalId) {
     return modalId === 'mostrarServicoModal';
 }
 
-function editarServico() {
+async function editarServico() {
     const idServico = document.getElementById('idServico').value;
     const nomeServico = document.getElementById('nomeServicoEditar').value;
     const precoServico = parseFloat(document.getElementById('precoServicoEditar').value);
@@ -125,79 +106,53 @@ function editarServico() {
             id: idServico,
             ativo: true,
         };
+        const url = `${urlBackend}/servicos`
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+        const response = await apiClient.put(url,headers,servico)
+        const data = await response.json()
+        if (data.statusCode === 200) {
+            limparCamposModalEditarServico();
 
-        fetch(`${urlBackend}/servicos`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(servico)
-        })
-        .then((response) => {
-            if (response.status === 200) {
-                response.json().then(data => {
-                    limparCamposModalEditarServico();
+            var modal = new bootstrap.Modal(document.getElementById('editarServicoModal'));
+            modal.hide();
 
-                    var modal = new bootstrap.Modal(document.getElementById('editarServicoModal'));
-                    modal.hide();
-
-                    exibirAlertaServicos("success",data.message);
-                    buscarServicosDaBarbearia();
-                });
-            } else if (response.status === 400){
-                response.json().then(data =>{
-                    exibirAlertaServicos("error",data.message);
-                })
-             
-                throw new Error('Erro ao editar serviço.');
-            }
-        })
-        .catch(error => console.error(error)) ;
+            exibirAlertaServicos("success",data.message);
+            buscarServicosDaBarbearia();
+        } else {
+            exibirAlertaServicos("error",data.message);
+        }
     }
 }
+   
 
 async function buscarServico(servicoId) {
-    try {
-        const response = await fetch(`${urlBackend}/servicos/${servicoId}`,{
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+    const url = `${urlBackend}/servicos/${servicoId}`
+    const headers = {
+        'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            const resposta = await response.json();
-            return resposta.result
-        } else {
-            throw new Error(`Erro ao buscar servico: ${servicoId}.`);
-        }
-    } catch (error) {
-        console.error('Erro: ', error);
     }
+    const response = await apiClient.get(url,headers)
+    const resposta = await response.json();
+            return resposta.result
 }
  
-function deletarServico(servicoId) {
-    if (confirm('Tem certeza que deseja excluir o serviço?')) {
-        fetch(`${urlBackend}/servicos/${servicoId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            if (response.ok) {
-                exibirAlertaServicos("success",'Serviço excluído com sucesso!');
-                buscarServicosDaBarbearia();
-            } else {
-                exibirAlertaServicos("error",'Erro ao excluir serviço.');
-                throw new Error('Erro ao excluir serviço.');
-            }
-        })
-        .catch(error => console.error(error));
+async function deletarServico(servicoId) {
+    const url = `${urlBackend}/servicos/${servicoId}`
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
     }
+    const response = await apiClient.delete(url,headers)
+    if (response.ok) {
+        exibirAlertaServicos("success",'Serviço excluído com sucesso!');
+        buscarServicosDaBarbearia();
+    } else {
+        exibirAlertaServicos("error",'Erro ao excluir serviço.');
+    }
+
 }
 
 function isNullOrEmptyOrUndefined(value) {
@@ -278,20 +233,4 @@ function exibirAlertaServicos(status, mensagem) {
     setTimeout(function() {
         alert.classList.remove("show");
     },3000);
-}
-
-function carregarVariaveisDeAmbiente() {
-    fetch('/config')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro ao carregar variáveis de ambiente.");
-            }
-            
-            return response.json();
-        })
-        .then(config => {
-            urlBackend = config.apiUrl
-            buscarServicosDaBarbearia();
-        })
-        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }

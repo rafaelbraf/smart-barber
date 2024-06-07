@@ -1,6 +1,9 @@
+import { carregarVariaveisDeAmbiente } from "./utils/loadEnvs.js";
 let urlBackend;
 
-document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+document.addEventListener('DOMContentLoaded', async () => {
+    urlBackend = await carregarVariaveisDeAmbiente();
+});
 
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
@@ -146,18 +149,4 @@ function limparCamposModal() {
     document.getElementById('nomeCliente').value = '';
     document.getElementById('celularCliente').value = '';
     document.getElementById('emailCliente').value = '';
-}
-function carregarVariaveisDeAmbiente() {
-    fetch('/config')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro ao carregar variáveis de ambiente.");
-            }
-            
-            return response.json();
-        })
-        .then(config => {
-            urlBackend = config.apiUrl
-        })
-        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
 }

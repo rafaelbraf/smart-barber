@@ -1,28 +1,23 @@
+import { ApiClient } from "./utils/apiClient.js";
+import { carregarVariaveisDeAmbiente } from "./utils/loadEnvs.js";
 let urlBackend;
 
-document.addEventListener('DOMContentLoaded', carregarVariaveisDeAmbiente);
+document.addEventListener('DOMContentLoaded', async () => {
+    urlBackend = await carregarVariaveisDeAmbiente();
+});
 
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 
 
-function carregarVariaveisDeAmbiente() {
-    fetch('/config')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Erro ao carregar variáveis de ambiente.");
-            }
-            
-            return response.json();
-        })
-        .then(config => {
-            urlBackend = config.apiUrl
-            buscarClientesDaBarbearia();
-        })
-        .catch(error => console.error("Erro ao carregar variáveis de ambiente: ", error));
-}
-
 function buscarClientesDaBarbearia() {
+    const url = `${urlBackend}/usuarios/barbearia/${barbeariaId}`
+    const headers = {
+        'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+    }
+    const response = await ApiClient.get(url,headers)
+    const data =
     fetch(`${urlBackend}/usuarios/barbearia/${barbeariaId}`, {
         method: 'GET',
         headers: {
