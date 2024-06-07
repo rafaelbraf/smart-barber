@@ -1,8 +1,6 @@
 package com.optimiza.clickbarber.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.optimiza.clickbarber.exception.ResourceNotFoundException;
-import com.optimiza.clickbarber.model.Barbeiro;
 import com.optimiza.clickbarber.model.Servico;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoAtualizarDto;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoCadastroDto;
@@ -10,18 +8,16 @@ import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoDto;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoRespostaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAgendamentoDto;
-import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
-import com.optimiza.clickbarber.repository.AgendamentoRepository;
 import com.optimiza.clickbarber.service.AgendamentoService;
 import com.optimiza.clickbarber.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -50,7 +46,7 @@ class AgendamentoControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private AgendamentoService agendamentoService;
 
     @Autowired
