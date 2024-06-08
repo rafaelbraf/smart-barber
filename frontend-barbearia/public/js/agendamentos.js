@@ -1,34 +1,17 @@
 import { carregarVariaveisDeAmbiente } from "./utils/loadEnvs.js";
-let urlBackend;
+import { ApiClient } from "./utils/apiClient.js";
+
+export let urlBackend;
+
+export const apiClient = new ApiClient();
 
 document.addEventListener('DOMContentLoaded', async () => {
     urlBackend = await carregarVariaveisDeAmbiente();
 });
 
-const token = localStorage.getItem('token');
-const barbeariaId = localStorage.getItem('barbearia');
+export const token = localStorage.getItem('token');
+export const barbeariaId = localStorage.getItem('barbearia');
 
-
-async function buscarAgendamentosDaBarbearia() {
-    try {
-        const response = await fetch(`${urlBackend}/agendamentos/barbearia/${barbeariaId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            const jsonResponse = await response.json();
-            await renderizarCalendarioDeAgendamentos(jsonResponse.agendamentos);
-        } else {
-            throw new Error(`Erro ao buscar usuário: ${idUsuario}.`);
-        }
-    } catch (error) {
-        console.error('Erro: ', error);
-    }
-}
 
 function verAgendamento(agendamentoId) {
     fetch(`${urlBackend}/agendamentos/${agendamentoId}`, {
@@ -43,7 +26,7 @@ function verAgendamento(agendamentoId) {
             
         }
     })
-}
+}       
 
 async function mostrarModalDoAgendamento(agendamentoId) {
     const modal = new bootstrap.Modal(document.getElementById('verAgendamentoModal'));
@@ -64,31 +47,25 @@ async function mostrarModalDoAgendamento(agendamentoId) {
 
 async function buscarClienteDoAgendamento(agendamento) {
     const idUsuario = agendamento.idUsuario;
-
-    try {
-        const response = await fetch(`${urlBackend}/usuarios/${idUsuario}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            return await response.json();
-        } else {
-            throw new Error(`Erro ao buscar usuário: ${idUsuario}.`);
-        }
-    } catch (error) {
-        console.error('Erro: ', error);
+    const url = `${urlBackend}/usuarios/${idUsuario}`
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
     }
+    const response = await apiClient.get(url,headers)
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error(`Erro ao buscar usuário: ${idUsuario}.`);
+    }
+    
 }
 
 function formatarPreco(preco) {
     return preco.toString().replace(/\./g, ",");
 }
 
-async function renderizarCalendarioDeAgendamentos(agendamentos) {
+export async function renderizarCalendarioDeAgendamentos(agendamentos) {
     const calendarioEl = document.getElementById('calendario-agendamentos');
     const agendamentosParaCalendario = [];
     agendamentos.forEach(agendamento => {
@@ -121,22 +98,17 @@ async function renderizarCalendarioDeAgendamentos(agendamentos) {
 }
 
 async function buscarInformacoesDoAgendamento(agendamentoId) {
-    try {
-        const response = await fetch(`${urlBackend}/agendamentos/${agendamentoId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (response.ok) {
-            return await response.json();
-        } else {
-            throw new Error(`Erro ao buscar agendamento: ${agendamentoId}.`);
-        }
-    } catch (error) {
-        console.error('Erro: ', error);
+    const url = `${urlBackend}/agendamentos/${agendamentoId}`
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    }
+    const response = await apiClient.get(url,headers)
+    const data = response.json()
+    if (response.ok) {
+        return await response.json();
+    } else {
+        throw new Error(`Erro ao buscar agendamento: ${agendamentoId}.`);
     }
 }
 
