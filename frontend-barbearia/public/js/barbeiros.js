@@ -62,7 +62,7 @@ async function buscarBarbeirosDaBarbearia() {
     })
 }
 
- async function cadastrarBarbeiro() {
+async function cadastrarBarbeiro() {
     const nomeBarbeiro = document.getElementById('nomeBarbeiro').value;
     const cpfBarbeiro = document.getElementById('cpfBarbeiro').value;
     const celularBarbeiro = document.getElementById('celularBarbeiro').value;
@@ -88,7 +88,7 @@ async function buscarBarbeirosDaBarbearia() {
         'Authorization': `Bearer ${token}`
     }
     const response = await apiClient.post(url,headers,barbeiro)
-    const data = response.json()
+    const data = await response.json()
     if( data.statusCode === 201){
         limparCamposModalBarbeiro();
 
