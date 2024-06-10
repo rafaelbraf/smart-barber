@@ -35,9 +35,9 @@ public class ClienteService {
     }
 
     public ClienteDto cadastrar(ClienteCadastroDto usuarioCadastro) {
-        var usuario = clienteMapper.toEntity(usuarioCadastro);
-        var usuarioCadastrado = clienteRepository.save(usuario);
-        return clienteMapper.toDto(usuarioCadastrado);
+        var cliente = clienteMapper.toEntity(usuarioCadastro);
+        var clienteCadastrado = clienteRepository.save(cliente);
+        return clienteMapper.toDto(clienteCadastrado);
     }
 
 }
