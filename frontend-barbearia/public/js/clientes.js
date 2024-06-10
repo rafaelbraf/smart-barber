@@ -19,34 +19,34 @@ async function buscarClientesDaBarbearia() {
         'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
     }
-    const response = await ApiClient.get(url,headers)
+    const response = await apiClient.get(url,headers)
     const data = response.json()
     const container = document.getElementById('clientes-container');
         const clientes = data.usuarios;
         clientes.forEach(cliente => {
-            const card = document.createElement('div');
-            card.innerHTML = `
-                <div class="card mt-1" style="cursor: pointer;">
-                    <div class="card-body justify-content-between">
-                        <div class="row">
-                            <div class="col">
-                                ${cliente.id}
-                            </div>
-                            <div class="col">
-                                ${cliente.nome}
-                            </div>
-                            <div class="col">
-                                ${cliente.celular}
-                            </div>
-                            <div class="col">
-                                ${cliente.email}
-                            </div>
+        const card = document.createElement('div');
+        card.innerHTML = `
+            <div class="card mt-1" style="cursor: pointer;">
+                <div class="card-body justify-content-between">
+                    <div class="row">
+                        <div class="col">
+                            ${cliente.id}
+                        </div>
+                        <div class="col">
+                            ${cliente.nome}
+                        </div>
+                        <div class="col">
+                            ${cliente.celular}
+                        </div>
+                        <div class="col">
+                            ${cliente.email}
                         </div>
                     </div>
                 </div>
-            `;
+            </div>
+        `;
 
-            container.appendChild(card);
-    
-    })
+        container.appendChild(card);
+        
+        })
 }
