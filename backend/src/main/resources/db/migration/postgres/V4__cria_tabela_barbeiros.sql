@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS barbeiros (
     admin BOOLEAN NOT NULL,
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
     barbearia_id BIGINT REFERENCES barbearias(id),
-    CONSTRAINT fk_barbearia FOREIGN KEY (barbearia_id) REFERENCES barbearias(id),
+    CONSTRAINT fk_barbearia_barbeiros FOREIGN KEY (barbearia_id) REFERENCES barbearias(id),
     usuario_id UUID REFERENCES usuarios(id),
-    CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    CONSTRAINT fk_usuario_barbeiros FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
