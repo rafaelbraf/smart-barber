@@ -5,5 +5,5 @@ CREATE TABLE servicos (
     tempo_duracao_em_minutos INTEGER NOT NULL,
     barbearia_id INTEGER NOT NULL,
     ativo BOOLEAN NOT NULL DEFAULT true,
-    CONSTRAINT fk_barbearia FOREIGN KEY (barbearia_id) REFERENCES barbearias(id)
+    CONSTRAINT fk_barbearia_servicos FOREIGN KEY (barbearia_id) REFERENCES barbearias(id)
 );
