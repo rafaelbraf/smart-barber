@@ -11,10 +11,8 @@ import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroMapper;
 import com.optimiza.clickbarber.repository.BarbeiroRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
@@ -46,9 +44,9 @@ class BarbeiroServiceTest {
     void testBuscarPorId_Encontrado() {
         var barbeiroEncontrado = montarBarbeiro();
 
-        when(barbeiroRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(barbeiroEncontrado));
+        when(barbeiroRepository.findById(anyLong())).thenReturn(Optional.of(barbeiroEncontrado));
 
-        var barbeiroResult = barbeiroService.buscarPorId(1);
+        var barbeiroResult = barbeiroService.buscarPorId(1L);
 
         assertNotNull(barbeiroResult);
         assertEquals(1, barbeiroResult.getId());
@@ -58,16 +56,16 @@ class BarbeiroServiceTest {
 
     @Test
     void testBuscarPorId_NaoEncontrado() {
-        when(barbeiroRepository.findById(anyInt())).thenReturn(Optional.empty());
+        when(barbeiroRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> barbeiroService.buscarPorId(1));
+        assertThrows(ResourceNotFoundException.class, () -> barbeiroService.buscarPorId(1L));
     }
 
     @Test
     void testBuscarPorBarbeariaId_Encontrados() {
         var barbeiro1 = montarBarbeiro();
         var barbeiro2 = montarBarbeiro();
-        barbeiro2.setId(2);
+        barbeiro2.setId(2L);
         var barbeirosEncontrados = List.of(barbeiro1, barbeiro2);
 
         when(barbeiroRepository.findByBarbeariaId(anyInt())).thenReturn(barbeirosEncontrados);
@@ -114,10 +112,10 @@ class BarbeiroServiceTest {
 
     @Test
     void testCadastrarBarbeiro() {
-        when(barbeariaService.existePorId(anyInt())).thenReturn(true);
+        when(barbeariaService.existePorId(anyLong())).thenReturn(true);
 
         var barbearia = montarBarbearia();
-        when(barbeariaService.buscarPorId(anyInt())).thenReturn(barbearia);
+        when(barbeariaService.buscarPorId(anyLong())).thenReturn(barbearia);
 
         var barbeiro = montarBarbeiro();
         when(barbeiroMapper.toEntity(any(BarbeiroCadastroDto.class))).thenReturn(barbeiro);
@@ -138,7 +136,7 @@ class BarbeiroServiceTest {
     @Test
     void testAtualizarBarbeiro() {
         var barbeiro = montarBarbeiro();
-        when(barbeiroRepository.findById(anyInt())).thenReturn(Optional.ofNullable(barbeiro));
+        when(barbeiroRepository.findById(anyLong())).thenReturn(Optional.ofNullable(barbeiro));
 
         var barbeiroAtualizado = montarBarbeiro();
         barbeiroAtualizado.setNome("Barbeiro Atualizar");
@@ -157,13 +155,13 @@ class BarbeiroServiceTest {
 
     @Test
     void testDeletarBarbeiroPorId() {
-        barbeiroService.deletarPorId(1);
-        verify(barbeiroRepository, times(1)).deleteById(anyInt());
+        barbeiroService.deletarPorId(1L);
+        verify(barbeiroRepository, times(1)).deleteById(anyLong());
     }
 
     private Barbeiro montarBarbeiro() {
         return Barbeiro.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbeiro Teste")
                 .cpf("012345678910")
                 .ativo(true)
@@ -174,7 +172,7 @@ class BarbeiroServiceTest {
 
     private BarbeiroDto montarBarbeiroDto() {
         return BarbeiroDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbeiro Teste")
                 .cpf("012345678910")
                 .celular("988888888")
@@ -197,7 +195,7 @@ class BarbeiroServiceTest {
 
     private BarbeiroAtualizarDto montarBarbeiroAtualizarDto() {
         return BarbeiroAtualizarDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbeiro Atualizar")
                 .celular("988888889")
                 .admin(true)
@@ -207,7 +205,7 @@ class BarbeiroServiceTest {
 
     private Barbearia montarBarbearia() {
         return Barbearia.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .cnpj("01234567891011")
                 .endereco("Rua Teste, 123")
@@ -217,7 +215,7 @@ class BarbeiroServiceTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .cnpj("01234567891011")
                 .endereco("Rua Teste, 123")

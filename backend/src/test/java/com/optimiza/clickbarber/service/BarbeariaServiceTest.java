@@ -5,7 +5,6 @@ import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
-import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
 import com.optimiza.clickbarber.repository.BarbeariaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -43,17 +42,17 @@ class BarbeariaServiceTest {
 
     @Test
     void testVerificaSeBarbeariaExiste() {
-        when(barbeariaRepository.existsById(anyInt())).thenReturn(true);
-        var existeBarbearia = barbeariaService.existePorId(1);
+        when(barbeariaRepository.existsById(anyLong())).thenReturn(true);
+        var existeBarbearia = barbeariaService.existePorId(1L);
         assertTrue(existeBarbearia);
     }
 
     @Test
     void testBuscarBarbeariaPorId_Encontrado() {
         var barbearia = montarBarbearia();
-        when(barbeariaRepository.findById(anyInt())).thenReturn(Optional.of(barbearia));
+        when(barbeariaRepository.findById(anyLong())).thenReturn(Optional.of(barbearia));
 
-        var barbeariaEncontrada = barbeariaService.buscarPorId(1);
+        var barbeariaEncontrada = barbeariaService.buscarPorId(1L);
         assertNotNull(barbeariaEncontrada);
         assertEquals(1, barbeariaEncontrada.getId());
         assertEquals("Barbearia Teste", barbeariaEncontrada.getNome());
@@ -61,9 +60,9 @@ class BarbeariaServiceTest {
 
     @Test
     void testBuscarBarbeariaPorId_NaoEncontrado() {
-        when(barbeariaRepository.findById(anyInt())).thenReturn(Optional.empty());
+        when(barbeariaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> barbeariaService.buscarPorId(1));
+        assertThrows(ResourceNotFoundException.class, () -> barbeariaService.buscarPorId(1L));
     }
 
     @Test
@@ -105,7 +104,7 @@ class BarbeariaServiceTest {
 
     private Barbearia montarBarbearia() {
         return Barbearia.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .cnpj("01234567891011")
                 .telefone("988888888")
@@ -115,7 +114,7 @@ class BarbeariaServiceTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .telefone("988888888")
                 .endereco("Rua Teste, 123")

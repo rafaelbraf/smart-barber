@@ -24,11 +24,11 @@ public class BarbeariaService {
         this.barbeariaMapper = barbeariaMapper;
     }
 
-    public boolean existePorId(Integer id) {
+    public boolean existePorId(Long id) {
         return barbeariaRepository.existsById(id);
     }
 
-    public Barbearia buscarPorId(Integer id) {
+    public Barbearia buscarPorId(Long id) {
         return barbeariaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.ID, id.toString()));
     }
 

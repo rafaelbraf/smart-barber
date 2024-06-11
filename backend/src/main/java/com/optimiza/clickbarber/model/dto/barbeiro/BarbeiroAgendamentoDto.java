@@ -11,7 +11,7 @@ import lombok.ToString;
 @Builder
 public class BarbeiroAgendamentoDto {
 
-    private Integer id;
+    private Long id;
     private String cpf;
     private String nome;
     private String celular;

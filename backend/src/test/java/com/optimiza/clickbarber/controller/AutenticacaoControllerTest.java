@@ -85,7 +85,7 @@ class AutenticacaoControllerTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .cnpj("0123456789101112")
                 .endereco("Rua Teste, 123")
@@ -95,7 +95,7 @@ class AutenticacaoControllerTest {
 
     private Barbearia montarBarbearia() {
         return Barbearia.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .cnpj("0123456789101112")
                 .endereco("Rua Teste, 12")

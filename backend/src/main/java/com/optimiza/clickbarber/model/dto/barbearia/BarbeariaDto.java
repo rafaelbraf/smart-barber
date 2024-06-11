@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 public class BarbeariaDto {
 
-    private Integer id;
+    private Long id;
     private String cnpj;
     private String nome;
     private String endereco;
