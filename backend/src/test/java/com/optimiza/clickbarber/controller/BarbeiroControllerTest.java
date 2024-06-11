@@ -45,20 +45,20 @@ class BarbeiroControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Integer barbeiroId;
+    private Long barbeiroId;
     private UUID usuarioId;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(new BarbeiroController(barbeiroService)).build();
 
-        barbeiroId = 1;
+        barbeiroId = 1L;
         usuarioId = UUID.randomUUID();
     }
 
     @Test
     void testBuscarBarbeiroPorId() throws Exception {
-        when(barbeiroService.buscarPorId(anyInt())).thenReturn(montarBarbeiro());
+        when(barbeiroService.buscarPorId(anyLong())).thenReturn(montarBarbeiro());
 
         mockMvc.perform(get("/barbeiros/" + barbeiroId))
                 .andExpect(status().isOk())
@@ -76,7 +76,7 @@ class BarbeiroControllerTest {
     void testBuscarBarbeirosPorBarbeariaId() throws Exception {
         var barbeiro1 = montarBarbeiro();
         var barbeiro2 = montarBarbeiro();
-        barbeiro2.setId(2);
+        barbeiro2.setId(2L);
 
         when(barbeiroService.buscarPorBarbeariaId(anyInt())).thenReturn(List.of(barbeiro1, barbeiro2));
 
@@ -111,7 +111,7 @@ class BarbeiroControllerTest {
         when(barbeiroService.atualizar(any(BarbeiroAtualizarDto.class))).thenReturn(barbeiro);
 
         var barbeiroAtualizarDto = BarbeiroAtualizarDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbeiro Atualizado")
                 .ativo(false)
                 .admin(false)
@@ -150,14 +150,14 @@ class BarbeiroControllerTest {
 
     private Barbearia montarBarbearia() {
         return Barbearia.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .build();
     }
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1)
+                .id(1L)
                 .cnpj("01234567891011")
                 .telefone("988888888")
                 .nome("Barbearia Teste")
@@ -186,7 +186,7 @@ class BarbeiroControllerTest {
 
     private BarbeiroDto montarBarbeiroDto() {
         return BarbeiroDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbeiro Teste")
                 .ativo(true)
                 .admin(false)

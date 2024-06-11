@@ -3,16 +3,14 @@ package com.optimiza.clickbarber.service;
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.Servico;
-import com.optimiza.clickbarber.model.dto.servico.ServicoAtualizarDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoMapper;
 import com.optimiza.clickbarber.repository.ServicoRepository;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
@@ -40,6 +38,13 @@ class ServicoServiceTest {
     @Mock
     private BarbeariaService barbeariaService;
 
+    private UUID servicoId;
+
+    @BeforeEach
+    void setup() {
+        servicoId = UUID.randomUUID();
+    }
+
     @Test
     void testBuscarTodosOsServicos() {
         var servico = montarServico();
@@ -66,7 +71,7 @@ class ServicoServiceTest {
     void testBuscarServicoPorId_NaoEncontrado() {
         when(servicoRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> servicoService.buscarPorId(UUID.randomUUID()));
+        assertThrows(ResourceNotFoundException.class, () -> servicoService.buscarPorId(servicoId));
     }
 
     @Test
@@ -84,7 +89,7 @@ class ServicoServiceTest {
 
     @Test
     void testCadastrarServico() {
-        when(barbeariaService.existePorId(anyInt())).thenReturn(true);
+        when(barbeariaService.existePorId(anyLong())).thenReturn(true);
 
         var servico = montarServico();
         when(servicoMapper.toEntity(any(ServicoDto.class))).thenReturn(servico);
@@ -129,7 +134,7 @@ class ServicoServiceTest {
 
     private Barbearia montarBarbearia() {
         return Barbearia.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .cnpj("01234567891011")
                 .telefone("988888888")

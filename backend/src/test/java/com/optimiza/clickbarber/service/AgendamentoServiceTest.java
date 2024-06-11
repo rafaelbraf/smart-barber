@@ -10,7 +10,6 @@ import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAgendamentoDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.repository.AgendamentoRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -90,7 +89,7 @@ class AgendamentoServiceTest {
     void testBuscarAgendamentoPorId_NaoEncontrado() {
         when(agendamentoRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> agendamentoService.buscarPorId(UUID.randomUUID()));
+        assertThrows(ResourceNotFoundException.class, () -> agendamentoService.buscarPorId(agendamentoId));
     }
 
     @Test
@@ -127,16 +126,16 @@ class AgendamentoServiceTest {
     @Test
     void testCadastrarAgendamento() {
         var barbearia = montarBarbearia();
-        when(barbeariaService.buscarPorId(anyInt())).thenReturn(barbearia);
+        when(barbeariaService.buscarPorId(anyLong())).thenReturn(barbearia);
 
         var cliente = montarCliente();
-        when(clienteService.buscarPorId(anyInt())).thenReturn(cliente);
+        when(clienteService.buscarPorId(anyLong())).thenReturn(cliente);
 
         var servico = montarServico();
         when(servicoService.buscarPorId(any(UUID.class))).thenReturn(servico);
 
         var barbeiro = montarBarbeiro();
-        when(barbeiroService.buscarPorId(anyInt())).thenReturn(barbeiro);
+        when(barbeiroService.buscarPorId(anyLong())).thenReturn(barbeiro);
 
         var agendamento = montarAgendamento();
         when(agendamentoRepository.save(any(Agendamento.class))).thenReturn(agendamento);
@@ -190,10 +189,10 @@ class AgendamentoServiceTest {
                 .tempoDuracaoEmMinutos(45)
                 .dataHora(dataHoraAgendamento)
                 .valorTotal(valorTotalAgendamento)
-                .barbeariaId(1)
+                .barbeariaId(1L)
                 .servicos(List.of(UUID.randomUUID()))
-                .barbeiros(List.of(1))
-                .clienteId(1)
+                .barbeiros(List.of(1L))
+                .clienteId(1L)
                 .build();
     }
 
@@ -212,7 +211,7 @@ class AgendamentoServiceTest {
 
     private Barbearia montarBarbearia() {
         return Barbearia.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .cnpj("01234567891011")
                 .telefone("988888888")
@@ -222,7 +221,7 @@ class AgendamentoServiceTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .telefone("988888888")
                 .endereco("Rua Teste, 123")
@@ -232,7 +231,7 @@ class AgendamentoServiceTest {
 
     private Cliente montarCliente() {
         return Cliente.builder()
-                .id(1)
+                .id(1L)
                 .nome("Cliente Teste")
                 .dataNascimento(LocalDate.of(2001, 1, 1))
                 .cpf("012345678910")
@@ -242,7 +241,7 @@ class AgendamentoServiceTest {
 
     private ClienteDto montarClienteDto() {
         return ClienteDto.builder()
-                .id(1)
+                .id(1L)
                 .dataNascimento(LocalDate.of(2001, 1, 1))
                 .celular("988888888")
                 .cpf("012345678910")
@@ -263,7 +262,7 @@ class AgendamentoServiceTest {
 
     private Barbeiro montarBarbeiro() {
         return Barbeiro.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbeiro Teste")
                 .cpf("012345678910")
                 .ativo(true)
@@ -274,7 +273,7 @@ class AgendamentoServiceTest {
 
     private BarbeiroAgendamentoDto montarBarbeiroAgendamentoDto() {
         return BarbeiroAgendamentoDto.builder()
-                .id(1)
+                .id(1L)
                 .cpf("012345678910")
                 .nome("Barbeiro Teste")
                 .admin(false)

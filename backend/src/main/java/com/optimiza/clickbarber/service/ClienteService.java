@@ -30,7 +30,7 @@ public class ClienteService {
         return clienteMapper.toDto(clienteEncontrado);
     }
 
-    public Cliente buscarPorId(Integer id) {
+    public Cliente buscarPorId(Long id) {
         return clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.CLIENTE, Constants.Attribute.ID, id.toString()));
     }
 

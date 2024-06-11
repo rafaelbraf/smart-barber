@@ -1,6 +1,5 @@
 package com.optimiza.clickbarber.model.dto.barbeiro;
 
-import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import lombok.*;
 
@@ -11,7 +10,7 @@ import lombok.*;
 @Builder
 public class BarbeiroDto {
 
-    private Integer id;
+    private Long id;
     private String cpf;
     private String nome;
     private String celular;

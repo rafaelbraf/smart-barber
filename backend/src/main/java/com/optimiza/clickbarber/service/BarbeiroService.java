@@ -26,7 +26,7 @@ public class BarbeiroService {
         this.barbeiroMapper = barbeiroMapper;
     }
 
-    public Barbeiro buscarPorId(Integer id) {
+    public Barbeiro buscarPorId(Long id) {
         return barbeiroRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEIRO, Constants.Attribute.ID, id.toString()));
     }
 
@@ -64,11 +64,11 @@ public class BarbeiroService {
         return barbeiroRepository.save(barbeiroExistente);
     }
 
-    public void deletarPorId(Integer id) {
+    public void deletarPorId(Long id) {
         barbeiroRepository.deleteById(id);
     }
 
-    private boolean isExisteBarbearia(Integer barbeariaId) {
+    private boolean isExisteBarbearia(Long barbeariaId) {
         return barbeariaService.existePorId(barbeariaId);
     }
 

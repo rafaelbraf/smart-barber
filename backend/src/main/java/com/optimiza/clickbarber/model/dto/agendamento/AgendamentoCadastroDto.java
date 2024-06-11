@@ -19,9 +19,9 @@ public class AgendamentoCadastroDto {
     private ZonedDateTime dataHora;
     private BigDecimal valorTotal;
     private Integer tempoDuracaoEmMinutos;
-    private Integer barbeariaId;
-    private Integer clienteId;
+    private Long barbeariaId;
+    private Long clienteId;
     private List<UUID> servicos;
-    private List<Integer> barbeiros;
+    private List<Long> barbeiros;
 
 }

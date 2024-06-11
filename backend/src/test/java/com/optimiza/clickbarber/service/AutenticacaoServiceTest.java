@@ -160,7 +160,7 @@ class AutenticacaoServiceTest {
 
     private ClienteDto montarClienteDto() {
         return ClienteDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Cliente Teste")
                 .cpf("012345678910")
                 .celular("988888888")
@@ -170,7 +170,7 @@ class AutenticacaoServiceTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbearia Teste")
                 .cnpj("01234567891012")
                 .endereco("Rua Teste, 123")
@@ -180,7 +180,7 @@ class AutenticacaoServiceTest {
 
     private Barbeiro montarBarbeiro() {
         return Barbeiro.builder()
-                .id(1)
+                .id(1L)
                 .nome("Barbeiro Teste")
                 .ativo(true)
                 .admin(false)

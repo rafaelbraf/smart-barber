@@ -25,7 +25,7 @@ public class BarbeiroController {
     }
 
     @GetMapping("/{id}")
-    public Resposta<Barbeiro> buscarPorId(@PathVariable Integer id) {
+    public Resposta<Barbeiro> buscarPorId(@PathVariable Long id) {
         var barbeiro = barbeiroService.buscarPorId(id);
         return RespostaUtils.ok(Constants.Success.BARBEIRO_ENCONTRADO_COM_SUCESSO, barbeiro);
     }
@@ -51,7 +51,7 @@ public class BarbeiroController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPorId(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletarPorId(@PathVariable Long id) {
         barbeiroService.deletarPorId(id);
         return ResponseEntity.noContent().build();
     }

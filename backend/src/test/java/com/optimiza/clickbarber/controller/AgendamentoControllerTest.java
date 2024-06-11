@@ -167,7 +167,7 @@ class AgendamentoControllerTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-            .id(1)
+            .id(1L)
             .nome("Barbearia Teste")
             .cnpj("0123456789101112")
             .endereco("Rua Teste, 123")
@@ -187,7 +187,7 @@ class AgendamentoControllerTest {
 
     private BarbeiroAgendamentoDto montarBarbeiroAgendamentoDto() {
         return BarbeiroAgendamentoDto.builder()
-            .id(1)
+            .id(1L)
             .nome("Barbeiro Teste")
             .admin(false)
             .ativo(true)
@@ -198,7 +198,7 @@ class AgendamentoControllerTest {
 
     private ClienteDto montarClienteDto() {
         return ClienteDto.builder()
-            .id(1)
+            .id(1L)
             .nome("Cliente Teste")
             .celular("988888888")
             .cpf("012345678910")
@@ -250,10 +250,10 @@ class AgendamentoControllerTest {
             .valorTotal(valorTotal)
             .tempoDuracaoEmMinutos(tempoDuracaoEmMinutos)
             .dataHora(dataHora)
-            .clienteId(1)
-            .barbeariaId(1)
+            .clienteId(1L)
+            .barbeariaId(1L)
             .servicos(List.of(UUID.randomUUID()))
-            .barbeiros(List.of(1))
+            .barbeiros(List.of(1L))
             .build();
     }
 
