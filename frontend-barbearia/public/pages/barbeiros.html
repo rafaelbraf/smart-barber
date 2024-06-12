@@ -147,10 +147,55 @@
             </div>
         </div>
     </div>
-
-
-    
-    <!-- Link para o JavaScript do Bootstrap -->
+    <!-- Modal -->
+    <div class="modal fade" id="editarBarbeiroModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Editar Barbeiro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                     <!-- Formulário para incluir barbeiro -->
+                     <form>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="cpfBarbeiro" class="form-label">CPF</label>
+                                <input type="text" class="form-control" id="cpfBarbeiroEditar" placeholder="000.000.000-00" required>
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <label for="nomeBarbeiro" class="form-label">Nome</label>
+                                <input type="text" class="form-control" id="nomeBarbeiroEditar" placeholder="Insira o nome do barbeiro" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="celularBarbeiro" class="form-label">Celular</label>
+                                <input type="text" class="form-control" id="celularBarbeiroEditar" placeholder="(88) 98888-8888" required>
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <label for="emailBarbeiro" class="form-label">Email</label>
+                                <input type="text" class="form-control" id="emailBarbeiroEditar" placeholder="Insira o email do barbeiro" required>
+                            </div>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkboxBarbeiroAtivo" checked>
+                            <label class="form-check-label" for="checkbox1">Ativo</label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkboxBarbeiroAdmin">
+                            <label class="form-check-label" for="checkbox1">Admin</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button id="buttonEditarBarbeiro" type="button" class="btn btn-primary" data-bs-dismiss="modal">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            <!-- Link para o JavaScript do Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/tokenUtils.js"></script>
     <script type="module" src="../js/barbeiros.js"></script>

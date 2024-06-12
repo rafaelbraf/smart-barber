@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/click-barber_db
+    url: jdbc:postgresql://postgres:5432/click-barber_db
     username: clbb
     password: clbb
     driver-class-name: org.postgresql.Driver

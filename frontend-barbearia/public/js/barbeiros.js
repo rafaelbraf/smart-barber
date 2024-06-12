@@ -1,17 +1,20 @@
 import { ApiClient } from "./utils/apiClient.js";
 import { carregarVariaveisDeAmbiente } from "./utils/loadEnvs.js";
+
+
 let urlBackend;
 
-const apiClient = new ApiClient();
 
 document.addEventListener('DOMContentLoaded', async () => {
     urlBackend = await carregarVariaveisDeAmbiente();
 });
-
+const apiClient = new ApiClient();
 const token = localStorage.getItem('token');
 const barbeariaId = localStorage.getItem('barbearia');
 const buttonCadastrarBarbeiro = document.getElementById('buttonCadastrarBarbeiro')
 buttonCadastrarBarbeiro.addEventListener('click',cadastrarBarbeiro)
+const buttonEditarBarbeiro = document.getElementById('buttonEditarBarbeiro')
+buttonEditarBarbeiro.addEventListener('click',editarBarbeiro)
 
 
 
@@ -145,4 +148,44 @@ function exibirAlertaBarbeiro(status, message) {
         alert.classList.remove("show");
     },3000);
 
+}
+
+async function editarBarbeiro(barbeiroId) {
+    const nomeBarbeiro = document.getElementById('nomeBarbeiroEditar').value;
+    const cpfBarbeiro = document.getElementById('cpfBarbeiroEditar').value;
+    const celularBarbeiro = document.getElementById('celularBarbeiroEditar').value;
+    const emailBarbeiro = document.getElementById('emailBarbeiroEditar').value;
+    const isBarbeiroAdmin = document.getElementById('checkboxBarbeiroAdminEditar').checked;
+    const isBarbeiroAtivo = document.getElementById('checkboxBarbeiroAtivo').checked;
+    const idBarbearia = localStorage.getItem('barbearia');
+
+    const barbeiro = {
+        nome: nomeBarbeiro,
+        cpf: cpfBarbeiro,
+        celular: celularBarbeiro,
+        email: emailBarbeiro,
+        admin: isBarbeiroAdmin,
+        ativo: isBarbeiroAtivo,
+        barbearia: {
+            id:idBarbearia
+        }
+};
+    const url = `${urlBackend}/barbeiros/${barbeiroId}`
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    }
+    const response = await apiClient.put(url,headers,barbeiro)
+    const data = await response.json()
+    if (data.statusCode === 200) {
+        buscarBarbeirosDaBarbearia();
+
+        var modal = new bootstrap.Modal(document.getElementById('editarBarbeiroModal'));
+        modal.hide();
+
+        exibirAlertaBarbeiro("success",data.message);
+        buscarBarbeirosDaBarbearia();
+    } else {
+        exibirAlertaBarbeiro("error",data.message);
+    }
 }
