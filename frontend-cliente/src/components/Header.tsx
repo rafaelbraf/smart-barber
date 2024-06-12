@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import '../css/Header.css';
 
 export const Header = () => {
     return (
-        <nav className="navbar navbar-expand-lg navbar-primary bg-primary text-white">
+        <nav className="navbar navbar-expand-lg navbar-primary bg-primary">
             <div className="container">
                 <Link className="navbar-brand" to="/">Click Barber</Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
