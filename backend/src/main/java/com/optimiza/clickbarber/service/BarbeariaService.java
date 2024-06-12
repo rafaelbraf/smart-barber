@@ -10,6 +10,8 @@ import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,6 +32,20 @@ public class BarbeariaService {
 
     public Barbearia buscarPorId(Long id) {
         return barbeariaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.ID, id.toString()));
+    }
+
+    public List<BarbeariaDto> buscarPorNome(String nome) {
+        nome = nome.toLowerCase();
+
+        var barbeariasEncontradas = barbeariaRepository.findByNome(nome);
+        var barbeariasEncontradasDto = new ArrayList<BarbeariaDto>();
+
+        barbeariasEncontradas.forEach(barbearia -> {
+            var barbeariaDto = barbeariaMapper.toDto(barbearia);
+            barbeariasEncontradasDto.add(barbeariaDto);
+        });
+
+        return barbeariasEncontradasDto;
     }
 
     public BarbeariaDto buscarPorUsuarioId(UUID usuarioId) {

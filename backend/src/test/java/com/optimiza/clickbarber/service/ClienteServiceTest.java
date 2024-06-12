@@ -6,14 +6,11 @@ import com.optimiza.clickbarber.model.dto.cliente.ClienteCadastroDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteMapper;
 import com.optimiza.clickbarber.repository.ClienteRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -22,11 +19,11 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class ClienteServiceTest {
+class ClienteServiceTest {
 
     @InjectMocks
     private ClienteService clienteService;
@@ -68,9 +65,9 @@ public class ClienteServiceTest {
     @Test
     void testBuscarClientePorId_Encontrado() {
         var cliente = montarCliente();
-        when(clienteRepository.findById(anyInt())).thenReturn(Optional.of(cliente));
+        when(clienteRepository.findById(anyLong())).thenReturn(Optional.of(cliente));
 
-        var clienteEncontradoResult = clienteService.buscarPorId(1);
+        var clienteEncontradoResult = clienteService.buscarPorId(1L);
         assertNotNull(clienteEncontradoResult);
         assertEquals(1, clienteEncontradoResult.getId());
         assertEquals("Cliente Teste", clienteEncontradoResult.getNome());
@@ -78,9 +75,9 @@ public class ClienteServiceTest {
 
     @Test
     void testBuscarClientePorId_NaoEncontrado() {
-        when(clienteRepository.findById(anyInt())).thenReturn(Optional.empty());
+        when(clienteRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> clienteService.buscarPorId(1));
+        assertThrows(ResourceNotFoundException.class, () -> clienteService.buscarPorId(1L));
     }
 
     @Test
@@ -101,7 +98,7 @@ public class ClienteServiceTest {
 
     private Cliente montarCliente() {
         return Cliente.builder()
-                .id(1)
+                .id(1L)
                 .nome("Cliente Teste")
                 .dataNascimento(LocalDate.of(2001, 1, 1))
                 .cpf("012345678910")
@@ -111,7 +108,7 @@ public class ClienteServiceTest {
 
     private ClienteDto montarClienteDto() {
         return ClienteDto.builder()
-                .id(1)
+                .id(1L)
                 .dataNascimento(LocalDate.of(2001, 1, 1))
                 .celular("988888888")
                 .cpf("012345678910")

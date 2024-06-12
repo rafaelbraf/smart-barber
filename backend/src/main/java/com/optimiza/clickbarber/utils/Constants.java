@@ -12,8 +12,7 @@ public class Constants {
         private Success() {}
 
         public static final String LOGIN_REALIZADO_COM_SUCESSO = "Login realizado com sucesso!";
-        public static final String BARBEARIA_CADASTRADA_COM_SUCESSO = "Barbearia cadastrada com sucesso!";
-        public static final String BARBEARIA_ENCONTRADA_COM_SUCESSO = "Barbearia encontrada com sucesso!";
+        public static final String BARBEARIAS_ENCONTRADAS_PELO_NOME = "Barbearias encontradas com nome ";
         public static final String SERVICOS_ENCONTRADOS = "Serviços encontrados";
         public static final String SERVICO_ENCONTRADO_COM_SUCESSO = "Serviço encontrado com sucesso!";
         public static final String SERVICOS_ENCONTRADOS_DA_BARBEARIA = "Serviços encontrados para Barbearia com id ";

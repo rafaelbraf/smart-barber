@@ -13,12 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -87,6 +87,28 @@ class BarbeariaServiceTest {
     }
 
     @Test
+    void testBuscarBarbeariaPeloNome() {
+        var barbearia1 = montarBarbearia();
+        var barbearia2 = montarBarbearia(2L, "Barbearia Teste 2");
+        var barbeariasLista = List.of(barbearia1, barbearia2);
+        when(barbeariaRepository.findByNome(anyString())).thenReturn(barbeariasLista);
+
+        var barbearia1Dto = montarBarbeariaDto();
+        when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbearia1Dto);
+
+        var barbearia2Dto = montarBarbeariaDto(2L, "Barbearia Teste 2");
+        when(barbeariaMapper.toDto(barbearia2)).thenReturn(barbearia2Dto);
+
+        var barbeariasEncontradas = barbeariaService.buscarPorNome("Barbearia");
+        assertFalse(barbeariasEncontradas.isEmpty());
+        assertEquals(2, barbeariasEncontradas.size());
+        assertEquals(1, barbeariasEncontradas.getFirst().getId());
+        assertEquals("Barbearia Teste", barbeariasEncontradas.getFirst().getNome());
+        assertEquals(2, barbeariasEncontradas.getLast().getId());
+        assertEquals("Barbearia Teste 2", barbeariasEncontradas.getLast().getNome());
+    }
+
+    @Test
     void testCadastrarBarbearia() {
         var barbearia = montarBarbearia();
         when(barbeariaMapper.toEntity(any(BarbeariaCadastroDto.class))).thenReturn(barbearia);
@@ -112,10 +134,30 @@ class BarbeariaServiceTest {
                 .build();
     }
 
+    private Barbearia montarBarbearia(Long id, String nome) {
+        return Barbearia.builder()
+                .id(id)
+                .nome(nome)
+                .cnpj("01234567891011")
+                .telefone("988888888")
+                .endereco("Rua Teste, 123")
+                .build();
+    }
+
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
                 .id(1L)
                 .nome("Barbearia Teste")
+                .telefone("988888888")
+                .endereco("Rua Teste, 123")
+                .cnpj("01234567891011")
+                .build();
+    }
+
+    private BarbeariaDto montarBarbeariaDto(Long id, String nome) {
+        return BarbeariaDto.builder()
+                .id(id)
+                .nome(nome)
                 .telefone("988888888")
                 .endereco("Rua Teste, 123")
                 .cnpj("01234567891011")
