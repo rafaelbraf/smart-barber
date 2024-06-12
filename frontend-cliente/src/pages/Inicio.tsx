@@ -1,21 +1,18 @@
 import React from "react";
-import { Button, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import { Header } from "../components/Header";
 import { SearchBar } from "../components/SearchBar";
+import { Footer } from "../components/Footer";
 
 export const Inicio = () => {
     return (
         <div>
             <Header />
             <Container className="my-4">
-                <h1>Welcome to the Home Page</h1>
-                <p className="lead">This is the home page of our awesome application.</p>
-                <Link to="/sobre">
-                    <Button variant="primary">Learn more about us</Button>
-                </Link>
+                <h1>Encontre a barbearia mais próxima de você!</h1>
                 <SearchBar />
-            </Container>            
+            </Container>
+            <Footer />
         </div>
     );
 }
