@@ -2,7 +2,6 @@ package com.optimiza.clickbarber.controller
 
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto
 import com.optimiza.clickbarber.service.BarbeariaService
-import com.optimiza.clickbarber.utils.Constants
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -52,7 +51,7 @@ internal class BarbeariaControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(
                 MockMvcResultMatchers.jsonPath("$.message")
-                    .value(Constants.Success.BARBEARIAS_ENCONTRADAS_PELO_NOME + nomePesquisar)
+                    .value("${Constants.Success.BARBEARIAS_ENCONTRADAS_PELO_NOME} $nomePesquisar")
             )
             .andExpect(MockMvcResultMatchers.jsonPath("$.result.[0].id").value(1))
             .andExpect(MockMvcResultMatchers.jsonPath("$.result.[0].nome").value("Barbearia Teste"))

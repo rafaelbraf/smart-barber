@@ -8,7 +8,6 @@ import com.optimiza.clickbarber.model.Usuario;
 import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
-import com.optimiza.clickbarber.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

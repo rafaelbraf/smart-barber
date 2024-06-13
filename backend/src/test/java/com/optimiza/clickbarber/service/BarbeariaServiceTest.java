@@ -5,7 +5,6 @@ import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
-import com.optimiza.clickbarber.repository.BarbeariaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

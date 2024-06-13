@@ -1,26 +1,19 @@
 package com.optimiza.clickbarber.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.Servico;
 import com.optimiza.clickbarber.model.dto.servico.ServicoAtualizarDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoDto;
 import com.optimiza.clickbarber.service.ServicoService;
-import com.optimiza.clickbarber.utils.Constants;
-import org.apache.tomcat.util.bcel.Const;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
