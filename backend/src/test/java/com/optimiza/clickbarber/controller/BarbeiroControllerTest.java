@@ -10,6 +10,7 @@ import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAtualizarDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.service.BarbeiroService;
+import com.optimiza.clickbarber.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

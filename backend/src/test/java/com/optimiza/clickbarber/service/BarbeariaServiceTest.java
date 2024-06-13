@@ -5,11 +5,15 @@ import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
+import com.optimiza.clickbarber.repository.BarbeariaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 class BarbeariaServiceTest {
@@ -44,6 +48,54 @@ class BarbeariaServiceTest {
         when(barbeariaRepository.existsById(anyLong())).thenReturn(true);
         var existeBarbearia = barbeariaService.existePorId(1L);
         assertTrue(existeBarbearia);
+    }
+
+    @Test
+    void testBuscarTodasAsBarbeariasComLimite() {
+        var barbearia1 = montarBarbearia();
+        var barbeariasLista = List.of(barbearia1);
+
+        var barbeariasPage = new PageImpl<>(barbeariasLista);
+        var pageable = PageRequest.of(0, 1);
+        when(barbeariaRepository.findAll(pageable)).thenReturn(barbeariasPage);
+
+        var barbeariaDto1 = montarBarbeariaDto();
+        when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbeariaDto1);
+
+        var barbeariasEncontradas = barbeariaService.buscarTodos(pageable);
+        assertFalse(barbeariasEncontradas.isEmpty());
+        assertEquals(1, barbeariasEncontradas.size());
+        assertEquals(1, barbeariasEncontradas.getFirst().getId());
+        assertEquals("Barbearia Teste", barbeariasEncontradas.getFirst().getNome());
+
+        verify(barbeariaRepository, times(1)).findAll(pageable);
+        verify(barbeariaMapper, times(barbeariasLista.size())).toDto(any(Barbearia.class));
+    }
+
+    @Test
+    void testBuscarTodasAsBarbeariaSemLimite() {
+        var nomeBarbearia2 = "Barbearia Teste 2";
+        var barbearia1 = montarBarbearia();
+        var barbearia2 = montarBarbearia(2L, nomeBarbearia2);
+        var barbeariasLista = List.of(barbearia1, barbearia2);
+        when(barbeariaRepository.findAll()).thenReturn(barbeariasLista);
+
+        var barbeariaDto1 = montarBarbeariaDto();
+        when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbeariaDto1);
+
+        var barbeariaDto2 = montarBarbeariaDto(2L, nomeBarbearia2);
+        when(barbeariaMapper.toDto(barbearia2)).thenReturn(barbeariaDto2);
+
+        var barbeariasEncontradas = barbeariaService.buscarTodos(Pageable.unpaged());
+        assertFalse(barbeariasEncontradas.isEmpty());
+        assertEquals(2, barbeariasEncontradas.size());
+        assertEquals(1, barbeariasEncontradas.getFirst().getId());
+        assertEquals("Barbearia Teste", barbeariasEncontradas.getFirst().getNome());
+        assertEquals(2, barbeariasEncontradas.getLast().getId());
+        assertEquals("Barbearia Teste 2", barbeariasEncontradas.getLast().getNome());
+
+        verify(barbeariaRepository, times(1)).findAll();
+        verify(barbeariaMapper, times(barbeariasLista.size())).toDto(any(Barbearia.class));
     }
 
     @Test
