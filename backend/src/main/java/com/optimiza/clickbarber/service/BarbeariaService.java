@@ -8,6 +8,7 @@ import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
 import com.optimiza.clickbarber.repository.BarbeariaRepository;
 import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +29,23 @@ public class BarbeariaService {
 
     public boolean existePorId(Long id) {
         return barbeariaRepository.existsById(id);
+    }
+
+    public List<BarbeariaDto> buscarTodos(Pageable pageable) {
+        List<Barbearia> barbeariasEncontradas;
+        if (pageable.isUnpaged()) {
+            barbeariasEncontradas = barbeariaRepository.findAll();
+        } else {
+            barbeariasEncontradas = barbeariaRepository.findAll(pageable).getContent();
+        }
+
+        var barbeariasEncontradasDto = new ArrayList<BarbeariaDto>();
+        barbeariasEncontradas.forEach(barbearia -> {
+            var barbeariaDto = barbeariaMapper.toDto(barbearia);
+            barbeariasEncontradasDto.add(barbeariaDto);
+        });
+
+        return barbeariasEncontradasDto;
     }
 
     public Barbearia buscarPorId(Long id) {

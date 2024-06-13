@@ -6,6 +6,8 @@ import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto
 import com.optimiza.clickbarber.service.BarbeariaService
 import com.optimiza.clickbarber.utils.Constants
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -18,6 +20,20 @@ class BarbeariaController @Autowired constructor(
 ) {
 
     @GetMapping
+    fun buscarTodos(@RequestParam(name = "limit") limit: Int = 0): Resposta<List<BarbeariaDto>> {
+        val pageable = if (limit == null || limit == 0) {
+            Pageable.unpaged()
+        } else {
+            PageRequest.of(0, limit)
+        }
+
+        val barbeariasEncontradas = barbeariaService.buscarTodos(pageable)
+        val mensagem = "${barbeariasEncontradas.size} ${Constants.Success.BARBEARIAS_ENCONTRADAS}"
+
+        return RespostaUtils.ok(mensagem, barbeariasEncontradas)
+    }
+
+    @GetMapping("/nome")
     fun buscarPorNome(@RequestParam(name = "nome") nome: String): Resposta<List<BarbeariaDto>> {
         val barbearias = barbeariaService.buscarPorNome(nome)
         val mensagem = "${Constants.Success.BARBEARIAS_ENCONTRADAS_PELO_NOME} $nome"
