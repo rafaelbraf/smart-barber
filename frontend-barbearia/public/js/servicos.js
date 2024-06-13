@@ -5,6 +5,7 @@ let urlBackend;
 
 document.addEventListener('DOMContentLoaded', async () => {
     urlBackend = await carregarVariaveisDeAmbiente();
+    await buscarServicosDaBarbearia();
 });
 
 const apiClient = new ApiClient();
@@ -53,7 +54,7 @@ async function salvarServico() {
         const url = `${urlBackend}/servicos`    
         const headers = {
             'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`
         }
         const response = await apiClient.post(url,headers,servico)
         const data = await response.json()
