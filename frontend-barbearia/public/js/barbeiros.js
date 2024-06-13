@@ -6,6 +6,7 @@ const apiClient = new ApiClient();
 
 document.addEventListener('DOMContentLoaded', async () => {
     urlBackend = await carregarVariaveisDeAmbiente();
+    await buscarBarbeirosDaBarbearia();
 });
 
 const token = localStorage.getItem('token');
