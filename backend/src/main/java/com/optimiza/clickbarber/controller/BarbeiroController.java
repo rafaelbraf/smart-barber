@@ -33,7 +33,7 @@ public class BarbeiroController {
     @GetMapping("/barbearia/{id}")
     public Resposta<List<Barbeiro>> buscarPorBarbeariaId(@PathVariable Integer id) {
         var barbeiros = barbeiroService.buscarPorBarbeariaId(id);
-        return RespostaUtils.ok(Constants.Success.BARBEIROS_ENCONTRADOS_DA_BARBEARIA, barbeiros);
+        return RespostaUtils.ok(Constants.Success.BARBEIROS_ENCONTRADOS_DA_BARBEARIA + id, barbeiros);
     }
 
     @PostMapping
