@@ -38,11 +38,11 @@ class ServicoServiceTest {
     @Mock
     private BarbeariaService barbeariaService;
 
-    private UUID servicoId;
+    private Long servicoId;
 
     @BeforeEach
     void setup() {
-        servicoId = UUID.randomUUID();
+        servicoId = 1L;
     }
 
     @Test
@@ -59,9 +59,9 @@ class ServicoServiceTest {
     @Test
     void testBuscarServicoPorId_Encontrado() {
         var servico = montarServico();
-        when(servicoRepository.findById(any(UUID.class))).thenReturn(Optional.of(servico));
+        when(servicoRepository.findById(anyLong())).thenReturn(Optional.of(servico));
 
-        var servicoEncontradoResult = servicoService.buscarPorId(UUID.randomUUID());
+        var servicoEncontradoResult = servicoService.buscarPorId(1L);
         assertNotNull(servicoEncontradoResult);
         assertEquals("Serviço Teste", servicoEncontradoResult.getNome());
         assertEquals(1, servicoEncontradoResult.getBarbearia().getId());
@@ -69,7 +69,7 @@ class ServicoServiceTest {
 
     @Test
     void testBuscarServicoPorId_NaoEncontrado() {
-        when(servicoRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+        when(servicoRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> servicoService.buscarPorId(servicoId));
     }
@@ -107,13 +107,13 @@ class ServicoServiceTest {
 
     @Test
     void testDeletarServicoPorId() {
-        servicoService.deletarPorId(UUID.randomUUID());
-        verify(servicoRepository, times(1)).deleteById(any(UUID.class));
+        servicoService.deletarPorId(1L);
+        verify(servicoRepository, times(1)).deleteById(anyLong());
     }
 
     private Servico montarServico() {
         return Servico.builder()
-                .id(UUID.randomUUID())
+                .id(1L)
                 .nome("Serviço Teste")
                 .ativo(true)
                 .preco(new BigDecimal("50.0"))

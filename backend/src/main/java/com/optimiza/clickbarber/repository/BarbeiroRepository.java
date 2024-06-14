@@ -13,6 +13,6 @@ public interface BarbeiroRepository extends JpaRepository<Barbeiro, Long> {
 
     List<Barbeiro> findByBarbeariaId(Integer id);
 
-    Optional<Barbeiro> findByUsuarioId(UUID usuarioId);
+    Optional<Barbeiro> findByUsuarioId(Long usuarioId);
 
 }

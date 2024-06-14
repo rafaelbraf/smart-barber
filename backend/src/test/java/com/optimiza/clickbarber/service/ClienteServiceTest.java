@@ -34,17 +34,17 @@ class ClienteServiceTest {
     @Mock
     private ClienteMapper clienteMapper;
 
-    private UUID usuarioId;
+    private Long usuarioId;
 
     @BeforeEach
     void setup() {
-        usuarioId = UUID.randomUUID();
+        usuarioId = 1L;
     }
 
     @Test
     void testBuscarClientePorUsuarioId_Encontrado() {
         var cliente = montarCliente();
-        when(clienteRepository.findByUsuarioId(any(UUID.class))).thenReturn(Optional.of(cliente));
+        when(clienteRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(cliente));
 
         var clienteDto = montarClienteDto();
         when(clienteMapper.toDto(any(Cliente.class))).thenReturn(clienteDto);
@@ -57,7 +57,7 @@ class ClienteServiceTest {
 
     @Test
     void testBuscarClientePorUsuarioId_NaoEncontrado() {
-        when(clienteRepository.findByUsuarioId(any(UUID.class))).thenReturn(Optional.empty());
+        when(clienteRepository.findByUsuarioId(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> clienteService.buscarPorUsuarioId(usuarioId));
     }

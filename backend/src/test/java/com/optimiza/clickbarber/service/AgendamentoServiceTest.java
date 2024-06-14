@@ -54,13 +54,13 @@ class AgendamentoServiceTest {
     @Mock
     private BarbeiroService barbeiroService;
 
-    private UUID agendamentoId;
+    private Long agendamentoId;
     private ZonedDateTime dataHoraAgendamento;
     private BigDecimal valorTotalAgendamento;
 
     @BeforeEach
     void setup() {
-        agendamentoId = UUID.randomUUID();
+        agendamentoId = 1L;
         dataHoraAgendamento = ZonedDateTime.now();
         valorTotalAgendamento = new BigDecimal(50.0);
     }
@@ -68,7 +68,7 @@ class AgendamentoServiceTest {
     @Test
     void testBuscarAgendamentoPorId_Encontrado() {
         var agendamento = montarAgendamento();
-        when(agendamentoRepository.findById(any(UUID.class))).thenReturn(Optional.of(agendamento));
+        when(agendamentoRepository.findById(anyLong())).thenReturn(Optional.of(agendamento));
 
         var agendamentoDto = montarAgendamentoDto();
         when(agendamentoMapper.toDto(any(Agendamento.class))).thenReturn(agendamentoDto);
@@ -87,7 +87,7 @@ class AgendamentoServiceTest {
 
     @Test
     void testBuscarAgendamentoPorId_NaoEncontrado() {
-        when(agendamentoRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+        when(agendamentoRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> agendamentoService.buscarPorId(agendamentoId));
     }
@@ -132,7 +132,7 @@ class AgendamentoServiceTest {
         when(clienteService.buscarPorId(anyLong())).thenReturn(cliente);
 
         var servico = montarServico();
-        when(servicoService.buscarPorId(any(UUID.class))).thenReturn(servico);
+        when(servicoService.buscarPorId(anyLong())).thenReturn(servico);
 
         var barbeiro = montarBarbeiro();
         when(barbeiroService.buscarPorId(anyLong())).thenReturn(barbeiro);
@@ -158,7 +158,7 @@ class AgendamentoServiceTest {
     @Test
     void testDeletarAgendamentoPorId() {
         agendamentoService.deletarPorId(agendamentoId);
-        verify(agendamentoRepository, times(1)).deleteById(any(UUID.class));
+        verify(agendamentoRepository, times(1)).deleteById(anyLong());
     }
 
     private Agendamento montarAgendamento() {
@@ -190,7 +190,7 @@ class AgendamentoServiceTest {
                 .dataHora(dataHoraAgendamento)
                 .valorTotal(valorTotalAgendamento)
                 .barbeariaId(1L)
-                .servicos(List.of(UUID.randomUUID()))
+                .servicos(List.of(1L))
                 .barbeiros(List.of(1L))
                 .clienteId(1L)
                 .build();
@@ -251,7 +251,7 @@ class AgendamentoServiceTest {
 
     private Servico montarServico() {
         return Servico.builder()
-                .id(UUID.randomUUID())
+                .id(1L)
                 .nome("Serviço Teste")
                 .ativo(true)
                 .preco(new BigDecimal("50.0"))

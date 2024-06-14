@@ -1,5 +1,5 @@
 CREATE TABLE agendamentos_barbeiros (
-    agendamento_id UUID NOT NULL,
+    agendamento_id BIGINT NOT NULL,
     barbeiro_id BIGINT NOT NULL,
     PRIMARY KEY (agendamento_id, barbeiro_id),
     FOREIGN KEY (agendamento_id) REFERENCES agendamentos(id),

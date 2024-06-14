@@ -33,7 +33,7 @@ public class ServicoController {
     }
 
     @GetMapping("/{id}")
-    public Resposta<Servico> buscarPorId(@PathVariable UUID id) {
+    public Resposta<Servico> buscarPorId(@PathVariable Long id) {
         var servicoEncontrado = servicoService.buscarPorId(id);
         return RespostaUtils.ok(Constants.Success.SERVICO_ENCONTRADO_COM_SUCESSO, servicoEncontrado);
     }
@@ -59,7 +59,7 @@ public class ServicoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPorId(@PathVariable UUID id) {
+    public ResponseEntity<Void> deletarPorId(@PathVariable Long id) {
         servicoService.deletarPorId(id);
         return ResponseEntity.noContent().build();
     }

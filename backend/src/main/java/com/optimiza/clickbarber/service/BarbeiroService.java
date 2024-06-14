@@ -34,13 +34,13 @@ public class BarbeiroService {
         return barbeiroRepository.findByBarbeariaId(id);
     }
 
-    public Barbeiro buscarPorUsuarioId(UUID usuarioId) {
+    public Barbeiro buscarPorUsuarioId(Long usuarioId) {
         return barbeiroRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEIRO, Constants.Attribute.USUARIO_ID, usuarioId.toString()));
     }
 
     public BarbeiroDto cadastrar(BarbeiroCadastroDto barbeiroCadastroDto) {
-        var barbeariaId = barbeiroCadastroDto.getBarbearia().getId();
+        var barbeariaId = barbeiroCadastroDto.getBarbeariaId();
         if (!isExisteBarbearia(barbeariaId)) {
             throw new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.ID, barbeariaId.toString());
         }

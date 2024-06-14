@@ -21,7 +21,7 @@ public class AgendamentoCadastroDto {
     private Integer tempoDuracaoEmMinutos;
     private Long barbeariaId;
     private Long clienteId;
-    private List<UUID> servicos;
+    private List<Long> servicos;
     private List<Long> barbeiros;
 
 }

@@ -2,6 +2,8 @@ package com.optimiza.clickbarber.model.dto.barbearia;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
@@ -11,7 +13,7 @@ import lombok.*;
 @Builder
 public class BarbeariaDto {
 
-    private Long id;
+    private UUID idExterno;
     private String cnpj;
     private String nome;
     private String endereco;

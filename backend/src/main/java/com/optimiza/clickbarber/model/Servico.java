@@ -7,6 +7,8 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 @Table(name = "servicos")
 @Entity
 @Getter
@@ -19,8 +21,11 @@ import java.util.UUID;
 public class Servico {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "id_externo", unique = true, nullable = false)
+    private UUID idExterno;
 
     private String nome;
     private BigDecimal preco;
@@ -32,5 +37,12 @@ public class Servico {
     private Barbearia barbearia;
 
     private boolean ativo;
+
+    @PrePersist
+    void gerarIdExterno() {
+        if (isNull(idExterno)) {
+            idExterno = UUID.randomUUID();
+        }
+    }
 
 }

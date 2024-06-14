@@ -21,8 +21,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,14 +41,14 @@ class ServicoControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private UUID servicoId;
+    private Long servicoId;
     private Servico servico;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(new ServicoController(servicoService)).build();
 
-        servicoId = UUID.randomUUID();
+        servicoId = 1L;
         servico = montarServico(servicoId);
     }
 
@@ -72,7 +71,7 @@ class ServicoControllerTest {
 
     @Test
     void testBuscarServicoPorId() throws Exception {
-        when(servicoService.buscarPorId(any(UUID.class))).thenReturn(servico);
+        when(servicoService.buscarPorId(anyLong())).thenReturn(servico);
 
         mockMvc.perform(get("/servicos/" + servicoId))
                 .andExpect(status().isOk())
@@ -129,13 +128,13 @@ class ServicoControllerTest {
 
     @Test
     void testDeletarServicoPorId() throws Exception {
-        doNothing().when(servicoService).deletarPorId(any(UUID.class));
+        doNothing().when(servicoService).deletarPorId(anyLong());
 
         mockMvc.perform(delete("/servicos/" + servicoId))
                 .andExpect(status().isNoContent());
     }
 
-    private Servico montarServico(UUID id) {
+    private Servico montarServico(Long id) {
         return Servico.builder()
             .id(id)
             .nome("Serviço Teste")
@@ -145,7 +144,7 @@ class ServicoControllerTest {
             .build();
     }
 
-    private Servico montarServico(UUID id, String nome) {
+    private Servico montarServico(Long id, String nome) {
         return Servico.builder()
                 .id(id)
                 .nome(nome)
@@ -164,7 +163,7 @@ class ServicoControllerTest {
                 .build();
     }
 
-    private ServicoAtualizarDto montarServicoAtualizarDto(UUID id) {
+    private ServicoAtualizarDto montarServicoAtualizarDto(Long id) {
         return ServicoAtualizarDto.builder()
                 .id(id)
                 .nome("Serviço Atualizar")

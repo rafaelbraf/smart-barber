@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Table(name = "clientes")
 @Entity
@@ -20,6 +23,9 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "id_externo", unique = true, nullable = false)
+    private UUID idExterno;
+
     private String cpf;
     private String nome;
     private LocalDate dataNascimento;
@@ -28,5 +34,12 @@ public class Cliente {
     @OneToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @PrePersist
+    void gerarIdExterno() {
+        if (isNull(idExterno)) {
+            idExterno = UUID.randomUUID();
+        }
+    }
 
 }

@@ -46,14 +46,14 @@ class BarbeiroControllerTest {
     private ObjectMapper objectMapper;
 
     private Long barbeiroId;
-    private UUID usuarioId;
+    private Long usuarioId;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(new BarbeiroController(barbeiroService)).build();
 
         barbeiroId = 1L;
-        usuarioId = UUID.randomUUID();
+        usuarioId = 1L;
     }
 
     @Test
@@ -165,7 +165,7 @@ class BarbeiroControllerTest {
                 .build();
     }
 
-    private Usuario montarUsuario(UUID id) {
+    private Usuario montarUsuario(Long id) {
         return Usuario.builder()
                 .id(id)
                 .role(Role.BARBEIRO)

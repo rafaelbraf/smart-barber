@@ -5,8 +5,11 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Table(name = "agendamentos")
 @Entity
@@ -20,8 +23,11 @@ import java.util.UUID;
 public class Agendamento {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "id_externo", unique = true, nullable = false)
+    private UUID idExterno;
 
     private ZonedDateTime dataHora;
     private BigDecimal valorTotal;
@@ -50,5 +56,12 @@ public class Agendamento {
             inverseJoinColumns = @JoinColumn(name = "barbeiro_id")
     )
     private Set<Barbeiro> barbeiros;
+
+    @PrePersist
+    void gerarIdExterno() {
+        if (isNull(idExterno)) {
+            idExterno = UUID.randomUUID();
+        }
+    }
 
 }

@@ -35,7 +35,7 @@ public class AgendamentoService {
         this.barbeiroService = barbeiroService;
     }
 
-    public AgendamentoDto buscarPorId(UUID id) {
+    public AgendamentoDto buscarPorId(Long id) {
         var agendamento = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.AGENDAMENTO, Constants.Attribute.ID, id.toString()));
 
@@ -97,7 +97,7 @@ public class AgendamentoService {
         return agendamentoMapper.toDto(agendamentoAtualizado);
     }
 
-    public void deletarPorId(UUID id) {
+    public void deletarPorId(Long id) {
         agendamentoRepository.deleteById(id);
     }
 }
