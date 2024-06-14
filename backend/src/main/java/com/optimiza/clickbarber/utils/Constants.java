@@ -3,7 +3,8 @@ package com.optimiza.clickbarber.utils;
 public class Constants {
     private Constants() {}
 
-    public static final String FRONTEND_URL = "http://localhost:3000";
+    public static final String FRONTEND_BARBEARIA_URL = "http://localhost:3000";
+    public static final String FRONTEND_CLIENTE_URL = "http://localhost:3001";
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String AUTHORIZATION_NAME = "Authorization";
     public static final String OPTIONS_METHOD = "OPTIONS";
