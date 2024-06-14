@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 @Table(name = "usuarios")
 @Entity
 @Getter
@@ -17,13 +19,23 @@ import java.util.UUID;
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "id_externo", unique = true, nullable = false)
+    private UUID idExterno;
 
     private String email;
     private String senha;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @PrePersist
+    void gerarIdExterno() {
+        if (isNull(idExterno)) {
+            idExterno = UUID.randomUUID();
+        }
+    }
 
 }

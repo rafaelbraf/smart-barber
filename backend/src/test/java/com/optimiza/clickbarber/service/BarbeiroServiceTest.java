@@ -92,9 +92,9 @@ class BarbeiroServiceTest {
     void testBuscarPorUsuarioId_Encontrado() {
         var barbeiro = montarBarbeiro();
 
-        when(barbeiroRepository.findByUsuarioId(any(UUID.class))).thenReturn(Optional.of(barbeiro));
+        when(barbeiroRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(barbeiro));
 
-        var barbeiroResult = barbeiroService.buscarPorUsuarioId(UUID.randomUUID());
+        var barbeiroResult = barbeiroService.buscarPorUsuarioId(1L);
 
         assertNotNull(barbeiroResult);
         assertEquals(1, barbeiroResult.getId());
@@ -104,10 +104,9 @@ class BarbeiroServiceTest {
 
     @Test
     void testBuscarPorUsuarioId_NaoEncontrados() {
-        when(barbeiroRepository.findByUsuarioId(any(UUID.class))).thenReturn(Optional.empty());
+        when(barbeiroRepository.findByUsuarioId(anyLong())).thenReturn(Optional.empty());
 
-        var usuarioId = UUID.randomUUID();
-        assertThrows(ResourceNotFoundException.class, () -> barbeiroService.buscarPorUsuarioId(usuarioId));
+        assertThrows(ResourceNotFoundException.class, () -> barbeiroService.buscarPorUsuarioId(1L));
     }
 
     @Test

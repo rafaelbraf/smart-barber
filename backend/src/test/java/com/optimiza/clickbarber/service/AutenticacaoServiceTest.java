@@ -21,8 +21,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -48,7 +47,7 @@ class AutenticacaoServiceTest {
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private UUID usuarioId;
+    private Long usuarioId;
     private String email;
     private String senha;
 
@@ -56,7 +55,7 @@ class AutenticacaoServiceTest {
     void setup() {
         bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-        usuarioId = UUID.randomUUID();
+        usuarioId = 1L;
         email = "teste@mail.com";
         senha = "teste";
     }
@@ -67,7 +66,7 @@ class AutenticacaoServiceTest {
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
         var cliente = montarClienteDto();
-        when(clienteService.buscarPorUsuarioId(any(UUID.class))).thenReturn(cliente);
+        when(clienteService.buscarPorUsuarioId(anyLong())).thenReturn(cliente);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_cliente");
 
@@ -88,7 +87,7 @@ class AutenticacaoServiceTest {
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
         var barbearia = montarBarbeariaDto();
-        when(barbeariaService.buscarPorUsuarioId(any(UUID.class))).thenReturn(barbearia);
+        when(barbeariaService.buscarPorUsuarioId(anyLong())).thenReturn(barbearia);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_barbearia");
 
@@ -109,7 +108,7 @@ class AutenticacaoServiceTest {
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
         var barbeiro = montarBarbeiro();
-        when(barbeiroService.buscarPorUsuarioId(any(UUID.class))).thenReturn(barbeiro);
+        when(barbeiroService.buscarPorUsuarioId(anyLong())).thenReturn(barbeiro);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_barbeiro");
 

@@ -30,7 +30,7 @@ public class AgendamentoController {
     }
 
     @GetMapping("/{id}")
-    public Resposta<AgendamentoDto> buscarPorId(@PathVariable UUID id) {
+    public Resposta<AgendamentoDto> buscarPorId(@PathVariable Long id) {
         var agendamento = agendamentoService.buscarPorId(id);
         return RespostaUtils.ok(Constants.Success.AGENDAMENTO_ENCONTRADO_COM_SUCESSO, agendamento);
     }
@@ -61,7 +61,7 @@ public class AgendamentoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPorId(@PathVariable UUID id) {
+    public ResponseEntity<Void> deletarPorId(@PathVariable Long id) {
         agendamentoService.deletarPorId(id);
         return ResponseEntity.noContent().build();
     }

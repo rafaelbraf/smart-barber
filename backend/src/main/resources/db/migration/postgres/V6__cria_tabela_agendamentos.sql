@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS agendamentos (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id_externo UUID UNIQUE NOT NULL,
     data_hora TIMESTAMPTZ NOT NULL,
     valor_total NUMERIC(10, 2) NOT NULL,
     tempo_duracao_em_minutos INTEGER NOT NULL,

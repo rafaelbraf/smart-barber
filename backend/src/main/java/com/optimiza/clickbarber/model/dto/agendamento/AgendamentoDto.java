@@ -23,7 +23,8 @@ import java.util.UUID;
 @Builder
 public class AgendamentoDto {
 
-    private UUID id;
+    private Long id;
+    private UUID idExterno;
     private ZonedDateTime dataHora;
     private BigDecimal valorTotal;
     private Integer tempoDuracaoEmMinutos;

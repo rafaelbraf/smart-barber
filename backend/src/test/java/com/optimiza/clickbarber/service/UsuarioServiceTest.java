@@ -40,11 +40,11 @@ class UsuarioServiceTest {
     @Mock
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private UUID usuarioId;
+    private Long usuarioId;
 
     @BeforeEach
     void setup() {
-        usuarioId = UUID.randomUUID();
+        usuarioId = 1L;
     }
 
     @Test

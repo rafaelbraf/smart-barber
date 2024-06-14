@@ -36,11 +36,11 @@ class BarbeariaServiceTest {
     @Mock
     private BarbeariaMapper barbeariaMapper;
 
-    private UUID usuarioId;
+    private Long usuarioId;
 
     @BeforeEach
     void setup() {
-        usuarioId = UUID.randomUUID();
+        usuarioId = 1L;
     }
 
     @Test
@@ -119,7 +119,7 @@ class BarbeariaServiceTest {
     @Test
     void testBuscarBarbeariaPorUsuarioId_Encontrado() {
         var barbearia = montarBarbearia();
-        when(barbeariaRepository.findByUsuarioId(any(UUID.class))).thenReturn(Optional.of(barbearia));
+        when(barbeariaRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(barbearia));
 
         var barbeariaDto = montarBarbeariaDto();
         when(barbeariaMapper.toDto(any(Barbearia.class))).thenReturn(barbeariaDto);
@@ -132,7 +132,7 @@ class BarbeariaServiceTest {
 
     @Test
     void testBuscarBarbeariaPorUsuarioId_NaoEncontrado() {
-        when(barbeariaRepository.findByUsuarioId(any(UUID.class))).thenReturn(Optional.empty());
+        when(barbeariaRepository.findByUsuarioId(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> barbeariaService.buscarPorUsuarioId(usuarioId));
     }

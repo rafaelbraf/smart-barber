@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 public class AgendamentoAtualizarDto {
 
-    private UUID id;
+    private Long id;
     private ZonedDateTime dataHora;
     private BigDecimal valorTotal;
     private Integer tempoDuracaoEmMinutos;

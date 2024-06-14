@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ServicoRepository extends JpaRepository<Servico, UUID> {
+public interface ServicoRepository extends JpaRepository<Servico, Long> {
 
     List<Servico> findByBarbeariaId(@Param("barbeariaId") Integer barbeariaId);
 

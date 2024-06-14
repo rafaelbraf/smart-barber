@@ -12,7 +12,7 @@ public class BarbeariaMapper {
         if (isNull(barbearia)) return null;
 
         return BarbeariaDto.builder()
-                .id(barbearia.getId())
+                .idExterno(barbearia.getIdExterno())
                 .nome(barbearia.getNome())
                 .cnpj(barbearia.getCnpj())
                 .telefone(barbearia.getTelefone())

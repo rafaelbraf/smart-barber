@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
+import static java.util.Objects.isNull;
+
 @Table(name = "barbeiros")
 @Entity
 @Getter
@@ -19,6 +23,9 @@ public class Barbeiro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "id_externo", unique = true, nullable = false)
+    private UUID idExterno;
+
     private String cpf;
     private String nome;
     private String celular;
@@ -33,5 +40,12 @@ public class Barbeiro {
     @OneToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @PrePersist
+    void gerarIdExterno() {
+        if (isNull(idExterno)) {
+            idExterno = UUID.randomUUID();
+        }
+    }
 
 }

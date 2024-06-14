@@ -33,7 +33,7 @@ public class ServicoService {
         return servicoRepository.findAll();
     }
 
-    public Servico buscarPorId(UUID id) {
+    public Servico buscarPorId(Long id) {
         return servicoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.SERVICO, Constants.Attribute.ID, id.toString()));
     }
 
@@ -60,7 +60,7 @@ public class ServicoService {
         return servicoRepository.save(servico);
     }
 
-    public void deletarPorId(UUID id) {
+    public void deletarPorId(Long id) {
         servicoRepository.deleteById(id);
     }
 }

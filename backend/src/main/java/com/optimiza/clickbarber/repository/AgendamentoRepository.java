@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface AgendamentoRepository extends JpaRepository<Agendamento, UUID> {
+public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
 
     List<Agendamento> findByBarbeariaId(Integer barbeariaId);
 

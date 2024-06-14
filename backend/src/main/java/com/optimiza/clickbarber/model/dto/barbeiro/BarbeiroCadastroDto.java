@@ -16,7 +16,7 @@ public class BarbeiroCadastroDto {
     private String celular;
     private boolean admin;
     private boolean ativo;
-    private BarbeariaDto barbearia;
+    private Long barbeariaId;
     private Usuario usuario;
 
 }

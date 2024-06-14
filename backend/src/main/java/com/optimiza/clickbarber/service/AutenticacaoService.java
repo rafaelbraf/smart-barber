@@ -59,7 +59,7 @@ public class AutenticacaoService {
         var acoesRole = Map.of(
                 Role.CLIENTE, clienteService::buscarPorUsuarioId,
                 Role.BARBEARIA, barbeariaService::buscarPorUsuarioId,
-                Role.BARBEIRO, (Function<UUID, Object>) barbeiroService::buscarPorUsuarioId
+                Role.BARBEIRO, (Function<Long, Object>) barbeiroService::buscarPorUsuarioId
         );
 
         var acaoRole = acoesRole.get(usuario.getRole());

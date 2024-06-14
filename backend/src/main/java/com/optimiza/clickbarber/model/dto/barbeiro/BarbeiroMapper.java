@@ -33,7 +33,7 @@ public class BarbeiroMapper {
         var barbeariaDto = barbeariaMapper.toDto(barbeiro.getBarbearia());
 
         return BarbeiroDto.builder()
-                .id(barbeiro.getId())
+                .idExterno(barbeiro.getIdExterno())
                 .nome(barbeiro.getNome())
                 .cpf(barbeiro.getCpf())
                 .celular(barbeiro.getCelular())

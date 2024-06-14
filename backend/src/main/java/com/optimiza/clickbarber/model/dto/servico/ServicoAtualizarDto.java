@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 public class ServicoAtualizarDto {
 
-    private UUID id;
+    private Long id;
     private String nome;
     private BigDecimal preco;
     private Integer tempoDuracaoEmMinutos;

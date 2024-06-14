@@ -24,7 +24,7 @@ public class ClienteService {
         this.clienteMapper = clienteMapper;
     }
 
-    public ClienteDto buscarPorUsuarioId(UUID usuarioId) {
+    public ClienteDto buscarPorUsuarioId(Long usuarioId) {
         var clienteEncontrado = clienteRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.CLIENTE, Constants.Attribute.USUARIO_ID, usuarioId.toString()));
         return clienteMapper.toDto(clienteEncontrado);

@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS servicos (
-    id UUID DEFAULT random_uuid() PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_externo UUID DEFAULT random_uuid(),
     nome VARCHAR(100) NOT NULL,
     preco NUMERIC(10, 2) NOT NULL,
     tempo_duracao_em_minutos INTEGER NOT NULL,
