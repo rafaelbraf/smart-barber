@@ -1,7 +1,8 @@
 package com.optimiza.clickbarber.utils
 
 object Constants {
-    const val FRONTEND_URL: String = "http://localhost:3000"
+    const val FRONTEND_BARBEARIA_URL: String = "http://localhost:3000"
+    const val FRONTEND_CLIENTE_URL: String = "http://localhost:3001"
     const val BEARER_PREFIX: String = "Bearer "
     const val AUTHORIZATION_NAME: String = "Authorization"
     const val OPTIONS_METHOD: String = "OPTIONS"
