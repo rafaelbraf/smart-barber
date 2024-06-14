@@ -82,7 +82,7 @@ class BarbeiroControllerTest {
 
         mockMvc.perform(get("/barbeiros/barbearia/" + 1))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value(Constants.Success.BARBEIROS_ENCONTRADOS_DA_BARBEARIA))
+                .andExpect(jsonPath("$.message").value(Constants.Success.BARBEIROS_ENCONTRADOS_DA_BARBEARIA + 1))
                 .andExpect(jsonPath("$.result.[0].barbearia.id").value(1))
                 .andExpect(jsonPath("$.result.[1].barbearia.id").value(1));
     }
