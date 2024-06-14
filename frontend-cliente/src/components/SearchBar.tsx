@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { BarbeariaService } from "../services/BarbeariaService";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
 import { Barbearia } from "../models/Barbearia";
 
-export const SearchBar: React.FC = () => {
+interface SearchBarProps {
+    onResults: (results: Barbearia[]) => void;
+}
+
+export const SearchBar: React.FC<SearchBarProps> = ({ onResults }) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [results, setResults] = useState<Barbearia[]>([]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
@@ -16,7 +19,7 @@ export const SearchBar: React.FC = () => {
 
         try {
             const searchResults = await BarbeariaService.pesquisarBarbeariasPorNome(searchTerm);
-            setResults(searchResults);
+            onResults(searchResults);
         } catch (error) {
             console.error(error);
         }
@@ -24,8 +27,8 @@ export const SearchBar: React.FC = () => {
 
     return (
         <Container>
-            <form className="form-inline d-flex align-items-center mt-2" onSubmit={handleSubmit}>
-                <input
+            <Form className="form-inline d-flex align-items-center mt-2" onSubmit={handleSubmit}>
+                <Form.Control
                     className="form-control mr-2"
                     type="search"
                     placeholder="Pesquisar barbearia..."
@@ -35,19 +38,7 @@ export const SearchBar: React.FC = () => {
                     style={{ width: "760px" }}
                 />
                 <button className="btn btn-primary my-2 my-sm-0 mt-0" type="submit">Pesquisar</button>
-            </form>
-            <Row className="mt-4">
-                {results.map((barbearia) => (
-                    <Col key={barbearia.id} sm={12} md={6} lg={4} className="mb-4">
-                        <Card>
-                            <Card.Body>
-                                <Card.Title>{barbearia.nome}</Card.Title>
-                                <Card.Text>{barbearia.endereco}</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+            </Form>
         </Container>
     );
 }

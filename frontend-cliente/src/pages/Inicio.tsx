@@ -1,12 +1,44 @@
-import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { Header } from "../components/Header";
 import { SearchBar } from "../components/SearchBar";
 import { Footer } from "../components/Footer";
 import { Image } from "../components/Image";
+import { BarbeariaService } from "../services/BarbeariaService";
+import { Barbearia } from "../models/Barbearia";
 
-export const Inicio = () => {
+export const Inicio: React.FC = () => {
     const urlImage = "https://visaoempreendedora.com.br/wp-content/uploads/2024/05/curso-barbeiro.png";
+    const [barbearias, setBarbearias] = useState<Barbearia[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchBarbearias = async () => {
+            try {
+                const data = await BarbeariaService.pesquisarTodasAsBarbearias();
+                setBarbearias(data);
+            } catch (error) {
+                setError('Erro ao buscar Barbearias.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBarbearias();
+    }, []);
+
+    const handleSearchResults = (results: Barbearia[]) => {
+        setBarbearias(results);
+    }
+
+    if (loading) {
+        return <p>Carregando...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
 
     return (
         <div>
@@ -22,8 +54,26 @@ export const Inicio = () => {
                 </Row>
                 <Row className="d-flex justify-content-center mt-4">
                     <Col sm={12} md={8} lg={6} className="d-flex justify-content-center">
-                        <SearchBar />
+                        <SearchBar onResults={handleSearchResults}/>
                     </Col>
+                </Row>
+                <Row className="mt-4">
+                    {barbearias.length === 0 ? (
+                        <Col className="text-center">
+                            <p>Nenhuma barbearia com esse nome foi encontrada.</p>
+                        </Col>
+                    ) : (
+                        barbearias.map((barbearia) => (
+                            <Col key={barbearia.id} sm={12} md={6} lg={3} className="mb-4">
+                                <Card>
+                                    <Card.Body>
+                                        <Card.Title>{barbearia.nome}</Card.Title>
+                                        <Card.Text>{barbearia.endereco}</Card.Text>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))
+                    )}
                 </Row>
             </Container>
             <Footer />

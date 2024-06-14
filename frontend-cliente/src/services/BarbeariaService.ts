@@ -1,9 +1,10 @@
-export const BarbeariaService = {
-    async pesquisarBarbeariasPorNome(searchTerm: string): Promise<any> {
-        const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
-        const token = "";
+const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
+const token = "";
+
+export const BarbeariaService = {    
+    async pesquisarBarbeariasPorNome(searchTerm: string): Promise<any> {        
         try {
-            const response = await fetch(`${apiUrl}/barbearias?nome=${searchTerm}`, {
+            const response = await fetch(`${apiUrl}/barbearias/nome?nome=${searchTerm}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -20,7 +21,31 @@ export const BarbeariaService = {
 
             return barbeariasEncontradasLista;
         } catch (error) {
-            console.error("Error fetching search results:", error);
+            console.error(error);
+            throw error;
+        }
+    },
+
+    async pesquisarTodasAsBarbearias(): Promise<any> {
+        try {
+            const response = await fetch(`${apiUrl}/barbearias?limit=8`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao pesquisar barbearias por nome.');
+            }
+
+            const responseJson = await response.json();
+            const barbeariasEncontradasLista = await responseJson.result;
+
+            return barbeariasEncontradasLista;
+        } catch (error) {
+            console.error(error);
             throw error;
         }
     }
