@@ -2,7 +2,6 @@ package com.optimiza.clickbarber.controller
 
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto
 import com.optimiza.clickbarber.service.BarbeariaService
-import com.optimiza.clickbarber.utils.Constants
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
