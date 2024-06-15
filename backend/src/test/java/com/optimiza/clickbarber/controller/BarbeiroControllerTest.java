@@ -47,6 +47,7 @@ class BarbeiroControllerTest {
 
     private Long barbeiroId;
     private Long usuarioId;
+    private UUID barbeariaIdExterno;
 
     @BeforeEach
     void setup() {
@@ -54,6 +55,7 @@ class BarbeiroControllerTest {
 
         barbeiroId = 1L;
         usuarioId = 1L;
+        barbeariaIdExterno = UUID.randomUUID();
     }
 
     @Test
@@ -100,7 +102,7 @@ class BarbeiroControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value(Constants.Success.BARBEIRO_CADASTRADO_COM_SUCESSO))
                 .andExpect(jsonPath("$.result.nome").value("Barbeiro Teste"))
-                .andExpect(jsonPath("$.result.barbearia.id").value(1));
+                .andExpect(jsonPath("$.result.barbearia.idExterno").value(barbeariaIdExterno.toString()));
     }
 
     @Test
@@ -157,7 +159,7 @@ class BarbeiroControllerTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1L)
+                .idExterno(barbeariaIdExterno)
                 .cnpj("01234567891011")
                 .telefone("988888888")
                 .nome("Barbearia Teste")
@@ -174,7 +176,7 @@ class BarbeiroControllerTest {
 
     private BarbeiroCadastroDto montarBarbeiroCadastroDto() {
         return BarbeiroCadastroDto.builder()
-                .barbearia(montarBarbeariaDto())
+                .barbeariaId(1L)
                 .admin(false)
                 .ativo(true)
                 .celular("988888888")
@@ -186,7 +188,7 @@ class BarbeiroControllerTest {
 
     private BarbeiroDto montarBarbeiroDto() {
         return BarbeiroDto.builder()
-                .id(1L)
+                .idExterno(barbeariaIdExterno)
                 .nome("Barbeiro Teste")
                 .ativo(true)
                 .admin(false)

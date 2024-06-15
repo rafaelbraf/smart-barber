@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
+import java.util.UUID
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [BarbeariaController::class], useDefaultFilters = false)
@@ -31,15 +32,20 @@ internal class BarbeariaControllerTest {
     @Mock
     private val barbeariaService: BarbeariaService? = null
 
+    var barbeariaIdExterno: UUID? = null
+    var barbeariaIdExterno2: UUID? = null
+
     @BeforeEach
     fun setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(BarbeariaController(barbeariaService!!)).build()
+        barbeariaIdExterno = UUID.randomUUID()
+        barbeariaIdExterno2 = UUID.randomUUID()
     }
 
     @Test
     fun buscarTodasAsBarbeariasSemLimite() {
         val barbearia1 = montarBarbeariaDto()
-        val barbearia2 = montarBarbeariaDto(2, "Barbearia Teste 2")
+        val barbearia2 = montarBarbeariaDto(barbeariaIdExterno2!!, "Barbearia Teste 2")
         val barbeariasDtoLista = listOf(barbearia1, barbearia2)
 
         Mockito.`when`(barbeariaService!!.buscarTodos(any(Pageable::class.java))).thenReturn(barbeariasDtoLista)
@@ -49,9 +55,9 @@ internal class BarbeariaControllerTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.message").value("${barbeariasDtoLista.size} ${Constants.Success.BARBEARIAS_ENCONTRADAS}"))
-            .andExpect(jsonPath("$.result.[0].id").value(1))
+            .andExpect(jsonPath("$.result.[0].idExterno").value(barbeariaIdExterno.toString()))
             .andExpect(jsonPath("$.result.[0].nome").value("Barbearia Teste"))
-            .andExpect(jsonPath("$.result.[1].id").value(2))
+            .andExpect(jsonPath("$.result.[1].idExterno").value(barbeariaIdExterno2.toString()))
             .andExpect(jsonPath("$.result.[1].nome").value("Barbearia Teste 2"))
     }
 
@@ -67,7 +73,7 @@ internal class BarbeariaControllerTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.message").value("${barbeariasDtoLista.size} ${Constants.Success.BARBEARIAS_ENCONTRADAS}"))
-            .andExpect(jsonPath("$.result.[0].id").value(1))
+            .andExpect(jsonPath("$.result.[0].idExterno").value(barbeariaIdExterno.toString()))
             .andExpect(jsonPath("$.result.[0].nome").value("Barbearia Teste"))
     }
 
@@ -75,7 +81,7 @@ internal class BarbeariaControllerTest {
     @Throws(Exception::class)
     fun buscarBarbeariaPeloNome() {
         val barbearia1 = montarBarbeariaDto()
-        val barbearia2 = montarBarbeariaDto(2L, "Barbearia Teste 2")
+        val barbearia2 = montarBarbeariaDto(barbeariaIdExterno2!!, "Barbearia Teste 2")
         val barbeariasDtoLista = listOf(barbearia1, barbearia2)
         Mockito.`when`(barbeariaService!!.buscarPorNome(ArgumentMatchers.anyString())).thenReturn(barbeariasDtoLista)
 
@@ -86,15 +92,15 @@ internal class BarbeariaControllerTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.message").value("${Constants.Success.BARBEARIAS_ENCONTRADAS_PELO_NOME} $nomePesquisar"))
-            .andExpect(jsonPath("$.result.[0].id").value(1))
+            .andExpect(jsonPath("$.result.[0].idExterno").value(barbeariaIdExterno.toString()))
             .andExpect(jsonPath("$.result.[0].nome").value("Barbearia Teste"))
-            .andExpect(jsonPath("$.result.[1].id").value(2))
+            .andExpect(jsonPath("$.result.[1].idExterno").value(barbeariaIdExterno2.toString()))
             .andExpect(jsonPath("$.result.[1].nome").value("Barbearia Teste 2"))
     }
 
     private fun montarBarbeariaDto(): BarbeariaDto {
         return BarbeariaDto.builder()
-            .id(1L)
+            .idExterno(barbeariaIdExterno)
             .nome("Barbearia Teste")
             .telefone("988888888")
             .endereco("Rua Teste, 123")
@@ -102,9 +108,9 @@ internal class BarbeariaControllerTest {
             .build()
     }
 
-    private fun montarBarbeariaDto(id: Long, nome: String): BarbeariaDto {
+    private fun montarBarbeariaDto(idExterno: UUID, nome: String): BarbeariaDto {
         return BarbeariaDto.builder()
-            .id(id)
+            .idExterno(idExterno)
             .nome(nome)
             .telefone("988888888")
             .endereco("Rua Teste, 123")

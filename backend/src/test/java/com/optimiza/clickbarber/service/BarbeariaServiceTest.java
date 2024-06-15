@@ -37,10 +37,12 @@ class BarbeariaServiceTest {
     private BarbeariaMapper barbeariaMapper;
 
     private Long usuarioId;
+    private UUID barbeariaIdExterno;
 
     @BeforeEach
     void setup() {
         usuarioId = 1L;
+        barbeariaIdExterno = UUID.randomUUID();
     }
 
     @Test
@@ -65,7 +67,7 @@ class BarbeariaServiceTest {
         var barbeariasEncontradas = barbeariaService.buscarTodos(pageable);
         assertFalse(barbeariasEncontradas.isEmpty());
         assertEquals(1, barbeariasEncontradas.size());
-        assertEquals(1, barbeariasEncontradas.getFirst().getId());
+        assertEquals(barbeariaIdExterno, barbeariasEncontradas.getFirst().getIdExterno());
         assertEquals("Barbearia Teste", barbeariasEncontradas.getFirst().getNome());
 
         verify(barbeariaRepository, times(1)).findAll(pageable);
@@ -83,15 +85,16 @@ class BarbeariaServiceTest {
         var barbeariaDto1 = montarBarbeariaDto();
         when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbeariaDto1);
 
-        var barbeariaDto2 = montarBarbeariaDto(2L, nomeBarbearia2);
+        var barbeariaIdExterno2 = UUID.randomUUID();
+        var barbeariaDto2 = montarBarbeariaDto(barbeariaIdExterno2, nomeBarbearia2);
         when(barbeariaMapper.toDto(barbearia2)).thenReturn(barbeariaDto2);
 
         var barbeariasEncontradas = barbeariaService.buscarTodos(Pageable.unpaged());
         assertFalse(barbeariasEncontradas.isEmpty());
         assertEquals(2, barbeariasEncontradas.size());
-        assertEquals(1, barbeariasEncontradas.getFirst().getId());
+        assertEquals(barbeariaIdExterno, barbeariasEncontradas.getFirst().getIdExterno());
         assertEquals("Barbearia Teste", barbeariasEncontradas.getFirst().getNome());
-        assertEquals(2, barbeariasEncontradas.getLast().getId());
+        assertEquals(barbeariaIdExterno2, barbeariasEncontradas.getLast().getIdExterno());
         assertEquals("Barbearia Teste 2", barbeariasEncontradas.getLast().getNome());
 
         verify(barbeariaRepository, times(1)).findAll();
@@ -126,7 +129,7 @@ class BarbeariaServiceTest {
 
         var barbeariaEncontrada = barbeariaService.buscarPorUsuarioId(usuarioId);
         assertNotNull(barbeariaEncontrada);
-        assertEquals(1, barbeariaEncontrada.getId());
+        assertEquals(barbeariaIdExterno, barbeariaEncontrada.getIdExterno());
         assertEquals("Barbearia Teste", barbeariaEncontrada.getNome());
     }
 
@@ -147,15 +150,16 @@ class BarbeariaServiceTest {
         var barbearia1Dto = montarBarbeariaDto();
         when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbearia1Dto);
 
-        var barbearia2Dto = montarBarbeariaDto(2L, "Barbearia Teste 2");
+        var barbeariaIdExterno2 = UUID.randomUUID();
+        var barbearia2Dto = montarBarbeariaDto(barbeariaIdExterno2, "Barbearia Teste 2");
         when(barbeariaMapper.toDto(barbearia2)).thenReturn(barbearia2Dto);
 
         var barbeariasEncontradas = barbeariaService.buscarPorNome("Barbearia");
         assertFalse(barbeariasEncontradas.isEmpty());
         assertEquals(2, barbeariasEncontradas.size());
-        assertEquals(1, barbeariasEncontradas.getFirst().getId());
+        assertEquals(barbeariaIdExterno, barbeariasEncontradas.getFirst().getIdExterno());
         assertEquals("Barbearia Teste", barbeariasEncontradas.getFirst().getNome());
-        assertEquals(2, barbeariasEncontradas.getLast().getId());
+        assertEquals(barbeariaIdExterno2, barbeariasEncontradas.getLast().getIdExterno());
         assertEquals("Barbearia Teste 2", barbeariasEncontradas.getLast().getNome());
     }
 
@@ -171,7 +175,7 @@ class BarbeariaServiceTest {
         var barbeariaCadastroDto = montarBarbeariaCadastroDto();
         var barbeariaCadastradaResult = barbeariaService.cadastrar(barbeariaCadastroDto);
         assertNotNull(barbeariaCadastradaResult);
-        assertEquals(1, barbeariaCadastradaResult.getId());
+        assertEquals(barbeariaIdExterno, barbeariaCadastradaResult.getIdExterno());
         assertEquals("Barbearia Teste", barbeariaCadastradaResult.getNome());
     }
 
@@ -197,7 +201,7 @@ class BarbeariaServiceTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1L)
+                .idExterno(barbeariaIdExterno)
                 .nome("Barbearia Teste")
                 .telefone("988888888")
                 .endereco("Rua Teste, 123")
@@ -205,9 +209,9 @@ class BarbeariaServiceTest {
                 .build();
     }
 
-    private BarbeariaDto montarBarbeariaDto(Long id, String nome) {
+    private BarbeariaDto montarBarbeariaDto(UUID idExterno, String nome) {
         return BarbeariaDto.builder()
-                .id(id)
+                .idExterno(idExterno)
                 .nome(nome)
                 .telefone("988888888")
                 .endereco("Rua Teste, 123")

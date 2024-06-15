@@ -57,12 +57,14 @@ class AgendamentoServiceTest {
     private Long agendamentoId;
     private ZonedDateTime dataHoraAgendamento;
     private BigDecimal valorTotalAgendamento;
+    private UUID barbeariaIdExterno;
 
     @BeforeEach
     void setup() {
         agendamentoId = 1L;
         dataHoraAgendamento = ZonedDateTime.now();
         valorTotalAgendamento = new BigDecimal(50.0);
+        barbeariaIdExterno = UUID.randomUUID();
     }
 
     @Test
@@ -79,7 +81,7 @@ class AgendamentoServiceTest {
         assertEquals(dataHoraAgendamento, agendamentoEncontrado.getDataHora());
         assertEquals(valorTotalAgendamento, agendamentoEncontrado.getValorTotal());
         assertEquals(45, agendamentoEncontrado.getTempoDuracaoEmMinutos());
-        assertEquals(1, agendamentoEncontrado.getBarbearia().getId());
+        assertEquals(barbeariaIdExterno, agendamentoEncontrado.getBarbearia().getIdExterno());
         assertEquals(1, agendamentoEncontrado.getCliente().getId());
         assertFalse(agendamentoEncontrado.getServicos().isEmpty());
         assertFalse(agendamentoEncontrado.getBarbeiros().isEmpty());
@@ -104,8 +106,8 @@ class AgendamentoServiceTest {
 
         var agendamentosLista = agendamentoService.buscarPorBarbeariaId(1);
         assertFalse(agendamentosLista.isEmpty());
-        assertEquals(1, agendamentosLista.getFirst().getBarbearia().getId());
-        assertEquals(1, agendamentosLista.getLast().getBarbearia().getId());
+        assertEquals(barbeariaIdExterno, agendamentosLista.getFirst().getBarbearia().getIdExterno());
+        assertEquals(barbeariaIdExterno, agendamentosLista.getLast().getBarbearia().getIdExterno());
     }
 
     @Test
@@ -149,7 +151,7 @@ class AgendamentoServiceTest {
         assertEquals(dataHoraAgendamento, agendamentoCadastrado.getDataHora());
         assertEquals("50", agendamentoCadastrado.getValorTotal().toString());
         assertEquals(45, agendamentoCadastrado.getTempoDuracaoEmMinutos());
-        assertEquals(1, agendamentoCadastrado.getBarbearia().getId());
+        assertEquals(barbeariaIdExterno, agendamentoCadastrado.getBarbearia().getIdExterno());
         assertEquals(1, agendamentoCadastrado.getCliente().getId());
         assertFalse(agendamentoCadastrado.getServicos().isEmpty());
         assertFalse(agendamentoCadastrado.getBarbeiros().isEmpty());
@@ -221,7 +223,7 @@ class AgendamentoServiceTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1L)
+                .idExterno(barbeariaIdExterno)
                 .nome("Barbearia Teste")
                 .telefone("988888888")
                 .endereco("Rua Teste, 123")

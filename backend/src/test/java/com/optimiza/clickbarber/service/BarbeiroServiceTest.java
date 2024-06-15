@@ -9,6 +9,7 @@ import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroMapper;
 import com.optimiza.clickbarber.repository.BarbeiroRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,6 +40,15 @@ class BarbeiroServiceTest {
 
     @Mock
     private BarbeiroMapper barbeiroMapper;
+
+    private UUID barbeiroIdExterno;
+    private UUID barbeariaIdExterno;
+
+    @BeforeEach
+    void setup() {
+        barbeiroIdExterno = UUID.randomUUID();
+        barbeariaIdExterno = UUID.randomUUID();
+    }
 
     @Test
     void testBuscarPorId_Encontrado() {
@@ -127,9 +137,9 @@ class BarbeiroServiceTest {
         var barbeiroCadastradoResult = barbeiroService.cadastrar(barbeiroCadastroDto);
 
         assertNotNull(barbeiroCadastradoResult);
-        assertEquals(1, barbeiroCadastradoResult.getId());
+        assertEquals(barbeiroIdExterno, barbeiroCadastradoResult.getIdExterno());
         assertEquals("Barbeiro Teste", barbeiroCadastradoResult.getNome());
-        assertEquals(1, barbeiroCadastradoResult.getBarbearia().getId());
+        assertEquals(barbeariaIdExterno, barbeiroCadastradoResult.getBarbearia().getIdExterno());
     }
 
     @Test
@@ -171,7 +181,7 @@ class BarbeiroServiceTest {
 
     private BarbeiroDto montarBarbeiroDto() {
         return BarbeiroDto.builder()
-                .id(1L)
+                .idExterno(barbeiroIdExterno)
                 .nome("Barbeiro Teste")
                 .cpf("012345678910")
                 .celular("988888888")
@@ -188,7 +198,7 @@ class BarbeiroServiceTest {
                 .admin(true)
                 .ativo(true)
                 .celular("988888888")
-                .barbearia(montarBarbeariaDto())
+                .barbeariaId(1L)
                 .build();
     }
 
@@ -214,7 +224,7 @@ class BarbeiroServiceTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1L)
+                .idExterno(barbeariaIdExterno)
                 .nome("Barbearia Teste")
                 .cnpj("01234567891011")
                 .endereco("Rua Teste, 123")

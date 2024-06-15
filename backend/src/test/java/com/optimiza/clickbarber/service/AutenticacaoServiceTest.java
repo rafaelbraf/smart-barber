@@ -50,6 +50,7 @@ class AutenticacaoServiceTest {
     private Long usuarioId;
     private String email;
     private String senha;
+    private UUID barbeariaIdExterno;
 
     @BeforeEach
     void setup() {
@@ -58,6 +59,7 @@ class AutenticacaoServiceTest {
         usuarioId = 1L;
         email = "teste@mail.com";
         senha = "teste";
+        barbeariaIdExterno = UUID.randomUUID();
     }
 
     @Test
@@ -169,7 +171,7 @@ class AutenticacaoServiceTest {
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1L)
+                .idExterno(barbeariaIdExterno)
                 .nome("Barbearia Teste")
                 .cnpj("01234567891012")
                 .endereco("Rua Teste, 123")

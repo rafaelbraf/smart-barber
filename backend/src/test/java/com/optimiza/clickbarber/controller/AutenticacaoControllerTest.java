@@ -21,6 +21,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.UUID;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,9 +42,13 @@ class AutenticacaoControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private UUID barbeariaIdExterno;
+
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(new AutenticacaoController(autenticacaoService)).build();
+
+        barbeariaIdExterno = UUID.randomUUID();
     }
 
     @Test
@@ -61,7 +67,7 @@ class AutenticacaoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(Constants.Success.LOGIN_REALIZADO_COM_SUCESSO))
                 .andExpect(jsonPath("$.accessToken").value(token))
-                .andExpect(jsonPath("$.result.id").value(1))
+                .andExpect(jsonPath("$.result.idExterno").value(barbeariaIdExterno.toString()))
                 .andExpect(jsonPath("$.result.nome").value("Barbearia Teste"));
     }
 
@@ -80,12 +86,12 @@ class AutenticacaoControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value(Constants.Success.USUARIO_CADASTRADO_COM_SUCESSO))
                 .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.result.id").value(1));
+                .andExpect(jsonPath("$.result.idExterno").value(barbeariaIdExterno.toString()));
     }
 
     private BarbeariaDto montarBarbeariaDto() {
         return BarbeariaDto.builder()
-                .id(1L)
+                .idExterno(barbeariaIdExterno)
                 .nome("Barbearia Teste")
                 .cnpj("0123456789101112")
                 .endereco("Rua Teste, 123")
