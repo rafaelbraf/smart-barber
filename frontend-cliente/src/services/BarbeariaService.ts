@@ -1,52 +1,27 @@
-const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
-const token = "";
+import ApiClient from "../api/ApiClient";
+import { ApiResponse } from "../api/ApiResponse";
+import { Barbearia } from "../models/Barbearia";
 
-export const BarbeariaService = {    
-    async pesquisarBarbeariasPorNome(searchTerm: string): Promise<any> {        
+class BarbeariaService {
+    static async pesquisarBarbeariasPorNome(searchTerm: string): Promise<Barbearia[]> {
         try {
-            const response = await fetch(`${apiUrl}/barbearias/nome?nome=${searchTerm}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Erro ao pesquisar barbearias por nome.');
-            }
-
-            const responseJson = await response.json();
-            const barbeariasEncontradasLista = await responseJson.result;
-
-            return barbeariasEncontradasLista;
+            const response = await ApiClient.get<ApiResponse<Barbearia[]>>(`/barbearias/nome?nome=${searchTerm}`);
+            return response.result;
         } catch (error) {
-            console.error(error);
+            console.error('Erro ao pesquisar barbearias por nome:', error);
             throw error;
         }
-    },
+    }
 
-    async pesquisarTodasAsBarbearias(): Promise<any> {
+    static async pesquisarTodasAsBarbearias(): Promise<Barbearia[]> {
         try {
-            const response = await fetch(`${apiUrl}/barbearias?limit=8`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Erro ao pesquisar barbearias por nome.');
-            }
-
-            const responseJson = await response.json();
-            const barbeariasEncontradasLista = await responseJson.result;
-
-            return barbeariasEncontradasLista;
+            const response = await ApiClient.get<ApiResponse<Barbearia[]>>(`/barbearias?limit=8`);
+            return response.result;
         } catch (error) {
-            console.error(error);
+            console.error('Erro ao pesquisar todas as barbearias:', error);
             throw error;
         }
     }
 };
+
+export default BarbeariaService;
