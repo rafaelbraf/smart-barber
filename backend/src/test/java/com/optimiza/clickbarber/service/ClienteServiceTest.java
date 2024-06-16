@@ -3,7 +3,6 @@ package com.optimiza.clickbarber.service;
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.Cliente;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteCadastroDto;
-import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteMapper;
 import com.optimiza.clickbarber.repository.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -96,35 +95,6 @@ class ClienteServiceTest {
         assertNotNull(clienteCadastradoResult);
         assertEquals(idExternoCliente, clienteCadastradoResult.getIdExterno());
         assertEquals("Cliente Teste", clienteCadastradoResult.getNome());
-    }
-
-    private Cliente montarCliente() {
-        return Cliente.builder()
-                .id(1L)
-                .nome("Cliente Teste")
-                .dataNascimento(LocalDate.of(2001, 1, 1))
-                .cpf("012345678910")
-                .celular("988888888")
-                .build();
-    }
-
-    private ClienteDto montarClienteDto() {
-        return ClienteDto.builder()
-                .idExterno(idExternoCliente)
-                .dataNascimento(LocalDate.of(2001, 1, 1))
-                .celular("988888888")
-                .cpf("012345678910")
-                .nome("Cliente Teste")
-                .build();
-    }
-
-    private ClienteCadastroDto montarClienteCadastroDto() {
-        return ClienteCadastroDto.builder()
-                .cpf("012345678910")
-                .nome("Cliente Teste")
-                .celular("988888888")
-                .dataNascimento(LocalDate.of(2001, 1, 1))
-                .build();
     }
 
 }

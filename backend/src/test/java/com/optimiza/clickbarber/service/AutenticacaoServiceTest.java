@@ -4,8 +4,6 @@ import com.optimiza.clickbarber.config.JwtUtil;
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.Barbeiro;
 import com.optimiza.clickbarber.model.Role;
-import com.optimiza.clickbarber.model.Usuario;
-import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.utils.Constants;
@@ -17,11 +15,12 @@ import org.mockito.Mock;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -66,7 +65,7 @@ class AutenticacaoServiceTest {
 
     @Test
     void testLoginCliente() {
-        var usuario = montarUsuario(Role.CLIENTE);
+        var usuario = montarUsuario(Role.CLIENTE, senha);
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
         var cliente = montarClienteDto();
@@ -87,10 +86,10 @@ class AutenticacaoServiceTest {
 
     @Test
     void testLoginBarbearia() {
-        var usuario = montarUsuario(Role.BARBEARIA);
+        var usuario = montarUsuario(Role.BARBEARIA, senha);
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
-        var barbearia = montarBarbeariaDto();
+        var barbearia = montarBarbeariaDto(barbeariaIdExterno);
         when(barbeariaService.buscarPorUsuarioId(anyLong())).thenReturn(barbearia);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_barbearia");
@@ -108,7 +107,7 @@ class AutenticacaoServiceTest {
 
     @Test
     void testLoginBarbeiro() {
-        var usuario = montarUsuario(Role.BARBEIRO);
+        var usuario = montarUsuario(Role.BARBEIRO, senha);
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
         var barbeiro = montarBarbeiro();
@@ -129,10 +128,10 @@ class AutenticacaoServiceTest {
 
     @Test
     void testLoginNaoAutorizado_SenhaIncorreta() {
-        var usuario = montarUsuario(Role.BARBEARIA);
+        var usuario = montarUsuario(Role.BARBEARIA, "teste123");
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
-        var loginRequest = montarLoginRequestDto("teste2");
+        var loginRequest = montarLoginRequestDto();
         var resposta = autenticacaoService.login(loginRequest);
 
         assertNotNull(resposta);
@@ -148,58 +147,6 @@ class AutenticacaoServiceTest {
 
         var loginRequest = montarLoginRequestDto();
         assertThrows(ResourceNotFoundException.class, () -> autenticacaoService.login(loginRequest));
-    }
-
-    private Usuario montarUsuario(Role role) {
-        String senhaCriptografada = bCryptPasswordEncoder.encode(senha);
-
-        return Usuario.builder()
-                .id(usuarioId)
-                .email(email)
-                .senha(senhaCriptografada)
-                .role(role)
-                .build();
-    }
-
-    private ClienteDto montarClienteDto() {
-        return ClienteDto.builder()
-                .idExterno(clienteIdExterno)
-                .nome("Cliente Teste")
-                .cpf("012345678910")
-                .celular("988888888")
-                .dataNascimento(LocalDate.of(2001, 1, 1))
-                .build();
-    }
-
-    private BarbeariaDto montarBarbeariaDto() {
-        return BarbeariaDto.builder()
-                .idExterno(barbeariaIdExterno)
-                .nome("Barbearia Teste")
-                .cnpj("01234567891012")
-                .endereco("Rua Teste, 123")
-                .telefone("988888888")
-                .build();
-    }
-
-    private Barbeiro montarBarbeiro() {
-        return Barbeiro.builder()
-                .id(1L)
-                .nome("Barbeiro Teste")
-                .ativo(true)
-                .admin(false)
-                .cpf("012345678910")
-                .build();
-    }
-
-    private LoginRequestDto montarLoginRequestDto() {
-        return LoginRequestDto.builder()
-                .email(email)
-                .senha(senha)
-                .build();
-    }
-
-    private LoginRequestDto montarLoginRequestDto(String senha) {
-        return LoginRequestDto.builder().email(email).senha(senha).build();
     }
 
 }

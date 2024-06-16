@@ -17,10 +17,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -49,13 +48,12 @@ class ServicoControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(new ServicoController(servicoService)).build();
 
         servicoId = 1L;
-        servico = montarServico(servicoId);
+        servico = montarServico();
     }
 
     @Test
     void testBuscarTodosOsServicos() throws Exception {
-        var servico2 = montarServico(servicoId);
-        servico2.setNome("Serviço Teste 2");
+        var servico2 = montarServico("Serviço Teste 2");
 
         var servicos = List.of(servico, servico2);
 
@@ -81,8 +79,7 @@ class ServicoControllerTest {
 
     @Test
     void testBuscarServicosPorBarbeariaId() throws Exception {
-        var servico2 = montarServico(servicoId);
-        servico2.setNome("Serviço Teste 2");
+        var servico2 = montarServico("Serviço Teste 2");
 
         var servicosEncontrados = List.of(servico, servico2);
 
@@ -111,10 +108,10 @@ class ServicoControllerTest {
 
     @Test
     void testAtualizarServico() throws Exception {
-        var servicoAtualizado = montarServico(servicoId, "Serviço Atualizar");
+        var servicoAtualizado = montarServico("Serviço Atualizar");
         when(servicoService.atualizar(any(ServicoAtualizarDto.class))).thenReturn(servicoAtualizado);
 
-        var servicoParaAtualizar = objectMapper.writeValueAsString(montarServicoAtualizarDto(servicoId));
+        var servicoParaAtualizar = objectMapper.writeValueAsString(montarServicoAtualizarDto());
 
         mockMvc.perform(put("/servicos")
                 .content(servicoParaAtualizar)
@@ -132,45 +129,6 @@ class ServicoControllerTest {
 
         mockMvc.perform(delete("/servicos/" + servicoId))
                 .andExpect(status().isNoContent());
-    }
-
-    private Servico montarServico(Long id) {
-        return Servico.builder()
-            .id(id)
-            .nome("Serviço Teste")
-            .ativo(true)
-            .preco(new BigDecimal("30.0"))
-            .tempoDuracaoEmMinutos(30)
-            .build();
-    }
-
-    private Servico montarServico(Long id, String nome) {
-        return Servico.builder()
-                .id(id)
-                .nome(nome)
-                .ativo(true)
-                .preco(new BigDecimal("50.0"))
-                .tempoDuracaoEmMinutos(30)
-                .build();
-    }
-
-    private ServicoDto montarServicoDto() {
-        return ServicoDto.builder()
-                .nome("Serviço Teste")
-                .tempoDuracaoEmMinutos(45)
-                .preco(new BigDecimal("30.0"))
-                .ativo(true)
-                .build();
-    }
-
-    private ServicoAtualizarDto montarServicoAtualizarDto(Long id) {
-        return ServicoAtualizarDto.builder()
-                .id(id)
-                .nome("Serviço Atualizar")
-                .preco(new BigDecimal("50.0"))
-                .tempoDuracaoEmMinutos(45)
-                .ativo(false)
-                .build();
     }
 
 }
