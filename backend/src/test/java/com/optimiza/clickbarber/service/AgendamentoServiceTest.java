@@ -58,6 +58,7 @@ class AgendamentoServiceTest {
     private ZonedDateTime dataHoraAgendamento;
     private BigDecimal valorTotalAgendamento;
     private UUID barbeariaIdExterno;
+    private UUID clienteIdExterno;
 
     @BeforeEach
     void setup() {
@@ -65,6 +66,7 @@ class AgendamentoServiceTest {
         dataHoraAgendamento = ZonedDateTime.now();
         valorTotalAgendamento = new BigDecimal(50.0);
         barbeariaIdExterno = UUID.randomUUID();
+        clienteIdExterno = UUID.randomUUID();
     }
 
     @Test
@@ -82,7 +84,7 @@ class AgendamentoServiceTest {
         assertEquals(valorTotalAgendamento, agendamentoEncontrado.getValorTotal());
         assertEquals(45, agendamentoEncontrado.getTempoDuracaoEmMinutos());
         assertEquals(barbeariaIdExterno, agendamentoEncontrado.getBarbearia().getIdExterno());
-        assertEquals(1, agendamentoEncontrado.getCliente().getId());
+        assertEquals(clienteIdExterno, agendamentoEncontrado.getCliente().getIdExterno());
         assertFalse(agendamentoEncontrado.getServicos().isEmpty());
         assertFalse(agendamentoEncontrado.getBarbeiros().isEmpty());
     }
@@ -152,7 +154,7 @@ class AgendamentoServiceTest {
         assertEquals("50", agendamentoCadastrado.getValorTotal().toString());
         assertEquals(45, agendamentoCadastrado.getTempoDuracaoEmMinutos());
         assertEquals(barbeariaIdExterno, agendamentoCadastrado.getBarbearia().getIdExterno());
-        assertEquals(1, agendamentoCadastrado.getCliente().getId());
+        assertEquals(clienteIdExterno, agendamentoCadastrado.getCliente().getIdExterno());
         assertFalse(agendamentoCadastrado.getServicos().isEmpty());
         assertFalse(agendamentoCadastrado.getBarbeiros().isEmpty());
     }
@@ -243,7 +245,7 @@ class AgendamentoServiceTest {
 
     private ClienteDto montarClienteDto() {
         return ClienteDto.builder()
-                .id(1L)
+                .idExterno(clienteIdExterno)
                 .dataNascimento(LocalDate.of(2001, 1, 1))
                 .celular("988888888")
                 .cpf("012345678910")
