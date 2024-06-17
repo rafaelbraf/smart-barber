@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,7 +48,7 @@ class ClienteServiceTest {
         var cliente = montarCliente();
         when(clienteRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(cliente));
 
-        var clienteDto = montarClienteDto();
+        var clienteDto = montarClienteDto(idExternoCliente);
         when(clienteMapper.toDto(any(Cliente.class))).thenReturn(clienteDto);
 
         var clienteEncontradoResult = clienteService.buscarPorUsuarioId(usuarioId);
@@ -82,12 +83,34 @@ class ClienteServiceTest {
     }
 
     @Test
+    void testBuscarClientesPeloIdExternoDaBarbearia() {
+        var cliente1 = montarCliente();
+        var cliente2 = montarCliente(2L, "Cliente Teste 2");
+        var listaClientes = List.of(cliente1, cliente2);
+        when(clienteRepository.findByIdExternoBarbearia(any(UUID.class))).thenReturn(listaClientes);
+
+        var idExternoCliente1 = UUID.randomUUID();
+        var clienteDto1 = montarClienteDto(idExternoCliente1);
+        when(clienteMapper.toDto(cliente1)).thenReturn(clienteDto1);
+
+        var idExternoCliente2 = UUID.randomUUID();
+        var clienteDto2 = montarClienteDto(idExternoCliente2);
+        when(clienteMapper.toDto(cliente2)).thenReturn(clienteDto2);
+
+        var idExternoBarbearia = UUID.randomUUID();
+        var clientesEncontrados = clienteService.buscarPorIdExternoBarbearia(idExternoBarbearia);
+        assertFalse(clientesEncontrados.isEmpty());
+        assertEquals(idExternoCliente1, clientesEncontrados.getFirst().getIdExterno());
+        assertEquals(idExternoCliente2, clientesEncontrados.getLast().getIdExterno());
+    }
+
+    @Test
     void testCadastrarCliente() {
         var cliente = montarCliente();
         when(clienteMapper.toEntity(any(ClienteCadastroDto.class))).thenReturn(cliente);
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
 
-        var clienteDto = montarClienteDto();
+        var clienteDto = montarClienteDto(idExternoCliente);
         when(clienteMapper.toDto(any(Cliente.class))).thenReturn(clienteDto);
 
         var clienteCadastroDto = montarClienteCadastroDto();

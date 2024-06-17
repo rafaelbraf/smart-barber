@@ -241,9 +241,19 @@ public class TestDataFactory {
                 .build();
     }
 
-    public static ClienteDto montarClienteDto() {
+    public static Cliente montarCliente(Long id, String nome) {
+        return Cliente.builder()
+                .id(id)
+                .nome(nome)
+                .dataNascimento(LocalDate.of(2001, 1, 1))
+                .cpf("012345678910")
+                .celular("988888888")
+                .build();
+    }
+
+    public static ClienteDto montarClienteDto(UUID idExterno) {
         return ClienteDto.builder()
-                .id(1L)
+                .idExterno(idExterno)
                 .nome("Cliente Teste")
                 .cpf("012345678910")
                 .celular("988888888")
@@ -271,10 +281,10 @@ public class TestDataFactory {
     }
 
     public static AgendamentoDto montarAgendamentoDto(
-            Long agendamentoId, ZonedDateTime dataHora, Integer tempoDuracaoEmMinutos, BigDecimal valorTotal, UUID idExternoBarbearia) {
+            Long agendamentoId, ZonedDateTime dataHora, Integer tempoDuracaoEmMinutos, BigDecimal valorTotal, UUID idExternoBarbearia, UUID idExternoCliente) {
         return AgendamentoDto.builder()
                 .id(agendamentoId)
-                .cliente(montarClienteDto())
+                .cliente(montarClienteDto(idExternoCliente))
                 .barbearia(montarBarbeariaDto(idExternoBarbearia))
                 .servicos(Set.of(montarServico()))
                 .barbeiros(Set.of(montarBarbeiroAgendamentoDto()))
@@ -320,14 +330,15 @@ public class TestDataFactory {
                 .build();
     }
 
-    public static AgendamentoRespostaDto montarAgendamentoRespostaDto(Long id, ZonedDateTime dataHora, BigDecimal valorTotal, UUID idExternoBarbearia) {
+    public static AgendamentoRespostaDto montarAgendamentoRespostaDto(
+            Long id, ZonedDateTime dataHora, BigDecimal valorTotal, UUID idExternoBarbearia, UUID idExternoCliente) {
         return AgendamentoRespostaDto.builder()
                 .id(id)
                 .dataHora(dataHora)
                 .tempoDuracaoEmMinutos(45)
                 .valorTotal(valorTotal)
                 .barbearia(montarBarbeariaDto(idExternoBarbearia))
-                .cliente(montarClienteDto())
+                .cliente(montarClienteDto(idExternoCliente))
                 .servicos(Set.of(montarServico()))
                 .barbeiros(Set.of(montarBarbeiroAgendamentoDto()))
                 .build();

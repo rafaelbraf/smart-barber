@@ -68,7 +68,7 @@ class AutenticacaoServiceTest {
         var usuario = montarUsuario(Role.CLIENTE, senha);
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
-        var cliente = montarClienteDto();
+        var cliente = montarClienteDto(clienteIdExterno);
         when(clienteService.buscarPorUsuarioId(anyLong())).thenReturn(cliente);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_cliente");

@@ -67,7 +67,8 @@ class AgendamentoServiceTest {
         var agendamento = montarAgendamento(agendamentoId, dataHoraAgendamento, valorTotalAgendamento);
         when(agendamentoRepository.findById(anyLong())).thenReturn(Optional.of(agendamento));
 
-        var agendamentoDto = montarAgendamentoDto(1L, dataHoraAgendamento, 45, valorTotalAgendamento, barbeariaIdExterno);
+        var agendamentoDto = montarAgendamentoDto(
+                1L, dataHoraAgendamento, 45, valorTotalAgendamento, barbeariaIdExterno, clienteIdExterno);
         when(agendamentoMapper.toDto(any(Agendamento.class))).thenReturn(agendamentoDto);
 
         var agendamentoEncontrado = agendamentoService.buscarPorId(agendamentoId);
@@ -96,7 +97,7 @@ class AgendamentoServiceTest {
         var agendamentos = List.of(agendamento1, agendamento2);
         when(agendamentoRepository.findByBarbeariaId(anyInt())).thenReturn(agendamentos);
 
-        var agendamentoRespostaDto = montarAgendamentoRespostaDto(1L, dataHoraAgendamento, valorTotalAgendamento, barbeariaIdExterno);
+        var agendamentoRespostaDto = montarAgendamentoRespostaDto(1L, dataHoraAgendamento, valorTotalAgendamento, barbeariaIdExterno, clienteIdExterno);
         when(agendamentoMapper.toAgendamentoRespostaDto(any(Agendamento.class))).thenReturn(agendamentoRespostaDto);
 
         var agendamentosLista = agendamentoService.buscarPorBarbeariaId(1);
@@ -137,7 +138,8 @@ class AgendamentoServiceTest {
         var agendamento = montarAgendamento(agendamentoId, dataHoraAgendamento, valorTotalAgendamento);
         when(agendamentoRepository.save(any(Agendamento.class))).thenReturn(agendamento);
 
-        var agendamentoDto = montarAgendamentoDto(1L, dataHoraAgendamento, 45, valorTotalAgendamento, barbeariaIdExterno);
+        var agendamentoDto = montarAgendamentoDto(
+                1L, dataHoraAgendamento, 45, valorTotalAgendamento, barbeariaIdExterno, clienteIdExterno);
         when(agendamentoMapper.toDto(any(Agendamento.class))).thenReturn(agendamentoDto);
 
         var agendamentoCadastroDto = montarAgendamentoCadastroDto(valorTotalAgendamento, 45, dataHoraAgendamento);
