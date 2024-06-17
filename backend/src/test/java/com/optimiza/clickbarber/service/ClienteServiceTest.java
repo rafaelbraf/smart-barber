@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -79,6 +80,28 @@ class ClienteServiceTest {
         when(clienteRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> clienteService.buscarPorId(1L));
+    }
+
+    @Test
+    void testBuscarClientesPeloIdExternoDaBarbearia() {
+        var cliente1 = montarCliente();
+        var cliente2 = montarCliente(2L, "Cliente Teste 2");
+        var listaClientes = List.of(cliente1, cliente2);
+        when(clienteRepository.findByIdExternoBarbearia(any(UUID.class))).thenReturn(listaClientes);
+
+        var idExternoCliente1 = UUID.randomUUID();
+        var clienteDto1 = montarClienteDto(idExternoCliente1);
+        when(clienteMapper.toDto(cliente1)).thenReturn(clienteDto1);
+
+        var idExternoCliente2 = UUID.randomUUID();
+        var clienteDto2 = montarClienteDto(idExternoCliente2);
+        when(clienteMapper.toDto(cliente2)).thenReturn(clienteDto2);
+
+        var idExternoBarbearia = UUID.randomUUID();
+        var clientesEncontrados = clienteService.buscarPorIdExternoBarbearia(idExternoBarbearia);
+        assertFalse(clientesEncontrados.isEmpty());
+        assertEquals(idExternoCliente1, clientesEncontrados.getFirst().getIdExterno());
+        assertEquals(idExternoCliente2, clientesEncontrados.getLast().getIdExterno());
     }
 
     @Test

@@ -241,6 +241,16 @@ public class TestDataFactory {
                 .build();
     }
 
+    public static Cliente montarCliente(Long id, String nome) {
+        return Cliente.builder()
+                .id(id)
+                .nome(nome)
+                .dataNascimento(LocalDate.of(2001, 1, 1))
+                .cpf("012345678910")
+                .celular("988888888")
+                .build();
+    }
+
     public static ClienteDto montarClienteDto(UUID idExterno) {
         return ClienteDto.builder()
                 .idExterno(idExterno)
