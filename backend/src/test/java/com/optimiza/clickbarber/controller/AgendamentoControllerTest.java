@@ -53,6 +53,7 @@ class AgendamentoControllerTest {
 
     private Long agendamentoId;
     private UUID barbeariaIdExterno;
+    private UUID clienteIdExterno;
 
     @BeforeEach
     void setup() {
@@ -60,6 +61,7 @@ class AgendamentoControllerTest {
 
         agendamentoId = 1L;
         barbeariaIdExterno = UUID.randomUUID();
+        clienteIdExterno = UUID.randomUUID();
     }
 
     @Test
@@ -196,7 +198,7 @@ class AgendamentoControllerTest {
 
     private ClienteDto montarClienteDto() {
         return ClienteDto.builder()
-            .id(1L)
+            .idExterno(clienteIdExterno)
             .nome("Cliente Teste")
             .celular("988888888")
             .cpf("012345678910")

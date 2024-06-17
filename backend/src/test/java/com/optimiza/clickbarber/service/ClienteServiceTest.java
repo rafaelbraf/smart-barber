@@ -35,10 +35,12 @@ class ClienteServiceTest {
     private ClienteMapper clienteMapper;
 
     private Long usuarioId;
+    private UUID idExternoCliente;
 
     @BeforeEach
     void setup() {
         usuarioId = 1L;
+        idExternoCliente = UUID.randomUUID();
     }
 
     @Test
@@ -92,7 +94,7 @@ class ClienteServiceTest {
         var clienteCadastroDto = montarClienteCadastroDto();
         var clienteCadastradoResult = clienteService.cadastrar(clienteCadastroDto);
         assertNotNull(clienteCadastradoResult);
-        assertEquals(1, clienteCadastradoResult.getId());
+        assertEquals(idExternoCliente, clienteCadastradoResult.getIdExterno());
         assertEquals("Cliente Teste", clienteCadastradoResult.getNome());
     }
 
@@ -108,7 +110,7 @@ class ClienteServiceTest {
 
     private ClienteDto montarClienteDto() {
         return ClienteDto.builder()
-                .id(1L)
+                .idExterno(idExternoCliente)
                 .dataNascimento(LocalDate.of(2001, 1, 1))
                 .celular("988888888")
                 .cpf("012345678910")
