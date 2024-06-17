@@ -1,12 +1,8 @@
 package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
-import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.Barbeiro;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
-import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAtualizarDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
-import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroMapper;
 import com.optimiza.clickbarber.repository.BarbeiroRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -130,7 +127,7 @@ class BarbeiroServiceTest {
         when(barbeiroMapper.toEntity(any(BarbeiroCadastroDto.class))).thenReturn(barbeiro);
         when(barbeiroRepository.save(any(Barbeiro.class))).thenReturn(barbeiro);
 
-        var barbeiroDto = montarBarbeiroDto();
+        var barbeiroDto = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
         when(barbeiroMapper.toDto(any(Barbeiro.class))).thenReturn(barbeiroDto);
 
         var barbeiroCadastroDto = montarBarbeiroCadastroDto();
@@ -166,70 +163,6 @@ class BarbeiroServiceTest {
     void testDeletarBarbeiroPorId() {
         barbeiroService.deletarPorId(1L);
         verify(barbeiroRepository, times(1)).deleteById(anyLong());
-    }
-
-    private Barbeiro montarBarbeiro() {
-        return Barbeiro.builder()
-                .id(1L)
-                .nome("Barbeiro Teste")
-                .cpf("012345678910")
-                .ativo(true)
-                .admin(false)
-                .barbearia(montarBarbearia())
-                .build();
-    }
-
-    private BarbeiroDto montarBarbeiroDto() {
-        return BarbeiroDto.builder()
-                .idExterno(barbeiroIdExterno)
-                .nome("Barbeiro Teste")
-                .cpf("012345678910")
-                .celular("988888888")
-                .ativo(true)
-                .admin(false)
-                .barbearia(montarBarbeariaDto())
-                .build();
-    }
-
-    private BarbeiroCadastroDto montarBarbeiroCadastroDto() {
-        return BarbeiroCadastroDto.builder()
-                .nome("Barbeiro Cadastrar")
-                .cpf("012345678910")
-                .admin(true)
-                .ativo(true)
-                .celular("988888888")
-                .barbeariaId(1L)
-                .build();
-    }
-
-    private BarbeiroAtualizarDto montarBarbeiroAtualizarDto() {
-        return BarbeiroAtualizarDto.builder()
-                .id(1L)
-                .nome("Barbeiro Atualizar")
-                .celular("988888889")
-                .admin(true)
-                .ativo(true)
-                .build();
-    }
-
-    private Barbearia montarBarbearia() {
-        return Barbearia.builder()
-                .id(1L)
-                .nome("Barbearia Teste")
-                .cnpj("01234567891011")
-                .endereco("Rua Teste, 123")
-                .telefone("988888888")
-                .build();
-    }
-
-    private BarbeariaDto montarBarbeariaDto() {
-        return BarbeariaDto.builder()
-                .idExterno(barbeariaIdExterno)
-                .nome("Barbearia Teste")
-                .cnpj("01234567891011")
-                .endereco("Rua Teste, 123")
-                .telefone("988888888")
-                .build();
     }
 
 }

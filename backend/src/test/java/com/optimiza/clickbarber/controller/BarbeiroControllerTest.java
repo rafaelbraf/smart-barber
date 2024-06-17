@@ -1,14 +1,9 @@
 package com.optimiza.clickbarber.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.optimiza.clickbarber.model.Barbearia;
-import com.optimiza.clickbarber.model.Barbeiro;
 import com.optimiza.clickbarber.model.Role;
-import com.optimiza.clickbarber.model.Usuario;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAtualizarDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
-import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.service.BarbeiroService;
 import com.optimiza.clickbarber.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -45,30 +41,28 @@ class BarbeiroControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private Long barbeiroId;
-    private Long usuarioId;
     private UUID barbeariaIdExterno;
+    private UUID barbeiroIdExterno;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(new BarbeiroController(barbeiroService)).build();
 
-        barbeiroId = 1L;
-        usuarioId = 1L;
         barbeariaIdExterno = UUID.randomUUID();
+        barbeiroIdExterno = UUID.randomUUID();
     }
 
     @Test
     void testBuscarBarbeiroPorId() throws Exception {
         when(barbeiroService.buscarPorId(anyLong())).thenReturn(montarBarbeiro());
 
-        mockMvc.perform(get("/barbeiros/" + barbeiroId))
+        mockMvc.perform(get("/barbeiros/" + 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(Constants.Success.BARBEIRO_ENCONTRADO_COM_SUCESSO))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.result.id").value(1))
                 .andExpect(jsonPath("$.result.cpf").value("01345678910"))
-                .andExpect(jsonPath("$.result.usuario.id").value(usuarioId.toString()))
+                .andExpect(jsonPath("$.result.usuario.id").value(1))
                 .andExpect(jsonPath("$.result.usuario.role").value(Role.BARBEIRO.toString()))
                 .andExpect(jsonPath("$.result.barbearia.id").value(1))
                 .andExpect(jsonPath("$.result.barbearia.nome").value("Barbearia Teste"));
@@ -91,7 +85,7 @@ class BarbeiroControllerTest {
 
     @Test
     void testCadastrarBarbeiro() throws Exception {
-        var barbeiroCadastrado = montarBarbeiroDto();
+        var barbeiroCadastrado = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
         when(barbeiroService.cadastrar(any(BarbeiroCadastroDto.class))).thenReturn(barbeiroCadastrado);
 
         var barbeiroCadastrar = montarBarbeiroCadastroDto();
@@ -131,71 +125,10 @@ class BarbeiroControllerTest {
 
     @Test
     void testDeletarBarbeiro() throws Exception {
-        doNothing().when(barbeiroService).deletarPorId(barbeiroId);
+        doNothing().when(barbeiroService).deletarPorId(1L);
 
-        mockMvc.perform(delete("/barbeiros/" + barbeiroId))
+        mockMvc.perform(delete("/barbeiros/" + 1L))
                 .andExpect(status().isNoContent());
-    }
-
-    private Barbeiro montarBarbeiro() {
-        return Barbeiro.builder()
-            .id(barbeiroId)
-            .cpf("01345678910")
-            .nome("Barbeiro Teste")
-            .admin(false)
-            .celular("988888888")
-            .ativo(true)
-            .barbearia(montarBarbearia())
-            .usuario(montarUsuario(usuarioId))
-            .build();
-    }
-
-    private Barbearia montarBarbearia() {
-        return Barbearia.builder()
-                .id(1L)
-                .nome("Barbearia Teste")
-                .build();
-    }
-
-    private BarbeariaDto montarBarbeariaDto() {
-        return BarbeariaDto.builder()
-                .idExterno(barbeariaIdExterno)
-                .cnpj("01234567891011")
-                .telefone("988888888")
-                .nome("Barbearia Teste")
-                .endereco("Rua Teste, 1234")
-                .build();
-    }
-
-    private Usuario montarUsuario(Long id) {
-        return Usuario.builder()
-                .id(id)
-                .role(Role.BARBEIRO)
-                .build();
-    }
-
-    private BarbeiroCadastroDto montarBarbeiroCadastroDto() {
-        return BarbeiroCadastroDto.builder()
-                .barbeariaId(1L)
-                .admin(false)
-                .ativo(true)
-                .celular("988888888")
-                .nome("Barbeiro Teste")
-                .usuario(montarUsuario(usuarioId))
-                .cpf("013456789101")
-                .build();
-    }
-
-    private BarbeiroDto montarBarbeiroDto() {
-        return BarbeiroDto.builder()
-                .idExterno(barbeariaIdExterno)
-                .nome("Barbeiro Teste")
-                .ativo(true)
-                .admin(false)
-                .cpf("0134567891011")
-                .celular("988888888")
-                .barbearia(montarBarbeariaDto())
-                .build();
     }
 
 }

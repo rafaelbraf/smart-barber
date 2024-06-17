@@ -1,11 +1,8 @@
 package com.optimiza.clickbarber.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.RespostaLogin;
-import com.optimiza.clickbarber.model.Role;
 import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.usuario.UsuarioCadastrarDto;
 import com.optimiza.clickbarber.service.AutenticacaoService;
 import com.optimiza.clickbarber.utils.Constants;
@@ -23,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -54,7 +52,7 @@ class AutenticacaoControllerTest {
     @Test
     void testLogin() throws Exception {
         var token = "token_teste";
-        var barbearia = montarBarbeariaDto();
+        var barbearia = montarBarbeariaDto(barbeariaIdExterno);
         var respostaLogin = RespostaLogin.authorized(barbearia, token);
         when(autenticacaoService.login(ArgumentMatchers.any(LoginRequestDto.class))).thenReturn(respostaLogin);
 
@@ -73,7 +71,7 @@ class AutenticacaoControllerTest {
 
     @Test
     void testCadastrarUsuario() throws Exception {
-        var barbeariaDto = montarBarbeariaDto();
+        var barbeariaDto = montarBarbeariaDto(barbeariaIdExterno);
         when(autenticacaoService.cadastrarUsuario(any(UsuarioCadastrarDto.class))).thenReturn(barbeariaDto);
 
         var barbearia = montarBarbearia();
@@ -87,41 +85,6 @@ class AutenticacaoControllerTest {
                 .andExpect(jsonPath("$.message").value(Constants.Success.USUARIO_CADASTRADO_COM_SUCESSO))
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.result.idExterno").value(barbeariaIdExterno.toString()));
-    }
-
-    private BarbeariaDto montarBarbeariaDto() {
-        return BarbeariaDto.builder()
-                .idExterno(barbeariaIdExterno)
-                .nome("Barbearia Teste")
-                .cnpj("0123456789101112")
-                .endereco("Rua Teste, 123")
-                .telefone("988888888")
-                .build();
-    }
-
-    private Barbearia montarBarbearia() {
-        return Barbearia.builder()
-                .id(1L)
-                .nome("Barbearia Teste")
-                .cnpj("0123456789101112")
-                .endereco("Rua Teste, 12")
-                .build();
-    }
-
-    private LoginRequestDto montarLoginRequestDto() {
-        return LoginRequestDto.builder()
-                .email("teste@mail.com")
-                .senha("teste")
-                .build();
-    }
-
-    private UsuarioCadastrarDto montarUsuarioBarbearia(Barbearia barbearia) {
-        return UsuarioCadastrarDto.builder()
-                .email("teste@mail.com")
-                .senha("teste")
-                .role(Role.BARBEARIA)
-                .data(barbearia)
-                .build();
     }
 
 }
