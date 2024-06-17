@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { BarbeariaService } from "../services/BarbeariaService";
 import { Container, Form } from "react-bootstrap";
 import { Barbearia } from "../models/Barbearia";
+import BarbeariaService from "../services/BarbeariaService";
 
 interface SearchBarProps {
     onResults: (results: Barbearia[]) => void;
