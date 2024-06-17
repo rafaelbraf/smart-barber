@@ -25,7 +25,7 @@ object Constants {
         const val AGENDAMENTOS_ENCONTRADOS: String = "Agendamentos encontrados"
         const val AGENDAMENTO_CADASTRADO_COM_SUCESSO: String = "Agendamento cadastrado com sucesso!"
         const val AGENDAMENTO_ATUALIZADO_COM_SUCESSO: String = "Agendamento atualizado com sucesso!"
-        const val CLIENTES_ENCONTRADOS_DA_BARBEARIA: String = "Cliuentes encontrados para Barbearia com id "
+        const val CLIENTES_ENCONTRADOS_DA_BARBEARIA: String = "Clientes encontrados para Barbearia com id "
     }
 
     object Error {
