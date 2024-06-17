@@ -145,7 +145,7 @@ class BarbeariaServiceTest {
         var barbearia1 = montarBarbearia();
         var barbearia2 = montarBarbearia(2L, "Barbearia Teste 2");
         var barbeariasLista = List.of(barbearia1, barbearia2);
-        when(barbeariaRepository.findByNome(anyString())).thenReturn(barbeariasLista);
+        when(barbeariaRepository.findByNomeContainingIgnoreCase(anyString())).thenReturn(barbeariasLista);
 
         var barbearia1Dto = montarBarbeariaDto();
         when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbearia1Dto);

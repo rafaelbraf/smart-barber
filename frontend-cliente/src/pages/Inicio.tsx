@@ -64,7 +64,7 @@ export const Inicio: React.FC = () => {
                         </Col>
                     ) : (
                         barbearias.map((barbearia) => (
-                            <Col key={barbearia.id} sm={12} md={6} lg={3} className="mb-4">
+                            <Col key={barbearia.idExterno} sm={12} md={6} lg={3} className="mb-4">
                                 <Card>
                                     <Card.Body>
                                         <Card.Title>{barbearia.nome}</Card.Title>
