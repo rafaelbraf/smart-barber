@@ -68,7 +68,7 @@ class AgendamentoControllerTest {
         var barbearia = montarBarbeariaDto(barbeariaIdExterno);
         var servico = montarServico();
         var barbeiro = montarBarbeiroAgendamentoDto();
-        var cliente = montarClienteDto();
+        var cliente = montarClienteDto(clienteIdExterno);
         var agendamentoEncontrado = montarAgendamentoDto(agendamentoId, barbearia, cliente, servico, barbeiro);
         when(agendamentoService.buscarPorId(anyLong())).thenReturn(agendamentoEncontrado);
 
@@ -118,7 +118,7 @@ class AgendamentoControllerTest {
 
         var agendamentoCadastro = montarAgendamentoCadastroDto(valorTotal, tempoDuracaoEmMinutos, dataHora);
 
-        var agendamentoDto = montarAgendamentoDto(agendamentoId, dataHora, tempoDuracaoEmMinutos, valorTotal, barbeariaIdExterno);
+        var agendamentoDto = montarAgendamentoDto(agendamentoId, dataHora, tempoDuracaoEmMinutos, valorTotal, barbeariaIdExterno, clienteIdExterno);
 
         when(agendamentoService.cadastrar(any(AgendamentoCadastroDto.class))).thenReturn(agendamentoDto);
 
@@ -139,7 +139,8 @@ class AgendamentoControllerTest {
         var tempoDuracaoEmMinutos = 45;
         var valorTotal = new BigDecimal("75.70");
 
-        var agendamentoAtualizado = montarAgendamentoDto(agendamentoId, dataHora, 30, new BigDecimal("40"), barbeariaIdExterno);
+        var agendamentoAtualizado = montarAgendamentoDto(
+                agendamentoId, dataHora, 30, new BigDecimal("40"), barbeariaIdExterno, clienteIdExterno);
         when(agendamentoService.atualizar(any(AgendamentoAtualizarDto.class))).thenReturn(agendamentoAtualizado);
 
         var agendamentoParaAtualizar = montarAgendamentoAtualizarDto(agendamentoId, dataHora, valorTotal, tempoDuracaoEmMinutos);

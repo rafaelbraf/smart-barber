@@ -1,6 +1,5 @@
 package com.optimiza.clickbarber.controller
 
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto
 import com.optimiza.clickbarber.service.BarbeariaService
 import com.optimiza.clickbarber.utils.Constants
 import com.optimiza.clickbarber.utils.TestDataFactory.montarBarbeariaDto
@@ -21,7 +20,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
-import java.util.UUID
+import java.util.*
 
 @ExtendWith(SpringExtension::class)
 @WebMvcTest(value = [BarbeariaController::class], useDefaultFilters = false)

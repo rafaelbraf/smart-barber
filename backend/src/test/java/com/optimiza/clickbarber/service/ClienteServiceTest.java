@@ -47,7 +47,7 @@ class ClienteServiceTest {
         var cliente = montarCliente();
         when(clienteRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(cliente));
 
-        var clienteDto = montarClienteDto();
+        var clienteDto = montarClienteDto(idExternoCliente);
         when(clienteMapper.toDto(any(Cliente.class))).thenReturn(clienteDto);
 
         var clienteEncontradoResult = clienteService.buscarPorUsuarioId(usuarioId);
@@ -87,7 +87,7 @@ class ClienteServiceTest {
         when(clienteMapper.toEntity(any(ClienteCadastroDto.class))).thenReturn(cliente);
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
 
-        var clienteDto = montarClienteDto();
+        var clienteDto = montarClienteDto(idExternoCliente);
         when(clienteMapper.toDto(any(Cliente.class))).thenReturn(clienteDto);
 
         var clienteCadastroDto = montarClienteCadastroDto();
