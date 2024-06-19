@@ -1,6 +1,5 @@
 const apiUrl = process.env.REACT_APP_BACKEND_API_URL;
-const token = "";
-
+const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXJiZWFyaWFAbWFpbC5jb20iLCJpYXQiOjE3MTg3NTg4NDUsImV4cCI6MTcxODc5NDg0NX0.12NtdbHsS7JRTFVHdYccwGjMFeJUBJnaGUESyDoYEqY"
 export const BarbeariaService = {    
     async pesquisarBarbeariasPorNome(searchTerm: string): Promise<any> {        
         try {

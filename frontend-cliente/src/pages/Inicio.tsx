@@ -6,6 +6,7 @@ import { Footer } from "../components/Footer";
 import { Image } from "../components/Image";
 import { BarbeariaService } from "../services/BarbeariaService";
 import { Barbearia } from "../models/Barbearia";
+import { Link } from "react-router-dom";
 
 export const Inicio: React.FC = () => {
     const urlImage = "https://visaoempreendedora.com.br/wp-content/uploads/2024/05/curso-barbeiro.png";
@@ -64,13 +65,15 @@ export const Inicio: React.FC = () => {
                         </Col>
                     ) : (
                         barbearias.map((barbearia) => (
-                            <Col key={barbearia.id} sm={12} md={6} lg={3} className="mb-4">
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Title>{barbearia.nome}</Card.Title>
-                                        <Card.Text>{barbearia.endereco}</Card.Text>
-                                    </Card.Body>
-                                </Card>
+                            <Col key={barbearia.idExterno} sm={12} md={6} lg={3} className="mb-4">
+                                <Link to={`/barbearia/${barbearia.idExterno}`}  style={{ textDecoration: 'none' }}>
+                                    <Card>
+                                        <Card.Body>
+                                            <Card.Title>{barbearia.nome}</Card.Title>
+                                            <Card.Text>{barbearia.endereco}</Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                </Link>
                             </Col>
                         ))
                     )}
