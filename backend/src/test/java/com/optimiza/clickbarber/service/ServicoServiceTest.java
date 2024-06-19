@@ -1,7 +1,6 @@
 package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
-import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.Servico;
 import com.optimiza.clickbarber.model.dto.servico.ServicoDto;
 import com.optimiza.clickbarber.model.dto.servico.ServicoMapper;
@@ -13,11 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.montarServico;
+import static com.optimiza.clickbarber.utils.TestDataFactory.montarServicoDto;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -99,8 +98,8 @@ class ServicoServiceTest {
         var servicoCadastradoResult = servicoService.cadastrar(servicoDto);
         assertNotNull(servicoCadastradoResult);
         assertEquals("Serviço Teste", servicoCadastradoResult.getNome());
-        assertEquals("50.0", servicoCadastradoResult.getPreco().toString());
-        assertEquals(45, servicoCadastradoResult.getTempoDuracaoEmMinutos());
+        assertEquals("30.0", servicoCadastradoResult.getPreco().toString());
+        assertEquals(30, servicoCadastradoResult.getTempoDuracaoEmMinutos());
         assertTrue(servicoCadastradoResult.isAtivo());
         assertEquals(1, servicoCadastradoResult.getBarbearia().getId());
     }
@@ -109,37 +108,6 @@ class ServicoServiceTest {
     void testDeletarServicoPorId() {
         servicoService.deletarPorId(1L);
         verify(servicoRepository, times(1)).deleteById(anyLong());
-    }
-
-    private Servico montarServico() {
-        return Servico.builder()
-                .id(1L)
-                .nome("Serviço Teste")
-                .ativo(true)
-                .preco(new BigDecimal("50.0"))
-                .tempoDuracaoEmMinutos(45)
-                .barbearia(montarBarbearia())
-                .build();
-    }
-
-    private ServicoDto montarServicoDto() {
-        return ServicoDto.builder()
-                .nome("Serviço Teste")
-                .ativo(true)
-                .preco(new BigDecimal("50.0"))
-                .tempoDuracaoEmMinutos(45)
-                .barbearia(montarBarbearia())
-                .build();
-    }
-
-    private Barbearia montarBarbearia() {
-        return Barbearia.builder()
-                .id(1L)
-                .nome("Barbearia Teste")
-                .cnpj("01234567891011")
-                .telefone("988888888")
-                .endereco("Rua Teste, 123")
-                .build();
     }
 
 }

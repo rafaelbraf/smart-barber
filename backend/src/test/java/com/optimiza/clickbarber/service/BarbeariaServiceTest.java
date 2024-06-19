@@ -3,7 +3,6 @@ package com.optimiza.clickbarber.service;
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
 import com.optimiza.clickbarber.repository.BarbeariaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -61,7 +61,7 @@ class BarbeariaServiceTest {
         var pageable = PageRequest.of(0, 1);
         when(barbeariaRepository.findAll(pageable)).thenReturn(barbeariasPage);
 
-        var barbeariaDto1 = montarBarbeariaDto();
+        var barbeariaDto1 = montarBarbeariaDto(barbeariaIdExterno);
         when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbeariaDto1);
 
         var barbeariasEncontradas = barbeariaService.buscarTodos(pageable);
@@ -82,7 +82,7 @@ class BarbeariaServiceTest {
         var barbeariasLista = List.of(barbearia1, barbearia2);
         when(barbeariaRepository.findAll()).thenReturn(barbeariasLista);
 
-        var barbeariaDto1 = montarBarbeariaDto();
+        var barbeariaDto1 = montarBarbeariaDto(barbeariaIdExterno);
         when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbeariaDto1);
 
         var barbeariaIdExterno2 = UUID.randomUUID();
@@ -124,7 +124,7 @@ class BarbeariaServiceTest {
         var barbearia = montarBarbearia();
         when(barbeariaRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(barbearia));
 
-        var barbeariaDto = montarBarbeariaDto();
+        var barbeariaDto = montarBarbeariaDto(barbeariaIdExterno);
         when(barbeariaMapper.toDto(any(Barbearia.class))).thenReturn(barbeariaDto);
 
         var barbeariaEncontrada = barbeariaService.buscarPorUsuarioId(usuarioId);
@@ -145,9 +145,9 @@ class BarbeariaServiceTest {
         var barbearia1 = montarBarbearia();
         var barbearia2 = montarBarbearia(2L, "Barbearia Teste 2");
         var barbeariasLista = List.of(barbearia1, barbearia2);
-        when(barbeariaRepository.findByNome(anyString())).thenReturn(barbeariasLista);
+        when(barbeariaRepository.findByNomeContainingIgnoreCase(anyString())).thenReturn(barbeariasLista);
 
-        var barbearia1Dto = montarBarbeariaDto();
+        var barbearia1Dto = montarBarbeariaDto(barbeariaIdExterno);
         when(barbeariaMapper.toDto(barbearia1)).thenReturn(barbearia1Dto);
 
         var barbeariaIdExterno2 = UUID.randomUUID();
@@ -169,7 +169,7 @@ class BarbeariaServiceTest {
         when(barbeariaMapper.toEntity(any(BarbeariaCadastroDto.class))).thenReturn(barbearia);
         when(barbeariaRepository.save(any(Barbearia.class))).thenReturn(barbearia);
 
-        var barbeariaDto = montarBarbeariaDto();
+        var barbeariaDto = montarBarbeariaDto(barbeariaIdExterno);
         when(barbeariaMapper.toDto(any(Barbearia.class))).thenReturn(barbeariaDto);
 
         var barbeariaCadastroDto = montarBarbeariaCadastroDto();
@@ -177,55 +177,6 @@ class BarbeariaServiceTest {
         assertNotNull(barbeariaCadastradaResult);
         assertEquals(barbeariaIdExterno, barbeariaCadastradaResult.getIdExterno());
         assertEquals("Barbearia Teste", barbeariaCadastradaResult.getNome());
-    }
-
-    private Barbearia montarBarbearia() {
-        return Barbearia.builder()
-                .id(1L)
-                .nome("Barbearia Teste")
-                .cnpj("01234567891011")
-                .telefone("988888888")
-                .endereco("Rua Teste, 123")
-                .build();
-    }
-
-    private Barbearia montarBarbearia(Long id, String nome) {
-        return Barbearia.builder()
-                .id(id)
-                .nome(nome)
-                .cnpj("01234567891011")
-                .telefone("988888888")
-                .endereco("Rua Teste, 123")
-                .build();
-    }
-
-    private BarbeariaDto montarBarbeariaDto() {
-        return BarbeariaDto.builder()
-                .idExterno(barbeariaIdExterno)
-                .nome("Barbearia Teste")
-                .telefone("988888888")
-                .endereco("Rua Teste, 123")
-                .cnpj("01234567891011")
-                .build();
-    }
-
-    private BarbeariaDto montarBarbeariaDto(UUID idExterno, String nome) {
-        return BarbeariaDto.builder()
-                .idExterno(idExterno)
-                .nome(nome)
-                .telefone("988888888")
-                .endereco("Rua Teste, 123")
-                .cnpj("01234567891011")
-                .build();
-    }
-
-    private BarbeariaCadastroDto montarBarbeariaCadastroDto() {
-        return BarbeariaCadastroDto.builder()
-                .nome("Barbearia Teste")
-                .cnpj("01234567891011")
-                .endereco("Rua Teste, 123")
-                .telefone("988888888")
-                .build();
     }
 
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.optimiza.clickbarber.model.Servico;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoAtualizarDto;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoCadastroDto;
-import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoDto;
 import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoRespostaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAgendamentoDto;
@@ -14,7 +13,6 @@ import com.optimiza.clickbarber.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,13 +23,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.*;
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -53,6 +52,7 @@ class AgendamentoControllerTest {
 
     private Long agendamentoId;
     private UUID barbeariaIdExterno;
+    private UUID clienteIdExterno;
 
     @BeforeEach
     void setup() {
@@ -60,14 +60,15 @@ class AgendamentoControllerTest {
 
         agendamentoId = 1L;
         barbeariaIdExterno = UUID.randomUUID();
+        clienteIdExterno = UUID.randomUUID();
     }
 
     @Test
     void testBuscarAgendamentoPorId() throws Exception {
-        var barbearia = montarBarbeariaDto();
+        var barbearia = montarBarbeariaDto(barbeariaIdExterno);
         var servico = montarServico();
         var barbeiro = montarBarbeiroAgendamentoDto();
-        var cliente = montarClienteDto();
+        var cliente = montarClienteDto(clienteIdExterno);
         var agendamentoEncontrado = montarAgendamentoDto(agendamentoId, barbearia, cliente, servico, barbeiro);
         when(agendamentoService.buscarPorId(anyLong())).thenReturn(agendamentoEncontrado);
 
@@ -117,7 +118,7 @@ class AgendamentoControllerTest {
 
         var agendamentoCadastro = montarAgendamentoCadastroDto(valorTotal, tempoDuracaoEmMinutos, dataHora);
 
-        var agendamentoDto = montarAgendamentoDto(agendamentoId, dataHora, tempoDuracaoEmMinutos, valorTotal);
+        var agendamentoDto = montarAgendamentoDto(agendamentoId, dataHora, tempoDuracaoEmMinutos, valorTotal, barbeariaIdExterno, clienteIdExterno);
 
         when(agendamentoService.cadastrar(any(AgendamentoCadastroDto.class))).thenReturn(agendamentoDto);
 
@@ -138,7 +139,8 @@ class AgendamentoControllerTest {
         var tempoDuracaoEmMinutos = 45;
         var valorTotal = new BigDecimal("75.70");
 
-        var agendamentoAtualizado = montarAgendamentoDto(agendamentoId, dataHora, 30, new BigDecimal("40"));
+        var agendamentoAtualizado = montarAgendamentoDto(
+                agendamentoId, dataHora, 30, new BigDecimal("40"), barbeariaIdExterno, clienteIdExterno);
         when(agendamentoService.atualizar(any(AgendamentoAtualizarDto.class))).thenReturn(agendamentoAtualizado);
 
         var agendamentoParaAtualizar = montarAgendamentoAtualizarDto(agendamentoId, dataHora, valorTotal, tempoDuracaoEmMinutos);
@@ -160,74 +162,6 @@ class AgendamentoControllerTest {
 
         mockMvc.perform(delete("/agendamentos/" + agendamentoId))
                 .andExpect(status().isNoContent());
-    }
-
-
-    private BarbeariaDto montarBarbeariaDto() {
-        return BarbeariaDto.builder()
-            .idExterno(barbeariaIdExterno)
-            .nome("Barbearia Teste")
-            .cnpj("0123456789101112")
-            .endereco("Rua Teste, 123")
-            .telefone("988888888")
-            .build();
-    }
-
-    private Servico montarServico() {
-        return Servico.builder()
-            .id(1L)
-            .ativo(true)
-            .nome("Serviço Teste")
-            .preco(new BigDecimal("30.00"))
-            .tempoDuracaoEmMinutos(30)
-            .build();
-    }
-
-    private BarbeiroAgendamentoDto montarBarbeiroAgendamentoDto() {
-        return BarbeiroAgendamentoDto.builder()
-            .id(1L)
-            .nome("Barbeiro Teste")
-            .admin(false)
-            .ativo(true)
-            .cpf("012345678910")
-            .celular("988888888")
-            .build();
-    }
-
-    private ClienteDto montarClienteDto() {
-        return ClienteDto.builder()
-            .id(1L)
-            .nome("Cliente Teste")
-            .celular("988888888")
-            .cpf("012345678910")
-            .dataNascimento(LocalDate.of(2001, 1, 1))
-            .build();
-    }
-
-    private AgendamentoDto montarAgendamentoDto(Long agendamentoId, ZonedDateTime dataHora, Integer tempoDuracaoEmMinutos, BigDecimal valorTotal) {
-        return AgendamentoDto.builder()
-                .id(agendamentoId)
-                .cliente(montarClienteDto())
-                .barbearia(montarBarbeariaDto())
-                .servicos(Set.of(montarServico()))
-                .barbeiros(Set.of(montarBarbeiroAgendamentoDto()))
-                .dataHora(dataHora)
-                .tempoDuracaoEmMinutos(tempoDuracaoEmMinutos)
-                .valorTotal(valorTotal)
-                .build();
-    }
-
-    private AgendamentoDto montarAgendamentoDto(Long agendamentoId, BarbeariaDto barbearia, ClienteDto cliente, Servico servico, BarbeiroAgendamentoDto barbeiro) {
-        return AgendamentoDto.builder()
-            .id(agendamentoId)
-            .dataHora(ZonedDateTime.now())
-            .tempoDuracaoEmMinutos(45)
-            .valorTotal(new BigDecimal("75.50"))
-            .barbearia(barbearia)
-            .cliente(cliente)
-            .servicos(Set.of(servico))
-            .barbeiros(Set.of(barbeiro))
-            .build();
     }
 
     private AgendamentoRespostaDto montarAgendamentoRespostaDto(Long agendamentoId, BarbeariaDto barbearia, ClienteDto cliente, Servico servico, BarbeiroAgendamentoDto barbeiro) {

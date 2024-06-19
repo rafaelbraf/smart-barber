@@ -53,9 +53,7 @@ public class BarbeariaService {
     }
 
     public List<BarbeariaDto> buscarPorNome(String nome) {
-        nome = nome.toLowerCase();
-
-        var barbeariasEncontradas = barbeariaRepository.findByNome(nome);
+        var barbeariasEncontradas = barbeariaRepository.findByNomeContainingIgnoreCase(nome);
         var barbeariasEncontradasDto = new ArrayList<BarbeariaDto>();
 
         barbeariasEncontradas.forEach(barbearia -> {

@@ -3,6 +3,7 @@ package com.optimiza.clickbarber.model.dto.cliente;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class ClienteDto {
 
-    private Long id;
+    private UUID idExterno;
     private String cpf;
     private String nome;
     private LocalDate dataNascimento;

@@ -4,9 +4,9 @@ import { Header } from "../components/Header";
 import { SearchBar } from "../components/SearchBar";
 import { Footer } from "../components/Footer";
 import { Image } from "../components/Image";
-import { BarbeariaService } from "../services/BarbeariaService";
 import { Barbearia } from "../models/Barbearia";
 import { Link } from "react-router-dom";
+import BarbeariaService from "../services/BarbeariaService";
 
 export const Inicio: React.FC = () => {
     const urlImage = "https://visaoempreendedora.com.br/wp-content/uploads/2024/05/curso-barbeiro.png";

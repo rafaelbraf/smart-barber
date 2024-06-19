@@ -18,7 +18,7 @@ public class ClienteMapper {
 
     public ClienteDto toDto(Cliente cliente) {
         return ClienteDto.builder()
-                .id(cliente.getId())
+                .idExterno(cliente.getIdExterno())
                 .nome(cliente.getNome())
                 .celular(cliente.getCelular())
                 .cpf(cliente.getCpf())

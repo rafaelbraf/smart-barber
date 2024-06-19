@@ -13,6 +13,5 @@ public interface BarbeariaRepository extends JpaRepository<Barbearia, Long> {
 
     Optional<Barbearia> findByUsuarioId(Long usuarioId);
 
-    @Query("SELECT b FROM Barbearia b WHERE b.nome LIKE %:nome%")
-    List<Barbearia> findByNome(String nome);
+    List<Barbearia> findByNomeContainingIgnoreCase(String nome);
 }

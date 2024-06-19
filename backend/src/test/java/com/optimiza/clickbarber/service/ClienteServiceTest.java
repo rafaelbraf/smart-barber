@@ -3,7 +3,6 @@ package com.optimiza.clickbarber.service;
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.Cliente;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteCadastroDto;
-import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteMapper;
 import com.optimiza.clickbarber.repository.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,10 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.optimiza.clickbarber.utils.TestDataFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -35,10 +35,12 @@ class ClienteServiceTest {
     private ClienteMapper clienteMapper;
 
     private Long usuarioId;
+    private UUID idExternoCliente;
 
     @BeforeEach
     void setup() {
         usuarioId = 1L;
+        idExternoCliente = UUID.randomUUID();
     }
 
     @Test
@@ -46,7 +48,7 @@ class ClienteServiceTest {
         var cliente = montarCliente();
         when(clienteRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(cliente));
 
-        var clienteDto = montarClienteDto();
+        var clienteDto = montarClienteDto(idExternoCliente);
         when(clienteMapper.toDto(any(Cliente.class))).thenReturn(clienteDto);
 
         var clienteEncontradoResult = clienteService.buscarPorUsuarioId(usuarioId);
@@ -81,48 +83,41 @@ class ClienteServiceTest {
     }
 
     @Test
+    void testBuscarClientesPeloIdExternoDaBarbearia() {
+        var cliente1 = montarCliente();
+        var cliente2 = montarCliente(2L, "Cliente Teste 2");
+        var listaClientes = List.of(cliente1, cliente2);
+        when(clienteRepository.findByIdExternoBarbearia(any(UUID.class))).thenReturn(listaClientes);
+
+        var idExternoCliente1 = UUID.randomUUID();
+        var clienteDto1 = montarClienteDto(idExternoCliente1);
+        when(clienteMapper.toDto(cliente1)).thenReturn(clienteDto1);
+
+        var idExternoCliente2 = UUID.randomUUID();
+        var clienteDto2 = montarClienteDto(idExternoCliente2);
+        when(clienteMapper.toDto(cliente2)).thenReturn(clienteDto2);
+
+        var idExternoBarbearia = UUID.randomUUID();
+        var clientesEncontrados = clienteService.buscarPorIdExternoBarbearia(idExternoBarbearia);
+        assertFalse(clientesEncontrados.isEmpty());
+        assertEquals(idExternoCliente1, clientesEncontrados.getFirst().getIdExterno());
+        assertEquals(idExternoCliente2, clientesEncontrados.getLast().getIdExterno());
+    }
+
+    @Test
     void testCadastrarCliente() {
         var cliente = montarCliente();
         when(clienteMapper.toEntity(any(ClienteCadastroDto.class))).thenReturn(cliente);
         when(clienteRepository.save(any(Cliente.class))).thenReturn(cliente);
 
-        var clienteDto = montarClienteDto();
+        var clienteDto = montarClienteDto(idExternoCliente);
         when(clienteMapper.toDto(any(Cliente.class))).thenReturn(clienteDto);
 
         var clienteCadastroDto = montarClienteCadastroDto();
         var clienteCadastradoResult = clienteService.cadastrar(clienteCadastroDto);
         assertNotNull(clienteCadastradoResult);
-        assertEquals(1, clienteCadastradoResult.getId());
+        assertEquals(idExternoCliente, clienteCadastradoResult.getIdExterno());
         assertEquals("Cliente Teste", clienteCadastradoResult.getNome());
-    }
-
-    private Cliente montarCliente() {
-        return Cliente.builder()
-                .id(1L)
-                .nome("Cliente Teste")
-                .dataNascimento(LocalDate.of(2001, 1, 1))
-                .cpf("012345678910")
-                .celular("988888888")
-                .build();
-    }
-
-    private ClienteDto montarClienteDto() {
-        return ClienteDto.builder()
-                .id(1L)
-                .dataNascimento(LocalDate.of(2001, 1, 1))
-                .celular("988888888")
-                .cpf("012345678910")
-                .nome("Cliente Teste")
-                .build();
-    }
-
-    private ClienteCadastroDto montarClienteCadastroDto() {
-        return ClienteCadastroDto.builder()
-                .cpf("012345678910")
-                .nome("Cliente Teste")
-                .celular("988888888")
-                .dataNascimento(LocalDate.of(2001, 1, 1))
-                .build();
     }
 
 }
