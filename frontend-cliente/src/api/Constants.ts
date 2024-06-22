@@ -1,2 +1,2 @@
 export const apiUrl: string = process.env.REACT_APP_BACKEND_API_URL || 'http://localhost:8081';
-export const token: string = "";
+export const token: string = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXJiZWFyaWFAbWFpbC5jb20iLCJpYXQiOjE3MTg3NjMwOTgsImV4cCI6MTcxODc5OTA5OH0.pblwJoF6LQ2wSLi_Ti_Q16ESItE924MuFGILkKp9kBY";

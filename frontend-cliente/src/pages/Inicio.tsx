@@ -15,7 +15,7 @@ export const Inicio: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchBarbearias = async () => {
+        const fetchBarbearias:any = async () => {
             try {
                 const data = await BarbeariaService.pesquisarTodasAsBarbearias();
                 setBarbearias(data);

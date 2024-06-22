@@ -22,6 +22,16 @@ class BarbeariaService {
             throw error;
         }
     }
+
+    static async pesquisarBarbeariaPorId(id: string): Promise<Barbearia> {
+        try {
+            const response = await ApiClient.get<ApiResponse<Barbearia>>(`/barbearias/idExterno?idExterno=${id}`);
+            return response.result;
+        } catch (error) {
+            console.error('Erro ao pesquisar barbearias por id:', error);
+            throw error;
+        }
+    }
 };
 
 export default BarbeariaService;
