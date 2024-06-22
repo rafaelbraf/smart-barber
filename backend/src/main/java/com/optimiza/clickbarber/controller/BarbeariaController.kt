@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/barbearias")
@@ -38,6 +39,13 @@ class BarbeariaController @Autowired constructor(
         val barbearias = barbeariaService.buscarPorNome(nome)
         val mensagem = "${Constants.Success.BARBEARIAS_ENCONTRADAS_PELO_NOME} $nome"
         return RespostaUtils.ok(mensagem, barbearias)
+    }
+
+    @GetMapping("/idExterno")
+    fun buscarPorIdExterno(@RequestParam(name = "idExterno") idExterno: UUID): Resposta<BarbeariaDto> {
+        val barbeariaEncontrada = barbeariaService.buscarPorIdExterno(idExterno)
+        val mensagem = "${Constants.Success.BARBEARIAS_ENCONTRADA_PELO_ID_EXTERNO} $idExterno"
+        return RespostaUtils.ok(mensagem, barbeariaEncontrada)
     }
 
 }
