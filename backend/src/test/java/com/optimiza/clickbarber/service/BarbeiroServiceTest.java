@@ -98,15 +98,17 @@ class BarbeiroServiceTest {
     @Test
     void testBuscarPorUsuarioId_Encontrado() {
         var barbeiro = montarBarbeiro();
-
         when(barbeiroRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(barbeiro));
+
+        var barbeiroDto = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
+        when(barbeiroMapper.toDto(any(Barbeiro.class))).thenReturn(barbeiroDto);
 
         var barbeiroResult = barbeiroService.buscarPorUsuarioId(1L);
 
         assertNotNull(barbeiroResult);
-        assertEquals(1, barbeiroResult.getId());
+        assertEquals(barbeiroIdExterno, barbeiroResult.getIdExterno());
         assertEquals("Barbeiro Teste", barbeiroResult.getNome());
-        assertEquals(1, barbeiroResult.getBarbearia().getId());
+        assertEquals(barbeariaIdExterno, barbeiroResult.getBarbearia().getIdExterno());
     }
 
     @Test
