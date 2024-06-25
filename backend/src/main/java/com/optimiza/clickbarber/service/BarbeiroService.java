@@ -34,9 +34,10 @@ public class BarbeiroService {
         return barbeiroRepository.findByBarbeariaId(id);
     }
 
-    public Barbeiro buscarPorUsuarioId(Long usuarioId) {
-        return barbeiroRepository.findByUsuarioId(usuarioId)
+    public BarbeiroDto buscarPorUsuarioId(Long usuarioId) {
+        var barbeiro = barbeiroRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEIRO, Constants.Attribute.USUARIO_ID, usuarioId.toString()));
+        return barbeiroMapper.toDto(barbeiro);
     }
 
     public BarbeiroDto cadastrar(BarbeiroCadastroDto barbeiroCadastroDto) {
