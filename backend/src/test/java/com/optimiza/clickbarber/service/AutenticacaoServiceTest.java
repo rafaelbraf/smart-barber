@@ -5,6 +5,7 @@ import com.optimiza.clickbarber.exception.ResourceNotFoundException;
 import com.optimiza.clickbarber.model.Barbeiro;
 import com.optimiza.clickbarber.model.Role;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
+import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.utils.Constants;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +52,7 @@ class AutenticacaoServiceTest {
     private String senha;
     private UUID barbeariaIdExterno;
     private UUID clienteIdExterno;
+    private UUID barbeiroIdExterno;
 
     @BeforeEach
     void setup() {
@@ -110,7 +112,7 @@ class AutenticacaoServiceTest {
         var usuario = montarUsuario(Role.BARBEIRO, senha);
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
-        var barbeiro = montarBarbeiro();
+        var barbeiro = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
         when(barbeiroService.buscarPorUsuarioId(anyLong())).thenReturn(barbeiro);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_barbeiro");
@@ -123,7 +125,7 @@ class AutenticacaoServiceTest {
         assertEquals(Constants.Success.LOGIN_REALIZADO_COM_SUCESSO, resposta.getMessage());
         assertEquals("token_barbeiro", resposta.getAccessToken());
         assertNotNull(resposta.getResult());
-        assertInstanceOf(Barbeiro.class, resposta.getResult());
+        assertInstanceOf(BarbeiroDto.class, resposta.getResult());
     }
 
     @Test

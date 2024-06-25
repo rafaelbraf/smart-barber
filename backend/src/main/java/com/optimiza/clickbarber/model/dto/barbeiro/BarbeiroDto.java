@@ -18,6 +18,5 @@ public class BarbeiroDto {
     private String celular;
     private boolean admin;
     private boolean ativo;
-    private BarbeariaDto barbearia;
 
 }

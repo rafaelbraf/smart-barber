@@ -30,8 +30,6 @@ public class BarbeiroMapper {
     }
 
     public BarbeiroDto toDto(Barbeiro barbeiro) {
-        var barbeariaDto = barbeariaMapper.toDto(barbeiro.getBarbearia());
-
         return BarbeiroDto.builder()
                 .idExterno(barbeiro.getIdExterno())
                 .nome(barbeiro.getNome())
@@ -39,7 +37,6 @@ public class BarbeiroMapper {
                 .celular(barbeiro.getCelular())
                 .admin(barbeiro.isAdmin())
                 .ativo(barbeiro.isAtivo())
-                .barbearia(barbeariaDto)
                 .build();
     }
 
