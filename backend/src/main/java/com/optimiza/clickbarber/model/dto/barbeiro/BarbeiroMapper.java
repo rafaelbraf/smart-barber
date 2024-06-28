@@ -1,8 +1,6 @@
 package com.optimiza.clickbarber.model.dto.barbeiro;
 
 import com.optimiza.clickbarber.model.Barbeiro;
-import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -10,14 +8,6 @@ import java.util.Set;
 
 @Component
 public class BarbeiroMapper {
-
-    private final BarbeariaMapper barbeariaMapper;
-
-    @Autowired
-    public BarbeiroMapper(BarbeariaMapper barbeariaMapper) {
-        this.barbeariaMapper = barbeariaMapper;
-    }
-
     public Barbeiro toEntity(BarbeiroCadastroDto barbeiroCadastro) {
         return Barbeiro.builder()
                 .nome(barbeiroCadastro.getNome())
