@@ -1,5 +1,6 @@
 export interface Barbearia {
-    idExterno: number,
+    idExterno: string,
     nome: string,
     endereco: string
+    horarios: string
 };

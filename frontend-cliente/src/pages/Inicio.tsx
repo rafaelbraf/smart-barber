@@ -5,6 +5,7 @@ import { SearchBar } from "../components/SearchBar";
 import { Footer } from "../components/Footer";
 import { Image } from "../components/Image";
 import { Barbearia } from "../models/Barbearia";
+import { Link } from "react-router-dom";
 import BarbeariaService from "../services/BarbeariaService";
 
 export const Inicio: React.FC = () => {
@@ -14,7 +15,7 @@ export const Inicio: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchBarbearias = async () => {
+        const fetchBarbearias:any = async () => {
             try {
                 const data = await BarbeariaService.pesquisarTodasAsBarbearias();
                 setBarbearias(data);
@@ -65,12 +66,15 @@ export const Inicio: React.FC = () => {
                     ) : (
                         barbearias.map((barbearia) => (
                             <Col key={barbearia.idExterno} sm={12} md={6} lg={3} className="mb-4">
-                                <Card>
-                                    <Card.Body>
-                                        <Card.Title>{barbearia.nome}</Card.Title>
-                                        <Card.Text>{barbearia.endereco}</Card.Text>
-                                    </Card.Body>
-                                </Card>
+                                <Link to={`/barbearia/${barbearia.idExterno}`}  style={{ textDecoration: 'none' }}>
+                                    <Card>
+                                        <Card.Body>
+                                            <Card.Title>{barbearia.nome}</Card.Title>
+                                            <Card.Text>{barbearia.endereco}</Card.Text>
+                                            <Card.Text>{barbearia.horarios}</Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                </Link>
                             </Col>
                         ))
                     )}
