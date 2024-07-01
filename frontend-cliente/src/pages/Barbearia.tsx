@@ -8,6 +8,7 @@ import BarbeariaService from "../services/BarbeariaService";
 import { Barbearia } from "../models/Barbearia";
 import { Header } from "../components/Header";
 import { Image } from "../components/Image";
+import { assert } from "console";
 
 export const BarbeariaPage = () => {
     const {idExterno} = useParams<{ idExterno: string }>();
@@ -27,6 +28,17 @@ export const BarbeariaPage = () => {
             } finally {
                 setLoading(false);
             }
+        const fetchBarbearia:any = async () => {
+            try {
+                const idExternoString:string = idExterno as string
+                const data = await BarbeariaService.pesquisarHorariosBarbearia(idExternoString);
+                setBarbearia(data);
+            } catch (error) {
+                setError('Erro ao buscar Horario.');
+            } finally {
+                setLoading(false);
+            }
+        }
         };
 
         fetchBarbearia();
@@ -47,6 +59,7 @@ export const BarbeariaPage = () => {
                 <Col sm={12} md={6} lg={6} className="mb-4 d-flex justify-content-center text-center">
                     <h1>Página da Barbearia {barbearia?.nome}</h1>
                     <p>Detalhes da Barbearia {barbearia?.endereco}.</p>
+                    <p>Horários da Barbearia {barbearia?.horarios}.</p>
                 </Col>
                 <Col sm={12} md={6} lg={6} className="mb-4 d-flex justify-content-center">
                     <Image src={urlImage} alt="Barbeiro cortando cabelo de cliente" height="400px" rounded />

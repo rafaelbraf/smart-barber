@@ -71,6 +71,7 @@ export const Inicio: React.FC = () => {
                                         <Card.Body>
                                             <Card.Title>{barbearia.nome}</Card.Title>
                                             <Card.Text>{barbearia.endereco}</Card.Text>
+                                            <Card.Text>{barbearia.horarios}</Card.Text>
                                         </Card.Body>
                                     </Card>
                                 </Link>
