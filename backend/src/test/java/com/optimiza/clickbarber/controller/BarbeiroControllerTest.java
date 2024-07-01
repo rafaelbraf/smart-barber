@@ -85,7 +85,7 @@ class BarbeiroControllerTest {
 
     @Test
     void testCadastrarBarbeiro() throws Exception {
-        var barbeiroCadastrado = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
+        var barbeiroCadastrado = montarBarbeiroDto(barbeiroIdExterno);
         when(barbeiroService.cadastrar(any(BarbeiroCadastroDto.class))).thenReturn(barbeiroCadastrado);
 
         var barbeiroCadastrar = montarBarbeiroCadastroDto();
@@ -95,8 +95,7 @@ class BarbeiroControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.message").value(Constants.Success.BARBEIRO_CADASTRADO_COM_SUCESSO))
-                .andExpect(jsonPath("$.result.nome").value("Barbeiro Teste"))
-                .andExpect(jsonPath("$.result.barbearia.idExterno").value(barbeariaIdExterno.toString()));
+                .andExpect(jsonPath("$.result.nome").value("Barbeiro Teste"));
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.optimiza.clickbarber.model.dto.agendamento.AgendamentoRespostaDto;
 import com.optimiza.clickbarber.model.dto.autenticacao.LoginRequestDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
+import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaRespostaLoginDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAgendamentoDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroAtualizarDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroCadastroDto;
@@ -70,6 +71,16 @@ public class TestDataFactory {
                 .build();
     }
 
+    public static BarbeariaRespostaLoginDto montarBarbeariaRespostaLoginDto(UUID idExterno) {
+        return BarbeariaRespostaLoginDto.builder()
+                .idExterno(idExterno)
+                .nome("Barbearia Teste")
+                .cnpj("0123456789101112")
+                .endereco("Rua Teste, 12")
+                .telefone("988888888")
+                .build();
+    }
+
     public static LoginRequestDto montarLoginRequestDto() {
         return LoginRequestDto.builder()
                 .email("teste@mail.com")
@@ -99,7 +110,7 @@ public class TestDataFactory {
                 .build();
     }
 
-    public static BarbeiroDto montarBarbeiroDto(UUID idExternoBarbeiro, UUID idExternoBarbearia) {
+    public static BarbeiroDto montarBarbeiroDto(UUID idExternoBarbeiro) {
         return BarbeiroDto.builder()
                 .idExterno(idExternoBarbeiro)
                 .nome("Barbeiro Teste")
@@ -107,7 +118,6 @@ public class TestDataFactory {
                 .admin(false)
                 .cpf("0134567891011")
                 .celular("988888888")
-                .barbearia(montarBarbeariaDto(idExternoBarbearia))
                 .build();
     }
 

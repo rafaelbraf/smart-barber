@@ -2,9 +2,9 @@ package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.config.JwtUtil;
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
-import com.optimiza.clickbarber.model.Barbeiro;
 import com.optimiza.clickbarber.model.Role;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
+import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaRespostaLoginDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
 import com.optimiza.clickbarber.model.dto.cliente.ClienteDto;
 import com.optimiza.clickbarber.utils.Constants;
@@ -91,8 +91,8 @@ class AutenticacaoServiceTest {
         var usuario = montarUsuario(Role.BARBEARIA, senha);
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
-        var barbearia = montarBarbeariaDto(barbeariaIdExterno);
-        when(barbeariaService.buscarPorUsuarioId(anyLong())).thenReturn(barbearia);
+        var barbearia = montarBarbeariaRespostaLoginDto(barbeariaIdExterno);
+        when(barbeariaService.buscarPorUsuarioIdLogin(anyLong())).thenReturn(barbearia);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_barbearia");
 
@@ -104,7 +104,7 @@ class AutenticacaoServiceTest {
         assertEquals(Constants.Success.LOGIN_REALIZADO_COM_SUCESSO, resposta.getMessage());
         assertEquals("token_barbearia", resposta.getAccessToken());
         assertNotNull(resposta.getResult());
-        assertInstanceOf(BarbeariaDto.class, resposta.getResult());
+        assertInstanceOf(BarbeariaRespostaLoginDto.class, resposta.getResult());
     }
 
     @Test
@@ -112,7 +112,7 @@ class AutenticacaoServiceTest {
         var usuario = montarUsuario(Role.BARBEIRO, senha);
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
-        var barbeiro = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
+        var barbeiro = montarBarbeiroDto(barbeiroIdExterno);
         when(barbeiroService.buscarPorUsuarioId(anyLong())).thenReturn(barbeiro);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_barbeiro");

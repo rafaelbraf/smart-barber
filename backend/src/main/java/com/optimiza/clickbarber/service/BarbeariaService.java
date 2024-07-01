@@ -5,6 +5,7 @@ import com.optimiza.clickbarber.model.Barbearia;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaCadastroDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaMapper;
+import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaRespostaLoginDto;
 import com.optimiza.clickbarber.repository.BarbeariaRepository;
 import com.optimiza.clickbarber.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,12 @@ public class BarbeariaService {
         var barbearia = barbeariaRepository.findByUsuarioId(usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.USUARIO_ID, usuarioId.toString()));
         return barbeariaMapper.toDto(barbearia);
+    }
+
+    public BarbeariaRespostaLoginDto buscarPorUsuarioIdLogin(Long usuarioId) {
+        var barbearia = barbeariaRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new ResourceNotFoundException(Constants.Entity.BARBEARIA, Constants.Attribute.USUARIO_ID, usuarioId.toString()));
+        return barbeariaMapper.toRespostaLoginDto(barbearia);
     }
 
     public BarbeariaDto cadastrar(BarbeariaCadastroDto barbeariaCadastro) {

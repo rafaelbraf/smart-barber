@@ -100,7 +100,7 @@ class BarbeiroServiceTest {
         var barbeiro = montarBarbeiro();
         when(barbeiroRepository.findByUsuarioId(anyLong())).thenReturn(Optional.of(barbeiro));
 
-        var barbeiroDto = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
+        var barbeiroDto = montarBarbeiroDto(barbeiroIdExterno);
         when(barbeiroMapper.toDto(any(Barbeiro.class))).thenReturn(barbeiroDto);
 
         var barbeiroResult = barbeiroService.buscarPorUsuarioId(1L);
@@ -108,7 +108,6 @@ class BarbeiroServiceTest {
         assertNotNull(barbeiroResult);
         assertEquals(barbeiroIdExterno, barbeiroResult.getIdExterno());
         assertEquals("Barbeiro Teste", barbeiroResult.getNome());
-        assertEquals(barbeariaIdExterno, barbeiroResult.getBarbearia().getIdExterno());
     }
 
     @Test
@@ -129,7 +128,7 @@ class BarbeiroServiceTest {
         when(barbeiroMapper.toEntity(any(BarbeiroCadastroDto.class))).thenReturn(barbeiro);
         when(barbeiroRepository.save(any(Barbeiro.class))).thenReturn(barbeiro);
 
-        var barbeiroDto = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
+        var barbeiroDto = montarBarbeiroDto(barbeiroIdExterno);
         when(barbeiroMapper.toDto(any(Barbeiro.class))).thenReturn(barbeiroDto);
 
         var barbeiroCadastroDto = montarBarbeiroCadastroDto();
@@ -138,7 +137,6 @@ class BarbeiroServiceTest {
         assertNotNull(barbeiroCadastradoResult);
         assertEquals(barbeiroIdExterno, barbeiroCadastradoResult.getIdExterno());
         assertEquals("Barbeiro Teste", barbeiroCadastradoResult.getNome());
-        assertEquals(barbeariaIdExterno, barbeiroCadastradoResult.getBarbearia().getIdExterno());
     }
 
     @Test
