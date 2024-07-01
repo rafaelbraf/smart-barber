@@ -99,7 +99,7 @@ public class TestDataFactory {
                 .build();
     }
 
-    public static BarbeiroDto montarBarbeiroDto(UUID idExternoBarbeiro, UUID idExternoBarbearia) {
+    public static BarbeiroDto montarBarbeiroDto(UUID idExternoBarbeiro) {
         return BarbeiroDto.builder()
                 .idExterno(idExternoBarbeiro)
                 .nome("Barbeiro Teste")
@@ -107,7 +107,6 @@ public class TestDataFactory {
                 .admin(false)
                 .cpf("0134567891011")
                 .celular("988888888")
-                .barbearia(montarBarbeariaDto(idExternoBarbearia))
                 .build();
     }
 

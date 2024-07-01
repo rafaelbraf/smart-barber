@@ -2,7 +2,6 @@ package com.optimiza.clickbarber.service;
 
 import com.optimiza.clickbarber.config.JwtUtil;
 import com.optimiza.clickbarber.exception.ResourceNotFoundException;
-import com.optimiza.clickbarber.model.Barbeiro;
 import com.optimiza.clickbarber.model.Role;
 import com.optimiza.clickbarber.model.dto.barbearia.BarbeariaDto;
 import com.optimiza.clickbarber.model.dto.barbeiro.BarbeiroDto;
@@ -112,7 +111,7 @@ class AutenticacaoServiceTest {
         var usuario = montarUsuario(Role.BARBEIRO, senha);
         when(usuarioService.buscarPorEmail(anyString())).thenReturn(usuario);
 
-        var barbeiro = montarBarbeiroDto(barbeiroIdExterno, barbeariaIdExterno);
+        var barbeiro = montarBarbeiroDto(barbeiroIdExterno);
         when(barbeiroService.buscarPorUsuarioId(anyLong())).thenReturn(barbeiro);
 
         when(jwtUtil.gerarToken(anyString())).thenReturn("token_barbeiro");
